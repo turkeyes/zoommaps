@@ -53,7 +53,8 @@ var items = [
 var options = {
     // optionName: 'option value'
     // for example:
-    index: 0 // start at first slide
+    index: 0, // start at first slide
+    maxSpreadZoom: 4
 };
 
 // Initializes and opens PhotoSwipe
