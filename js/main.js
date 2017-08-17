@@ -58,5 +58,16 @@ var options = {
 };
 
 // Initializes and opens PhotoSwipe
-var gallery = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options);
-gallery.init();
+var pswp = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options);
+pswp.init();
+
+pswp.listen('position_change', function(item, x, y, zoom, time) {
+  x_min = x < 0 ? Math.floor(-x) : 0;
+  width = Math.floor(-x + screen.width / zoom)
+  x_max = width < item.w ? width : item.w
+
+  y_min = y < 0 ? Math.floor(-y) : 0;
+  height = Math.floor(-y + screen.height / zoom)
+  y_max = height < item.h ? height : item.h
+  console.log('img.src:' + item.src + ' x_min:' + x_min + ' x_max:' + x_max + ' y_min:' + y_min + ' y_max:' + y_max + ' time:' + time);
+});
