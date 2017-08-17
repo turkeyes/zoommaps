@@ -1,0 +1,9 @@
+var mongoose = require("mongoose");
+
+console.log("url: " + process.env.MONGODB_URI);
+
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/diviz");
+mongoose.connection.on("error", console.error.bind(console, "connection error:"));
+mongoose.connection.once("open", function (callback) {
+    console.log("db connected");
+});
