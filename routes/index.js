@@ -15,7 +15,7 @@ router.get("/", function(req, res, next) {
 
 // send data
 router.post("/data", function(req, res, next) {
-    var label = new Label({ src:req.body.src, data:req.body.data, test:[1,2,3,4] id:req.body.id});
+    var label = new Label({ src:req.body.src, data:req.body.data, test:[1,2,3,4], id:req.body.id});
     label.save(function(err) {
         if (err) res.send({ success: false, message: "Can't save label, please try again!" });
     });
