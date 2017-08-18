@@ -60,6 +60,11 @@ pswp.init();
 
 var src = '';
 var x_min = [];
+var x_max = [];
+var y_min = [];
+var y_max = [];
+var times = [];
+var start_time = 0;
 
 pswp.listen('position_change', function(item, x, y, zoom, time) {
   if (item.src !== src) {
@@ -68,7 +73,7 @@ pswp.listen('position_change', function(item, x, y, zoom, time) {
       $.ajax({
             type: "POST",
             url: "/data",
-            data: JSON.stringify({ src:item.src, x_min:x_min, id:uniq}),
+            data: JSON.stringify({ src:item.src, x_min:x_min, x_max:x_max, y_min:y_min, y_max:y_max, time:times, id:uniq}),
             contentType: "application/json",
             success: function(res) {
                 if (res.success) {
@@ -83,14 +88,20 @@ pswp.listen('position_change', function(item, x, y, zoom, time) {
     }
     src = item.src;
     x_min = [];
+    x_max = [];
+    y_min = [];
+    y_max = [];
+    times = [];
+    start_time = time;
   }
   x_min.push(x < 0 ? Math.floor(-x) : 0);
   var width = Math.floor(-x + screen.width / zoom);
-  var x_max = width < item.w ? width : item.w;
+  x_max.push(width < item.w ? width : item.w);
 
-  var y_min = y < 0 ? Math.floor(-y) : 0;
+  y_min.push(y < 0 ? Math.floor(-y) : 0);
   var height = Math.floor(-y + screen.height / zoom);
-  var y_max = height < item.h ? height : item.h;
+  y_max.push(height < item.h ? height : item.h);
+  times.push(start_time - time)
   // console.log('img.src:' + item.src + ' x_min:' + x_min + ' x_max:' + x_max + ' y_min:' + y_min + ' y_max:' + y_max + ' time:' + time);
   // data.push({ x_min:x_min, x_max:x_max, y_min:y_min, y_max:y_max, time: time });
 });
