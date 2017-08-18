@@ -64,7 +64,7 @@ var data = [];
 pswp.listen('position_change', function(item, x, y, zoom, time) {
   if (item.src !== src) {
     if (data.length > min_events) {
-      console.log("saving to db")
+      console.log("saving to db");
       $.ajax({
             type: "POST",
             url: "/data",
