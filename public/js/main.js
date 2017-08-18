@@ -51,7 +51,10 @@ var options = {
     // optionName: 'option value'
     // for example:
     index: 0, // start at first slide
-    maxSpreadZoom: 4
+    maxSpreadZoom: 4,
+    pinchToClose: false,
+    closeOnScroll: false,
+    closeOnVerticalDrag: false
 };
 
 // Initializes and opens PhotoSwipe
