@@ -1,4 +1,4 @@
-var min_events = 10
+var min_events = 100
 
 var pswpElement = document.querySelectorAll('.pswp')[0];
 var uniq = 'id' + (new Date()).getTime();
@@ -101,7 +101,7 @@ pswp.listen('position_change', function(item, x, y, zoom, time) {
   y_min.push(y < 0 ? Math.floor(-y) : 0);
   var height = Math.floor(-y + screen.height / zoom);
   y_max.push(height < item.h ? height : item.h);
-  times.push(start_time - time)
+  times.push(time - start_time)
   // console.log('img.src:' + item.src + ' x_min:' + x_min + ' x_max:' + x_max + ' y_min:' + y_min + ' y_max:' + y_max + ' time:' + time);
   // data.push({ x_min:x_min, x_max:x_max, y_min:y_min, y_max:y_max, time: time });
 });
