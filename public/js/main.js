@@ -59,16 +59,16 @@ var pswp = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options);
 pswp.init();
 
 var src = '';
-var data = [];
+var x_min = [];
 
 pswp.listen('position_change', function(item, x, y, zoom, time) {
   if (item.src !== src) {
-    if (data.length > min_events) {
+    if (x_min.length > min_events) {
       console.log("saving to db");
       $.ajax({
             type: "POST",
             url: "/data",
-            data: JSON.stringify({ src:item.src, data:data, id:uniq}),
+            data: JSON.stringify({ src:item.src, x_min:x_min, id:uniq}),
             contentType: "application/json",
             success: function(res) {
                 if (res.success) {
@@ -82,15 +82,15 @@ pswp.listen('position_change', function(item, x, y, zoom, time) {
         });
     }
     src = item.src;
-    data = [];
+    x_min = [];
   }
-  var x_min = x < 0 ? Math.floor(-x) : 0;
+  x_min.push(x < 0 ? Math.floor(-x) : 0);
   var width = Math.floor(-x + screen.width / zoom);
   var x_max = width < item.w ? width : item.w;
 
   var y_min = y < 0 ? Math.floor(-y) : 0;
   var height = Math.floor(-y + screen.height / zoom);
   var y_max = height < item.h ? height : item.h;
-  console.log('img.src:' + item.src + ' x_min:' + x_min + ' x_max:' + x_max + ' y_min:' + y_min + ' y_max:' + y_max + ' time:' + time);
-  data.push({ x_min:x_min, x_max:x_max, y_min:y_min, y_max:y_max, time: time });
+  // console.log('img.src:' + item.src + ' x_min:' + x_min + ' x_max:' + x_max + ' y_min:' + y_min + ' y_max:' + y_max + ' time:' + time);
+  // data.push({ x_min:x_min, x_max:x_max, y_min:y_min, y_max:y_max, time: time });
 });
