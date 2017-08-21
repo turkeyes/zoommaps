@@ -18,33 +18,35 @@ var items = [
         src: 'imgs/3.png',
         w: 1240,
         h: 1754
-    },
-    {
-        src: 'imgs/4.png',
-        w: 1754,
-        h: 1240
-    },
-    {
-        src: 'imgs/5.png',
-        w: 1240,
-        h: 1754
-    },
-    {
-        src: 'imgs/6.png',
-        w: 1240,
-        h: 1754
-    },
-    {
-        src: 'imgs/7.png',
-        w: 1754,
-        h: 1240
-    },
-    {
-        src: 'imgs/8.png',
-        w: 1240,
-        h: 1754
     }
 ];
+//     ,
+//     {
+//         src: 'imgs/4.png',
+//         w: 1754,
+//         h: 1240
+//     },
+//     {
+//         src: 'imgs/5.png',
+//         w: 1240,
+//         h: 1754
+//     },
+//     {
+//         src: 'imgs/6.png',
+//         w: 1240,
+//         h: 1754
+//     },
+//     {
+//         src: 'imgs/7.png',
+//         w: 1754,
+//         h: 1240
+//     },
+//     {
+//         src: 'imgs/8.png',
+//         w: 1240,
+//         h: 1754
+//     }
+// ];
 
 // define options (if needed)
 var options = {
