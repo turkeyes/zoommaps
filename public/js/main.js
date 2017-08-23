@@ -6,8 +6,8 @@ var uniq = 'id' + (new Date()).getTime();
 var items = [
     {
         src: 'imgs/4.png',
-        w: 1240,
-        h: 1754
+        w: 1754,
+        h: 1240
     },
     {
         src: 'imgs/6.png',
