@@ -5,17 +5,17 @@ var uniq = 'id' + (new Date()).getTime();
 // build items array
 var items = [
     {
-        src: 'imgs/1.png',
+        src: 'imgs/4.png',
         w: 1240,
         h: 1754
     },
     {
-        src: 'imgs/2.png',
+        src: 'imgs/6.png',
         w: 1240,
         h: 1754
     },
     {
-        src: 'imgs/3.png',
+        src: 'imgs/8.png',
         w: 1240,
         h: 1754
     }
