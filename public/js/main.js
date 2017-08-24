@@ -128,6 +128,6 @@ pswp.listen('position_change', function(item, x, y, zoom, time) {
   // console.log(item)
   // console.log(item.fitRatio)
   // console.log('x:' + -x/zoom + ' y:' + -y/zoom + ' zoom:' + zoom)
-  // console.log('img.src:' + item.src + ' x_min:' + x_min[x_min.length - 1] + ' x_max:' + x_max[x_max.length - 1] + ' y_min:' + y_min[y_min.length - 1] + ' y_max:' + y_max[y_max.length - 1] + ' time:' + time[time.length - 1]);
+  console.log('img.src:' + item.src + ' x_min:' + x_min[x_min.length - 1] + ' x_max:' + x_max[x_max.length - 1] + ' y_min:' + y_min[y_min.length - 1] + ' y_max:' + y_max[y_max.length - 1] + ' time:' + time[time.length - 1]);
   //data.push({ x_min:x_min, x_max:x_max, y_min:y_min, y_max:y_max, time: time });
 });
