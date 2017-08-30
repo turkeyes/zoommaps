@@ -5,19 +5,19 @@ var uniq = 'id' + (new Date()).getTime();
 // build items array
 var items = [
     {
-        src: 'imgs/4.png',
-        w: 1754,
-        h: 1240
+        src: 'imgs/P-4B-10.jpg',
+        w: 2480,
+        h: 3508
     },
     {
-        src: 'imgs/6.png',
-        w: 1240,
-        h: 1754
+        src: 'imgs/P-1A-12.jpg',
+        w: 2480,
+        h: 3508
     },
     {
-        src: 'imgs/8.png',
-        w: 1240,
-        h: 1754
+        src: 'imgs/P-4B-33.jpg',
+        w: 2480,
+        h: 3508
     }
 ];
 //     ,
@@ -92,7 +92,7 @@ pswp.listen('position_change', function(item, x, y, zoom, time) {
       $.ajax({
             type: "POST",
             url: "/data",
-            data: JSON.stringify({ src:item.src, x_min:x_min, x_max:x_max, y_min:y_min, y_max:y_max, time:times, id:uniq}),
+            data: JSON.stringify({ src:src, x_min:x_min, x_max:x_max, y_min:y_min, y_max:y_max, time:times, id:uniq}),
             contentType: "application/json",
             success: function(res) {
                 if (res.success) {
@@ -127,6 +127,6 @@ pswp.listen('position_change', function(item, x, y, zoom, time) {
   // console.log(Math.floor(-y/zoom + width * window.innerHeight / window.innerWidth))
   // console.log(1754 - Math.floor((-y + item.h*item.fitRatio) / zoom))
   // console.log((y_max[x_max.length - 1] - y_min[x_min.length - 1]) / (x_max[x_max.length - 1] - x_min[x_min.length - 1]))
-  console.log('img.src:' + item.src + ' x_min:' + x_min[x_min.length - 1] + ' x_max:' + x_max[x_max.length - 1] + ' y_min:' + y_min[y_min.length - 1] + ' y_max:' + y_max[y_max.length - 1] + ' time:' + time[time.length - 1]);
+  console.log('img.src:' + item.src + ' x_min:' + x_min[x_min.length - 1] + ' x_max:' + x_max[x_max.length - 1] + ' y_min:' + y_min[y_min.length - 1] + ' y_max:' + y_max[y_max.length - 1] + ' time:' + times[times.length - 1]);
   // data.push({ x_min:x_min, x_max:x_max, y_min:y_min, y_max:y_max, time: time });
 });
