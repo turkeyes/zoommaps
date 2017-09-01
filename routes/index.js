@@ -8,15 +8,11 @@ var Label = require("../models/label");
 var router = express.Router();
 
 router.get("/", function(req, res, next) {
-    res.sendFile(path.join(__dirname, "../views/index.html"));
-});
-
-router.get("/viewer", function(req, res, next) {
     res.sendFile(path.join(__dirname, "../views/viewer.html"));
 });
 
-router.get("/viewer/:dataset", function(req, res, next) {
-  res.redirect('/viewer/?dataset=' + req.params['dataset']);
+router.get("/:dataset", function(req, res, next) {
+  res.redirect('/?dataset=' + req.params['dataset']);
 })
 
 

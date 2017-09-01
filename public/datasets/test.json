@@ -3,17 +3,17 @@
     "name" : "section 1",
     "data" : [
       {
-          "src": "../imgs/P-4B-10.jpg",
+          "src": "/imgs/P-4B-10.jpg",
           "w": 2480,
           "h": 3508
       },
       {
-          "src": "../imgs/P-1A-12.jpg",
+          "src": "/imgs/P-1A-12.jpg",
           "w": 2480,
           "h": 3508
       },
       {
-          "src": "../imgs/P-4B-33.jpg",
+          "src": "/imgs/P-4B-33.jpg",
           "w": 2480,
           "h": 3508
       }
@@ -23,17 +23,17 @@
     "name" : "section 2",
     "data" : [
       {
-          "src": "../imgs/1.png",
+          "src": "/imgs/1.png",
           "w": 2480,
           "h": 3508
       },
       {
-          "src": "../imgs/2.png",
+          "src": "/imgs/2.png",
           "w": 2480,
           "h": 3508
       },
       {
-          "src": "../imgs/3.png",
+          "src": "/imgs/3.png",
           "w": 2480,
           "h": 3508
       }
