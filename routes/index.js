@@ -7,10 +7,17 @@ var Label = require("../models/label");
 
 var router = express.Router();
 
-// main page
 router.get("/", function(req, res, next) {
     res.sendFile(path.join(__dirname, "../views/index.html"));
 });
+
+router.get("/viewer", function(req, res, next) {
+    res.sendFile(path.join(__dirname, "../views/viewer.html"));
+});
+
+router.get("/viewer/:dataset", function(req, res, next) {
+  res.redirect('/viewer/?dataset=' + req.params['dataset']);
+})
 
 
 // send data
