@@ -49,9 +49,11 @@ items = [{
     }]
 openPhotoSwipe(items)
 
+
 function openPhotoSwipe(items) {
   var pswpElement = document.querySelectorAll('.pswp')[0];
   var uniq = 'id' + (new Date()).getTime();
+  var rotated = false;
 
   // define options (if needed)
   var options = {
@@ -69,9 +71,14 @@ function openPhotoSwipe(items) {
       return orientation;
   }
 
+
   window.onresize = function(){
     orientation = getOrientation();
     console.log(orientation)
+    if(navigator.userAgent.match('CriOS')) {
+      // Catch IOS iPhone bug
+      window.location.reload();
+    }
   }
 
   // Initializes and opens PhotoSwipe
@@ -91,7 +98,7 @@ function openPhotoSwipe(items) {
   })
 
   pswp.listen('position_change', function(item, x, y, zoom, time) {
-    if (item.src !== src) {
+    if (item.src !== src || rotated) {
       if (x_min.length > min_events) {
         console.log("saving to db");
         $.ajax({
