@@ -32,37 +32,26 @@ $(document).ready(function() {
   }
 });
 
+items = [{
+        src: 'imgs/4.png',
+        w: 1754,
+        h: 1240
+    },
+    {
+        src: 'imgs/5.png',
+        w: 1240,
+        h: 1754
+    },
+    {
+        src: 'imgs/6.png',
+        w: 1240,
+        h: 1754
+    }]
+openPhotoSwipe(items)
+
 function openPhotoSwipe(items) {
   var pswpElement = document.querySelectorAll('.pswp')[0];
   var uniq = 'id' + (new Date()).getTime();
-  // build items array
-  //     ,
-  //     {
-  //         src: 'imgs/4.png',
-  //         w: 1754,
-  //         h: 1240
-  //     },
-  //     {
-  //         src: 'imgs/5.png',
-  //         w: 1240,
-  //         h: 1754
-  //     },
-  //     {
-  //         src: 'imgs/6.png',
-  //         w: 1240,
-  //         h: 1754
-  //     },
-  //     {
-  //         src: 'imgs/7.png',
-  //         w: 1754,
-  //         h: 1240
-  //     },
-  //     {
-  //         src: 'imgs/8.png',
-  //         w: 1240,
-  //         h: 1754
-  //     }
-  // ];
 
   // define options (if needed)
   var options = {
@@ -130,11 +119,18 @@ function openPhotoSwipe(items) {
       start_time = time;
     }
     x_min.push(x < 0 ? Math.floor(-x / zoom) : 0);
-    var width = item.w*item.fitRatio / zoom;
-    x_max.push(Math.floor(-x / zoom + width) < item.w ? Math.floor(-x / zoom + width) : item.w);
-
     y_min.push(y < 0 ? Math.floor(-y / zoom) : 0);
-    var height = width * window.innerHeight / window.innerWidth;
+
+    if ((item.w / item.h) > (window.innerWidth / window.innerHeight)) {
+      var width = item.w*item.fitRatio / zoom;
+      var height = width * window.innerHeight / window.innerWidth;
+    } else {
+      var height = item.h*item.fitRatio / zoom;
+      var width = height * window.innerWidth / window.innerHeight;
+    }
+
+
+    x_max.push(Math.floor(-x / zoom + width) < item.w ? Math.floor(-x / zoom + width) : item.w);
     y_max.push(Math.floor(-y / zoom + height) < item.h ? Math.floor(-y / zoom + height) : item.h);
     times.push(time - start_time)
     // console.log(item)
