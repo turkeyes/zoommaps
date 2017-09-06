@@ -17,37 +17,41 @@ $(document).ready(function() {
   var page_vars = getUrlVars();
   if ('dataset' in page_vars) {
     $.getJSON('../datasets/' + page_vars['dataset'] + '.json', function( data ) {
-      $.each( data, function( key, val ) {
-        var r=$('<input/>').attr({
-            type: "button",
-            id: "field",
-            value: val["name"]
+      if (data.length == 1) {
+        openPhotoSwipe(data[0]['data']);
+      } else {
+        $.each( data, function( key, val ) {
+          var r=$('<input/>').attr({
+              type: "button",
+              id: "field",
+              value: val["name"]
+          });
+          r.click(function(){
+              openPhotoSwipe(val['data']);
+          });
+          $("#galleries").append(r);
         });
-        r.click(function(){
-            openPhotoSwipe(val['data']);
-        });
-        $("#galleries").append(r);
-      });
+      }
     });
   }
 });
 
-items = [{
-        src: 'imgs/4.png',
-        w: 1754,
-        h: 1240
-    },
-    {
-        src: 'imgs/5.png',
-        w: 1240,
-        h: 1754
-    },
-    {
-        src: 'imgs/6.png',
-        w: 1240,
-        h: 1754
-    }]
-openPhotoSwipe(items)
+// items = [{
+//         src: 'imgs/4.png',
+//         w: 1754,
+//         h: 1240
+//     },
+//     {
+//         src: 'imgs/5.png',
+//         w: 1240,
+//         h: 1754
+//     },
+//     {
+//         src: 'imgs/6.png',
+//         w: 1240,
+//         h: 1754
+//     }]
+// openPhotoSwipe(items)
 
 
 function openPhotoSwipe(items) {
