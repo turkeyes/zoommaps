@@ -11,6 +11,10 @@ router.get("/", function(req, res, next) {
     res.sendFile(path.join(__dirname, "../views/viewer.html"));
 });
 
+router.get("/:dataset/:tag", function(req, res, next) {
+  res.redirect('/?dataset=' + req.params['dataset'] + '&tag=' + req.params['tag']);
+})
+
 router.get("/:dataset", function(req, res, next) {
   res.redirect('/?dataset=' + req.params['dataset']);
 })
@@ -18,7 +22,7 @@ router.get("/:dataset", function(req, res, next) {
 
 // send data
 router.post("/data", function(req, res, next) {
-    var label = new Label({ src:req.body.src, x_min:req.body.x_min, x_max:req.body.x_max, y_min:req.body.y_min, y_max:req.body.y_max, time:req.body.time, id:req.body.id});
+    var label = new Label({ src:req.body.src, x_min:req.body.x_min, x_max:req.body.x_max, y_min:req.body.y_min, y_max:req.body.y_max, time:req.body.time, id:req.body.id, tag:req.body.tag, dataset:req.body.dataset});
     label.save(function(err) {
         if (err) res.send({ success: false, message: "Can't save label, please try again!" });
     });

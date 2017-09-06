@@ -7,7 +7,9 @@ var labelSchema = mongoose.Schema({
   y_min: [Number],
   y_max: [Number],
   time: [Number],
-  id: String
+  id: String,
+  tag: String,
+  dataset: String
 });
 
 var Label = mongoose.model("Label", labelSchema);

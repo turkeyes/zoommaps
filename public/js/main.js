@@ -15,10 +15,14 @@ function getUrlVars()
 
 $(document).ready(function() {
   var page_vars = getUrlVars();
+  var tag = 'none'
+  if ('tag' in page_vars) {
+    tag = page_vars['tag']
+  }
   if ('dataset' in page_vars) {
     $.getJSON('../datasets/' + page_vars['dataset'] + '.json', function( data ) {
       if (data.length == 1) {
-        openPhotoSwipe(data[0]['data']);
+        openPhotoSwipe(data[0]['data'], page_vars['dataset'], tag);
       } else {
         $.each( data, function( key, val ) {
           var r=$('<input/>').attr({
@@ -27,7 +31,7 @@ $(document).ready(function() {
               value: val["name"]
           });
           r.click(function(){
-              openPhotoSwipe(val['data']);
+              openPhotoSwipe(val['data'], page_vars['dataset'], tag);
           });
           $("#galleries").append(r);
         });
@@ -54,7 +58,7 @@ $(document).ready(function() {
 // openPhotoSwipe(items)
 
 
-function openPhotoSwipe(items) {
+function openPhotoSwipe(items, dataset, tag) {
   var pswpElement = document.querySelectorAll('.pswp')[0];
   var uniq = 'id' + (new Date()).getTime();
   var rotated = false;
@@ -108,7 +112,7 @@ function openPhotoSwipe(items) {
         $.ajax({
               type: "POST",
               url: "/data",
-              data: JSON.stringify({ src:src, x_min:x_min, x_max:x_max, y_min:y_min, y_max:y_max, time:times, id:uniq}),
+              data: JSON.stringify({ src:src, x_min:x_min, x_max:x_max, y_min:y_min, y_max:y_max, time:times, id:uniq, dataset:dataset, tag:tag}),
               contentType: "application/json",
               success: function(res) {
                   if (res.success) {
