@@ -62,7 +62,7 @@ var PhotoSwipeUI_Default =
 				return true;
 			},
 
-			closeEl:true,
+			closeEl:false,
 			captionEl: true,
 			fullscreenEl: true,
 			zoomEl: true,
