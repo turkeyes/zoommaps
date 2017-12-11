@@ -29,16 +29,14 @@
       }
     ]
   },
-  [
-    {
-      "name" : "section 2",
-      "data" : [
-        {
-            "src": "/imgs/cvpr17_poster_wenzhen.png",
-            "w": 3000,
-            "h": 1468
-        }
-      ]
-    }
-  ]
+  {
+    "name" : "section 2",
+    "data" : [
+      {
+          "src": "/imgs/cvpr17_poster_wenzhen.png",
+          "w": 3000,
+          "h": 1468
+      }
+    ]
+  }
 ]
