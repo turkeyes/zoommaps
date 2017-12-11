@@ -32,4 +32,5 @@ def make_singletons():
         with open('studies_12_2017_%d.json' % i, 'w') as outfile: 
             json.dump(singleton, outfile)
 
+make_singletons()
 make_subjects()
