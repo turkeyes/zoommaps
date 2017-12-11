@@ -1,0 +1,44 @@
+[
+  {
+    "name" : "section 1",
+    "data" : [
+      {
+          "src": "/imgs/cvpr17_poster_wenzhen.png",
+          "w": 3000,
+          "h": 1468
+      },
+      {
+          "src": "/imgs/DavidBau.png",
+          "w": 3000,
+          "h": 1500
+      },
+      {
+          "src": "/imgs/jiajun.jpg",
+          "w": 3000,
+          "h": 1500
+      },
+      {
+          "src": "/imgs/julian_trevor.jpg",
+          "w": 3000,
+          "h": 1800
+      },
+      {
+          "src": "/imgs/poster_v1_sceneparsing.jpg",
+          "w": 3000,
+          "h": 1500
+      }
+    ]
+  },
+  [
+    {
+      "name" : "section 2",
+      "data" : [
+        {
+            "src": "/imgs/cvpr17_poster_wenzhen.png",
+            "w": 3000,
+            "h": 1468
+        }
+      ]
+    }
+  ]
+]
