@@ -9,12 +9,20 @@ posters = data[0]["data"] #array of posters
 
 def make_subjects(): 
     subjects = ['kimberli']
+    placeholder = [
+            {
+                "src": "/imgs/CVPR_studies_12_2017/slot_7_placeholder.JPG",
+                "w": 3000,
+                "h": 1500
+            }
+    ]
     for subject in subjects: 
         random.shuffle(posters)
+        taskdata = posters[:6] + placeholder + posters[6:]
         task = [
                 {
                     "name": "poster viewing study",
-                    "data": posters
+                    "data": taskdata
                 }
         ]
         with open('studies_12_2017_%s.json' % subject, 'w') as outfile: 
