@@ -8,7 +8,7 @@ with open('studies_12_2017_all.json', 'r') as infile:
 posters = data[0]["data"] #array of posters
 
 def make_subjects(): 
-    subjects = ['spandan', 'matt']
+    subjects = ['kimberli']
     placeholder = [
             {
                 "src": "/imgs/CVPR_studies_12_2017/slot_7_placeholder.JPG",
