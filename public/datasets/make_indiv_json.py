@@ -1,7 +1,14 @@
 import json 
 import random
 
-with open('studies_12_2017_all.json', 'r') as infile: 
+#STUDY_SET_TO_USE  = 'studies_12_2017_all.json'
+STUDY_SET_TO_USE  = 'vss.json'
+
+#INDIV_PREFIX = 'studies_12_2017_%s.json'
+INDIV_PREFIX = 'studies_12_2017_vss_%s.json'
+
+
+with open(STUDY_SET_TO_USE, 'r') as infile: 
     data = json.load(infile)
 
 
@@ -24,7 +31,7 @@ def make_subjects(subjects):
                     "data": taskdata
                 }
         ]
-        with open('studies_12_2017_%s.json' % subject, 'w') as outfile: 
+        with open(INDIV_PREFIX % subject, 'w') as outfile: 
             json.dump(task, outfile) 
 
 
@@ -40,4 +47,4 @@ def make_singletons():
             json.dump(singleton, outfile)
 
 #make_singletons()
-make_subjects(["milo"])
+make_subjects(["ali", "dian", "benjamin"])
