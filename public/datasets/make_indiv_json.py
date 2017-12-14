@@ -40,4 +40,4 @@ def make_singletons():
             json.dump(singleton, outfile)
 
 #make_singletons()
-make_subjects(["chollette"])
+make_subjects(["milo"])
