@@ -1,11 +1,11 @@
 import json 
 import random
 
-#STUDY_SET_TO_USE  = 'studies_12_2017_all.json'
-STUDY_SET_TO_USE  = 'vss.json'
+STUDY_SET_TO_USE  = 'studies_12_2017_all.json'
+#STUDY_SET_TO_USE  = 'vss.json'
 
-#INDIV_PREFIX = 'studies_12_2017_%s.json'
-INDIV_PREFIX = 'studies_12_2017_vss_%s.json'
+INDIV_PREFIX = 'studies_12_2017_%s.json'
+#INDIV_PREFIX = 'studies_12_2017_vss_%s.json'
 
 
 with open(STUDY_SET_TO_USE, 'r') as infile: 
@@ -47,4 +47,4 @@ def make_singletons():
             json.dump(singleton, outfile)
 
 #make_singletons()
-make_subjects(["ali", "dian", "benjamin"])
+make_subjects(["camilo", "erin", "mingshi"])
