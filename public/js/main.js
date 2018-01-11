@@ -91,6 +91,11 @@ function openPhotoSwipe(items, dataset, tag) {
   }
 
   // Initializes and opens PhotoSwipe
+  function randomize(a, b) {
+      return Math.random() - 0.5;
+  }
+  items.sort(randomize);
+
   var pswp = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options);
   pswp.init();
 
