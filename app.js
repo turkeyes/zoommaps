@@ -16,7 +16,10 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 // database
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/diviz");
+mongoose.connect(
+	process.env.MONGODB_URI || "mongodb://localhost/diviz",
+	{ useNewUrlParser: true }
+);
 var connection = mongoose.connection;
 connection.on("error", console.error.bind(console, "connection error:"));
 connection.on("connected", function() {

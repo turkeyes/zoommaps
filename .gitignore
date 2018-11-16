@@ -60,7 +60,7 @@ typings/
 .yarn-integrity
 
 # dotenv environment variables file
-.env
+env.sh
 
 
 # End of https://www.gitignore.io/api/node
