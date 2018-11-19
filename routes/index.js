@@ -17,6 +17,10 @@ router.get("/:dataset/:tag", function(req, res, next) {
 })
 
 router.get("/:dataset", function(req, res, next) {
+  var md = new MobileDetect(req.headers['user-agent']);
+  console.log( md.mobile() );
+  console.log( md.phone() );
+  console.log( md.tablet() );
   res.redirect('/?dataset=' + req.params['dataset']);
 })
 
