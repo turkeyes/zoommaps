@@ -21,6 +21,9 @@ router.get("/:dataset", function(req, res, next) {
   console.log( md.mobile() );
   console.log( md.phone() );
   console.log( md.tablet() );
+  if !(md.mobile() || md.phone() || md.tablet()) {
+    res.status(403).send({ success: false, message: "Not on mobile device!" });
+  }
   res.redirect('/?dataset=' + req.params['dataset']);
 })
 
@@ -36,7 +39,7 @@ router.post("/data", function(req, res, next) {
           if (err) res.send({ success: false, message: "Can't save label, please try again!" });
       });
     } else {
-      res.send({ success: false, message: "Not on mobile device!" });
+      res.status(403).send({ success: false, message: "Not on mobile device!" });
     }
 });
 
