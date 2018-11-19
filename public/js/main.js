@@ -127,7 +127,6 @@ function openPhotoSwipe(items, dataset, tag) {
                   }
               },
               error: function(err) {
-                  alert(err.message);
                   console.log("could not connect to db server");
               }
           });

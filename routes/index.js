@@ -8,27 +8,22 @@ var Label = require("../models/label");
 
 var router = express.Router();
 
+router.get('*', function(req, res, next) {
+  var md = new MobileDetect(req.headers['user-agent']);
+  if (!Boolean(md.mobile() || md.phone() || md.tablet())) {
+    res.sendFile(path.join(__dirname, "../views/error.html"));
+  }
+});
+
 router.get("/", function(req, res, next) {
-    var md = new MobileDetect(req.headers['user-agent']);
-    if (!Boolean(md.mobile() || md.phone() || md.tablet())) {
-      res.send({ success: false, message: "Not on mobile device!" });
-    }
     res.sendFile(path.join(__dirname, "../views/viewer.html"));
 });
 
 router.get("/:dataset/:tag", function(req, res, next) {
-  var md = new MobileDetect(req.headers['user-agent']);
-  if (!Boolean(md.mobile() || md.phone() || md.tablet())) {
-    res.send({ success: false, message: "Not on mobile device!" });
-  }
   res.redirect('/?dataset=' + req.params['dataset'] + '&tag=' + req.params['tag']);
 })
 
 router.get("/:dataset", function(req, res, next) {
-  var md = new MobileDetect(req.headers['user-agent']);
-  if (!Boolean(md.mobile() || md.phone() || md.tablet())) {
-    res.send({ success: false, message: "Not on mobile device!" });
-  }
   res.redirect('/?dataset=' + req.params['dataset']);
 })
 
