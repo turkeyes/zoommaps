@@ -16,11 +16,13 @@
   </head>
   <body>
 
-    <h1>Poster Viewer</h1>
-    No posters here, make sure the url is correct!
+    <div id="error-url">
+      <h1>Poster Viewer</h1>
+      No posters here, make sure the url is correct!
+    </div>
     <div id="galleries"></div>
 
-    <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
+    <div id="experiment" class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="pswp__bg"></div>
 
       <!-- Slides wrapper with overflow:hidden. -->
@@ -34,6 +36,7 @@
             <div class="pswp__item"></div>
             <div class="pswp__item"></div>
         </div>
+
 
         <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
         <div class="pswp__ui pswp__ui--hidden">
@@ -64,6 +67,10 @@
                 <div class="pswp__share-tooltip"></div>
             </div>
 
+            <div id="submit-button">
+              <button class="pswp__button">Submit</button>
+            </div>
+
             <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
             </button>
 
@@ -75,6 +82,15 @@
             </div>
 
         </div>
+      </div>
+    </div>
+
+
+    <div id="succesful-submit" class="row" style="display: none; text-align:center">
+      <p class="ui header">Thank you for completing the task!</p>
+      <div style="background-color: lightgray; display: inline-block; align-items: center; padding: 20px; border-radius: 10px">
+        <p>MTurk submit code:</p>
+        <h1 class="ui header" id="submit-code"></h1>
       </div>
     </div>
     <script src="/js/photoswipe.js"></script>

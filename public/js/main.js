@@ -1,7 +1,6 @@
 var min_events = 100
 
-function getUrlVars()
-{
+function getUrlVars() {
     var vars = [], hash;
     var hashes = window.location.href.replace('\#', '').slice(window.location.href.indexOf('?') + 1).split('&');
     for(var i = 0; i < hashes.length; i++)
@@ -163,4 +162,59 @@ function openPhotoSwipe(items, dataset, tag) {
     // console.log('img.src:' + item.src + ' x_min:' + x_min[x_min.length - 1] + ' x_max:' + x_max[x_max.length - 1] + ' y_min:' + y_min[y_min.length - 1] + ' y_max:' + y_max[y_max.length - 1] + ' time:' + times[times.length - 1]);
     // data.push({ x_min:x_min, x_max:x_max, y_min:y_min, y_max:y_max, time: time });
   });
+}
+
+$("#submit-button" ).on("click", function() {
+  var page_vars = getUrlVars();
+  var tag = 'none';
+  if ('tag' in page_vars) {
+    tag = page_vars['tag']
+    console.log(tag);
+  }
+  $.ajax({
+        type: "POST",
+        url: "/verification",
+        data: JSON.stringify({ userId: tag }),
+        contentType: "application/json",
+        success: function(res) {
+            if (res.success) {
+              showSubmitKey(res['key']);
+            } else {
+              console.log(res);
+              console.log("ERROR: cannot find user");
+            }
+        },
+        error: function(err) {
+            console.log("ERROR: could not connect to db server", err);
+        }
+    });
+});
+
+function showSubmitKey(key) {
+    $('#submit-code').text(key);
+    $('#error-url').hide();
+    $('#experiment').hide();
+    $('#succesful-submit').show();
+    selectText('submit-code');
+}
+
+// highlights/selects text within an html element
+// copied from:
+// https://stackoverflow.com/questions/985272/selecting-text-in-an-element-akin-to-highlighting-with-your-mouse
+function selectText(node) {
+    node = document.getElementById(node);
+
+    if (document.body.createTextRange) {
+        const range = document.body.createTextRange();
+        range.moveToElementText(node);
+        range.select();
+    } else if (window.getSelection) {
+        const selection = window.getSelection();
+        const range = document.createRange();
+        range.selectNodeContents(node);
+        selection.removeAllRanges();
+        selection.addRange(range);
+    } else {
+        console.warn("Could not select text in node: Unsupported browser.");
+    }
 }

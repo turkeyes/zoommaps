@@ -1,6 +1,7 @@
 var express = require("express");
 var path = require("path");
 var mongoose = require("mongoose");
+var User = require('../models/user');
 var ObjectId = require('mongodb').ObjectID;
 var MobileDetect = require('mobile-detect');
 
@@ -22,6 +23,15 @@ router.get("/", function(req, res, next) {
 });
 
 router.get("/:dataset/:tag", function(req, res, next) {
+  new User({
+        userId: req.params['tag'],
+        dataset: req.params['dataset']
+      }).save((err, saved) => {
+        if (err) {
+          console.log("Error saving new user", err)
+        } else {
+        }
+      });
   res.redirect('/?dataset=' + req.params['dataset'] + '&tag=' + req.params['tag']);
 })
 
@@ -35,6 +45,15 @@ router.post("/data", function(req, res, next) {
   label.save(function(err) {
     if (err) res.send({ success: false, message: "Can't save label, please try again!" });
   });
+});
+
+router.post("/verification", function(req, res, next) {
+  User.findOne({ userId: req.body.userId }, function(err, foundUser) {
+    if (err) {
+      console.log("Error finding the user", err)
+    }
+    res.send({ success: true, key: foundUser._id });
+  })
 });
 
 module.exports = router;
