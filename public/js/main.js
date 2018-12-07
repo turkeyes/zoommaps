@@ -1,6 +1,6 @@
 var MIN_EVENTS = 100;
 // var MIN_TIME = 5 * 60 * 1000;
-var MIN_TIME = 5000;
+var MIN_TIME = 10000;
 var MIN_ZOOM = 15;
 
 function getUrlVars() {
@@ -224,14 +224,13 @@ function endTask() {
     $('#submit-page').show();
   } else {
     $('#incomplete-task').show().delay(5000).fadeOut();
-    $('#experiment').delay(5000).show();
+    $('#experiment').delay(5000).fadeIn();;
   }
 }
 
 function showSubmitKey(key) {
     $('#submit-code').text(key);
-    $('#error-url').hide();
-    $('#experiment').hide();
+    $('#submit-page').hide();
     $('#succesful-submit').show();
     selectText('submit-code');
 }
