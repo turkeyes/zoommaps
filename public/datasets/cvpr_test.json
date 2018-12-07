@@ -26,6 +26,9 @@
           "src": "/imgs/poster_v1_sceneparsing.jpg",
           "w": 3000,
           "h": 1500
+      },
+      {
+        "html": "<div class=\"incomplete-task\"><h1>Any HTML <a href=\"http://example.com\">Spend more time, zoom in more</a></h1></div>"
       }
     ]
   }

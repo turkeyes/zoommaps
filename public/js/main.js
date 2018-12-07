@@ -1,4 +1,7 @@
-var min_events = 100
+var MIN_EVENTS = 100;
+// var MIN_TIME = 5 * 60 * 1000;
+var MIN_TIME = 5000;
+var MIN_ZOOM = 15;
 
 function getUrlVars() {
     var vars = [], hash;
@@ -107,12 +110,12 @@ function openPhotoSwipe(items, dataset, tag) {
   var start_time = 0;
 
   pswp.listen('setImageSize', function(w, h) {
-    console.log('w:'+ w + ' h:' + h)
+    console.log('w:'+ w + ' h:' + h);
   })
 
   pswp.listen('position_change', function(item, x, y, zoom, time) {
     if (item.src !== src || rotated) {
-      if (x_min.length > min_events) {
+      if (x_min.length > MIN_EVENTS) {
         console.log("saving to db");
         $.ajax({
               type: "POST",
@@ -161,10 +164,14 @@ function openPhotoSwipe(items, dataset, tag) {
     // console.log((y_max[x_max.length - 1] - y_min[x_min.length - 1]) / (x_max[x_max.length - 1] - x_min[x_min.length - 1]))
     // console.log('img.src:' + item.src + ' x_min:' + x_min[x_min.length - 1] + ' x_max:' + x_max[x_max.length - 1] + ' y_min:' + y_min[y_min.length - 1] + ' y_max:' + y_max[y_max.length - 1] + ' time:' + times[times.length - 1]);
     // data.push({ x_min:x_min, x_max:x_max, y_min:y_min, y_max:y_max, time: time });
+
+    if (pswp.getCurrentIndex() === pswp.options.getNumItemsFn() - 1) {
+      endTask();
+    };
   });
 }
 
-$("#submit-button" ).on("click", function() {
+$("#submit-button").on("click", function() {
   var page_vars = getUrlVars();
   var tag = 'none';
   if ('tag' in page_vars) {
@@ -190,6 +197,12 @@ $("#submit-button" ).on("click", function() {
     });
 });
 
+function startTask() {
+  window.localStorage.setItem("startTime", new Date().getTime());
+  goToTagUrl();
+  return false;
+}
+
 function goToTagUrl() {
   var tag = document.getElementById('tag').value;
   var currentUrl = window.location.href;
@@ -198,7 +211,21 @@ function goToTagUrl() {
   }
   var tagUrl = currentUrl + tag;
   window.location.href = tagUrl;
-  return false;
+}
+
+function endTask() {
+  $('#error-url').hide();
+  $('#experiment').hide();
+  var startTime = window.localStorage.getItem("startTime");
+  var curTime = new Date().getTime();
+  var geqMinTime = (curTime - startTime) >= MIN_TIME;
+  // TODO: More checks on min # zoom in times here
+  if (geqMinTime) {
+    $('#submit-page').show();
+  } else {
+    $('#incomplete-task').show().delay(5000).fadeOut();
+    $('#experiment').delay(5000).show();
+  }
 }
 
 function showSubmitKey(key) {
