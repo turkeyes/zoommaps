@@ -1,0 +1,38 @@
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<head>
+  <title>Poster Viewer</title>
+  <link rel="stylesheet" href="/css/enterid.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+  <!-- <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"> -->
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+  <div class="container-fluid" id="body-container-fluid">
+    <div class="container">
+      <div class="jumbotron">
+        <br>
+        <h1 class="display-1"><i class="fa fa-spin fa-cog fa-3x"></i></h1>
+        <h1 class="display-3">Please enter your MTurk Worker ID:</h1>
+        <div class="row">
+          <div class="col-md-6 col-offset-2">
+            <div class="text-input">
+              <form onsubmit="return goToTagUrl()">
+                <input type="text" id="tag">
+                <label for="tag">ID #</label>
+                <input type="submit" value="Submit">
+              </form>
+            </div>
+          </div>
+        </div>
+        <!-- <form onsubmit="return goToTagUrl()">
+          <input type="text" id="tag" value=""><br>
+          <input type="submit" value="Submit">
+        </form> -->
+      </div>
+    </div>
+  </div>
+  <script src="/js/main.js"></script>
+</body>
+</html>

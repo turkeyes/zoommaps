@@ -190,6 +190,17 @@ $("#submit-button" ).on("click", function() {
     });
 });
 
+function goToTagUrl() {
+  var tag = document.getElementById('tag').value;
+  var currentUrl = window.location.href;
+  if ([currentUrl.length-1] !== '/') {
+    currentUrl += '/';
+  }
+  var tagUrl = currentUrl + tag;
+  window.location.href = tagUrl;
+  return false;
+}
+
 function showSubmitKey(key) {
     $('#submit-code').text(key);
     $('#error-url').hide();

@@ -4,6 +4,8 @@ var mongoose = require("mongoose");
 var User = require('../models/user');
 var ObjectId = require('mongodb').ObjectID;
 var MobileDetect = require('mobile-detect');
+var fs = require('fs');
+var qr = require('qr-image');
 
 var Label = require("../models/label");
 
@@ -23,20 +25,28 @@ router.get("/", function(req, res, next) {
 });
 
 router.get("/:dataset/:tag", function(req, res, next) {
-  new User({
-        userId: req.params['tag'],
-        dataset: req.params['dataset']
-      }).save((err, saved) => {
-        if (err) {
-          console.log("Error saving new user", err)
-        } else {
-        }
-      });
-  res.redirect('/?dataset=' + req.params['dataset'] + '&tag=' + req.params['tag']);
+  User.findOne({ userId: req.params['tag'] }, function(err, foundUser) {
+    if (err) {
+      console.log("Error finding existing user", err)
+    } else if (foundUser) {
+      res.sendFile(path.join(__dirname, "../views/error.html"));
+    } else {
+      new User({
+            userId: req.params['tag'],
+            dataset: req.params['dataset']
+          }).save((err, saved) => {
+            if (err) {
+              console.log("Error saving new user", err)
+            } else {
+            }
+          });
+      res.redirect('/?dataset=' + req.params['dataset'] + '&tag=' + req.params['tag']);
+    }
+  })
 })
 
 router.get("/:dataset", function(req, res, next) {
-  res.redirect('/?dataset=' + req.params['dataset']);
+  res.sendFile(path.join(__dirname, "../views/enterid.html"));
 })
 
 // send data
