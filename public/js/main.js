@@ -1,6 +1,6 @@
 var MIN_EVENTS = 100;
 // var MIN_TIME = 5 * 60 * 1000;
-var MIN_TIME = 10 * 1000;
+var MIN_TIME = 15 * 1000;
 var MIN_ZOOM = 15;
 
 function getUrlVars() {
