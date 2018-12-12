@@ -66,4 +66,15 @@ router.post("/verification", function(req, res, next) {
   })
 });
 
+router.post("/end", function(req, res, next) {
+  Label.find({ tag: req.body.userId }, function(err, userLabels) {
+    if (err) {
+      console.log("Error finding the user labels", err)
+    }
+    console.log(userLabels);
+    console.log(userLabels.length);
+    res.send({ success: true, numLabels: userLabels.length });
+  })
+});
+
 module.exports = router;

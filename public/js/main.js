@@ -1,7 +1,7 @@
 var MIN_EVENTS = 100;
 // var MIN_TIME = 5 * 60 * 1000;
 var MIN_TIME = 15 * 1000;
-var MIN_ZOOM = 15;
+var MIN_ZOOM = 1;
 
 function getUrlVars() {
     var vars = [], hash;
@@ -220,12 +220,35 @@ function endTask() {
   var curTime = new Date().getTime();
   var geqMinTime = (curTime - startTime) >= MIN_TIME;
   // TODO: More checks on min # zoom in times here
-  if (geqMinTime) {
-    $('#submit-page').show();
-  } else {
-    $('#incomplete-task').show().delay(5000).fadeOut();
-    $('#experiment').delay(5000).fadeIn();;
+  var geqMinZoomNum = false;
+  var page_vars = getUrlVars();
+  var tag = 'none'
+  if ('tag' in page_vars) {
+    tag = page_vars['tag']
   }
+  $.ajax({
+        type: "POST",
+        url: "/end",
+        data: JSON.stringify({ userId: tag }),
+        contentType: "application/json",
+        success: function(res) {
+            if (res.success) {
+              var geqMinZoomNum = res['numLabels'] >= MIN_ZOOM;
+              if (geqMinTime && geqMinZoomNum) {
+                $('#submit-page').show();
+              } else {
+                $('#incomplete-task').show().delay(5000).fadeOut();
+                $('#experiment').delay(5000).fadeIn();;
+              }
+            } else {
+              console.log(res);
+              console.log("ERROR: cannot find user labels");
+            }
+        },
+        error: function(err) {
+            console.log("ERROR: could not connect to db server", err);
+        }
+    });
 }
 
 function showSubmitKey(key) {
