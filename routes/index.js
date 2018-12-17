@@ -11,14 +11,14 @@ var Label = require("../models/label");
 
 var router = express.Router();
 
-// router.get('*', function(req, res, next) {
-//   var md = new MobileDetect(req.headers['user-agent']);
-//   if (!Boolean(md.mobile() || md.phone() || md.tablet())) {
-//     res.sendFile(path.join(__dirname, "../views/error.html"));
-//   } else {
-//     next();
-//   }
-// });
+router.get('*', function(req, res, next) {
+  var md = new MobileDetect(req.headers['user-agent']);
+  if (!Boolean(md.mobile() || md.phone() || md.tablet())) {
+    res.sendFile(path.join(__dirname, "../views/error.html"));
+  } else {
+    next();
+  }
+});
 
 router.get("/", function(req, res, next) {
   res.sendFile(path.join(__dirname, "../views/viewer.html"));
