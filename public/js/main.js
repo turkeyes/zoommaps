@@ -65,16 +65,14 @@ function openPhotoSwipe(items, dataset, tag) {
   var uniq = 'id' + (new Date()).getTime();
   var rotated = false;
 
-  // define options (if needed)
-  var options = {
-      // optionName: 'option value'
-      // for example:
+  var pswpOptions = {
       index: 0, // start at first slide
       maxSpreadZoom: 4,
       pinchToClose: false,
       closeOnScroll: false,
       closeOnVerticalDrag: false,
-      escKey: false
+      escKey: false,
+      loop: false
   };
 
   function getOrientation(){
@@ -98,7 +96,7 @@ function openPhotoSwipe(items, dataset, tag) {
   }
   items.sort(randomize);
 
-  var pswp = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, options);
+  var pswp = new PhotoSwipe( pswpElement, PhotoSwipeUI_Default, items, pswpOptions);
   pswp.init();
 
   var src = '';
