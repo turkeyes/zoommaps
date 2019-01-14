@@ -5,22 +5,15 @@ body {
   background-position: center;
   background-size: cover;
   line-height: 300%;
-}
-
-.display-1 {
   text-align: center;
-  color: #e1b7b7;
 }
 
-.display-1 .fa {
+
+h1 .fa {
+  color: #e1b7b7;
   animation: fa-spin 5s infinite linear;
 }
 
-.display-3 {
-  text-align: center;
+h1 {
   color: #df726a;
-}
-
-.lower-case {
-  text-align: center;
 }

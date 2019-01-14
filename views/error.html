@@ -4,15 +4,20 @@
     <title>Poster Viewer</title>
     <link rel="stylesheet" href="/css/error.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
   </head>
   <body>
     <div class="container-fluid" id="body-container-fluid">
 				<div class="container">
 					<div class="jumbotron">
             <br>
-						<h1 class="display-1"><i class="fa fa-spin fa-cog fa-3x"></i></h1>
-						<h1 class="display-3">Inappropriate Device or User</h1>
-						<h2 class="lower-case">If you have not done this task in the past, please do it on a mobile device!</h2>
+						<h1><i class="fa fa-spin fa-cog fa-3x"></i></h1>
+						<h1>Inappropriate Device or User</h1>
+            <h2>If you have not done this task in the past, please do it on a mobile device!</h2>
+            <h2>Scan the QR code or copy the link below.</h2>
+            <div id="qrcode"></div>
+            <h3 id="mobile-link"></div>
           </div>
 				</div>
 			</div>
