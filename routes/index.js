@@ -25,7 +25,10 @@ router.get("/", function(req, res, next) {
 });
 
 router.get("/:dataset/:tag", function(req, res, next) {
-  User.findOne({ userId: req.params['tag'] }, function(err, foundUser) {
+  User.findOne({
+    userId: req.params['tag'],
+    dataset: req.param['tag']
+  }, function(err, foundUser) {
     if (err) {
       console.log("Error finding existing user", err)
     } else if (foundUser) {
