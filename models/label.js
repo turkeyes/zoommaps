@@ -9,7 +9,10 @@ var labelSchema = mongoose.Schema({
   time: [Number],
   id: String,
   workerID: String,
-  dataset: String
+  dataset: String,
+  orientation: String,
+  browser: String,
+  os: String
 });
 
 var Label = mongoose.model("Label", labelSchema);

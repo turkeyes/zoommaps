@@ -9,6 +9,39 @@ var FINAL_SENTINEL_IMAGE = {
 
 
 /**
+ * Find the first substring from an array in a string
+ * @param {string} str string
+ * @param {string[]} choices substrings
+ * @return {string} first substring in string, else '?'
+ */
+function findFirstString(str, choices) {
+  for (var j = 0; j < choices.length; j++) {
+    if (str.indexOf(choices[j]) >= 0) {
+      return choices[j];
+    }
+  }
+  return '?';
+}
+
+/**
+ * Get the user's browser, or ? if unknown
+ */
+function getBrowser() {
+  return findFirstString(navigator.userAgent, [
+    'Seamonkey', 'Firefox', 'Chromium', 'Chrome', 'Safari', 'OPR', 'Opera',
+    'Edge', 'MSIE', 'Blink', 'Webkit', 'Gecko', 'Trident', 'Mozilla']);
+}
+
+/**
+ * Get the user's OS, or ? if unknown
+ */
+function getOS() {
+  var os = findFirstString(navigator.userAgent, [
+    'Android', 'iOS', 'Symbian', 'Blackberry', 'Windows Phone', 'Windows',
+    'OS X', 'Linux', 'iOS', 'CrOS']).replace(/ /g, '_');
+}
+
+/**
  * Get query params from URL
  * @return {{[key: string]: string}}
  */
@@ -133,7 +166,10 @@ function openPhotoSwipe(items, dataset, workerID) {
             time: times,
             id: uniq,
             dataset,
-            workerID
+            workerID,
+            orientation,
+            browser: getBrowser(),
+            os: getOS()
           }),
           contentType: "application/json",
           success: function (res) {
