@@ -1,5 +1,5 @@
 var MIN_EVENTS = 100;
-var MIN_TIME = 15 * 1000;
+var SEC_PER_PHOTO = 18; // not enforced; for the instruction
 
 var FINAL_SENTINEL_IMAGE = {
   "src": "/imgs/final-sentinel.jpg",
@@ -36,7 +36,7 @@ function getBrowser() {
  * Get the user's OS, or ? if unknown
  */
 function getOS() {
-  var os = findFirstString(navigator.userAgent, [
+  return findFirstString(navigator.userAgent, [
     'Android', 'iOS', 'Symbian', 'Blackberry', 'Windows Phone', 'Windows',
     'OS X', 'Linux', 'iOS', 'CrOS']).replace(/ /g, '_');
 }
@@ -70,9 +70,11 @@ $(document).ready(function () {
   var workerID = page_vars['workerID'] || 'none';
   if ('dataset' in page_vars) {
     checkEnd(function() {
+      var numPhotos = 0;
       $.getJSON('../datasets/' + page_vars['dataset'] + '.json', function (data) {
         if (data.length == 1) {
           openPhotoSwipe(data[0]['data'], page_vars['dataset'], workerID);
+          numPhotos = data[0]['data'].length;
         } else {
           $.each(data, function (key, val) {
             var r = $('<input/>').attr({
@@ -84,12 +86,13 @@ $(document).ready(function () {
               openPhotoSwipe(val['data'], page_vars['dataset'], workerID);
             });
             $("#galleries").append(r);
+            numPhotos += val['data'].length;
           });
         }
+        showLinksForMobile(numPhotos);
       });
     })
   }
-  showLinksForMobile();
 });
 
 
@@ -102,6 +105,8 @@ $(document).ready(function () {
  * @param {workerID} workerID
  */
 function openPhotoSwipe(items, dataset, workerID) {
+  if (!window.PhotoSwipe) return;
+
   var pswpElement = document.querySelectorAll('.pswp')[0];
   var uniq = 'id' + (new Date()).getTime();
 
@@ -230,10 +235,6 @@ function openPhotoSwipe(items, dataset, workerID) {
  * @param {() => void} onNotDone
  */
 function checkEnd(onNotDone) {
-  var startTime = window.localStorage.getItem("startTime");
-  var curTime = new Date().getTime();
-  var geqMinTime = (curTime - startTime) >= MIN_TIME;
-
   var page_vars = getUrlVars();
   var workerID = page_vars['workerID'] || 'none';
   var dataset = page_vars['dataset'] || 'none';
@@ -246,7 +247,7 @@ function checkEnd(onNotDone) {
     success: function (res) {
       if (res.success) {
         var submitKey = res['key'];
-        if (geqMinTime && submitKey.length > 0) {
+        if (submitKey.length > 0) {
           showSubmitKey(submitKey);
         } else {
           onNotDone();
@@ -305,11 +306,17 @@ function selectText(node) {
  * This should only render if the server has detected we are on desktop
  *   and sent the error page
  */
-function showLinksForMobile() {
+function showLinksForMobile(numPhotos = 'some') {
   if ($('#qrcode').length > 0) {
     $('#qrcode').qrcode(window.location.href);
   }
   $('#mobile-link').text(window.location.href);
+  $('#num-photos').text(numPhotos);
+  var numMinutes = 10;
+  if (typeof numPhotos === 'number') {
+    numMinutes = Math.floor((numPhotos * SEC_PER_PHOTO) / 60)
+  }
+  $('#task-time').text(numMinutes);
 }
 
 
@@ -320,15 +327,11 @@ function showLinksForMobile() {
  * Just redirects to the experiment
  */
 function startTask() {
-  window.localStorage.setItem("startTime", new Date().getTime());
   var workerID = document.getElementById('workerID').value;
   var pathquery = window.location.href.split('?');
   var path = pathquery[0];
   var query = pathquery[1];
-  if ([path.length - 1] !== '/') {
-    path += '/';
-  }
-  path += workerID;
-  window.location.href = path + (query ? '?' + query : '' );
+  query += ((query ? '&' : '') + 'workerID=' + workerID);
+  window.location.href = path + '?' + query;
   return false;
 }

@@ -1,12 +1,21 @@
-var mongoose = require("mongoose");
+const mongoose = require("mongoose");
 
-var labelSchema = mongoose.Schema({
+function arraySize(val) {
+  return val.length >= 100;
+}
+
+const numArray = {
+  type: [Number],
+  validate: [arraySize, '{PATH} must have at least 100 items']
+};
+
+const labelSchema = mongoose.Schema({
   src: String,
-  x_min: [Number],
-  x_max: [Number],
-  y_min: [Number],
-  y_max: [Number],
-  time: [Number],
+  x_min: numArray,
+  x_max: numArray,
+  y_min: numArray,
+  y_max: numArray,
+  time: numArray,
   id: String,
   workerID: String,
   dataset: String,
@@ -15,6 +24,6 @@ var labelSchema = mongoose.Schema({
   os: String
 });
 
-var Label = mongoose.model("Label", labelSchema);
+const Label = mongoose.model("Label", labelSchema);
 
 module.exports = Label;

@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const MobileDetect = require('mobile-detect');
+const url = require('url');
 
 const Label = require('../models/label');
 const User = require('../models/user');
@@ -8,6 +9,7 @@ const User = require('../models/user');
 const router = express.Router();
 
 const MIN_ZOOM = 5;
+const MIN_TIME = 5 * 60 * 1000; // 5 minutes in milliseconds
 
 
 /**
@@ -44,22 +46,36 @@ function getUserData(workerID, dataset, f) {
   });
 }
 
+/**
+ * Determines whether or not a label represents a zoom event
+ * Note: label arrays are guaranteed to have >= 100 items (checked in schema)
+ * @param {Label} label
+ * @return {boolean}
+ */
+function isZoom(label) {
+  const x_min = new Set(label.x_min)
+  const x_max = new Set(label.x_max);
+  const y_min = new Set(label.y_min)
+  const y_max = new Set(label.y_max);
+  return x_min.size + x_max.size + y_min.size + y_max.size > 4;
+}
+
 
 /**
  * Bad link -- just send the photo view page which will show an error
  */
 router.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../views/viewer.html'));
-});
+  const { workerID, dataset } = req.query;
 
-/**
- * Show the photo viewing interface.
- * Shows an error screen if the user is not done and not on mobile.
- * If the user is done, desktop works for easy copying of completion code.
- */
-router.get('/:dataset/:workerID', (req, res) => {
-  const { workerID, dataset } = req.params;
+  if (!dataset) {
+    return res.sendFile(path.join(__dirname, '../views/viewer.html'))
+  }
+  if (!workerID) {
+    return res.sendFile(path.join(__dirname, '../views/enterid.html'));
+  }
+
   getUserData(workerID, dataset, (err, user, labels) => {
+    console.log()
     if (err) return res.sendFile(path.join(__dirname, '../views/enterid.html'));
 
     const md = new MobileDetect(req.headers['user-agent']);
@@ -69,15 +85,22 @@ router.get('/:dataset/:workerID', (req, res) => {
       return res.sendFile(path.join(__dirname, '../views/error.html'));
     }
 
-    return res.redirect(`/?dataset=${dataset}&workerID=${workerID}`);
+    res.sendFile(path.join(__dirname, '../views/viewer.html'));
   });
 });
 
 /**
- * Ask the user to enter their Worker ID
+ * experimentdomain/dataset -- convenient for MTurk links
  */
 router.get('/:dataset', (req, res) => {
-  res.sendFile(path.join(__dirname, '../views/enterid.html'));
+  const { dataset } = req.params;
+  res.redirect(url.format({
+    pathname: '/',
+    query: {
+      dataset,
+      ...req.query
+    }
+  }));
 });
 
 
@@ -94,7 +117,10 @@ router.post('/data', (req, res) => {
     time: req.body.time,
     id: req.body.id,
     workerID: req.body.workerID,
-    dataset: req.body.dataset
+    dataset: req.body.dataset,
+    orientation: req.body.orientation,
+    browser: req.body.browser,
+    os: req.body.os
   });
   label.save((err) => {
     if (err) res.send({ success: false, message: "Can't save label, please try again!" });
@@ -107,9 +133,21 @@ router.post('/data', (req, res) => {
 router.post('/end', (req, res) => {
   const { workerID, dataset } = req.body;
   getUserData(workerID, dataset, (err, user, labels) => {
+    if (err) {
+      return res.send({ success: false, key: '' });
+    }
+
+    const enoughZooms = labels.map(isZoom).length >= MIN_ZOOM;
+
+    const times = labels.map(label => label._id.getTimestamp().getTime());
+    const startTime = Math.min(...times);
+    const endTime = Math.max(...times);
+    const enoughTime = endTime - startTime >= MIN_TIME;
+
+    const done = enoughZooms && enoughTime
     res.send({
-      success: !err,
-      key: labels.length >= MIN_ZOOM ? user._id : '',
+      success: true,
+      key: done ? user._id : '',
     });
   });
 });

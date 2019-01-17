@@ -1,10 +1,10 @@
-var mongoose = require("mongoose");
+const mongoose = require("mongoose");
 
-var userSchema = mongoose.Schema({
+const userSchema = mongoose.Schema({
   workerID: String,
   dataset: String
 });
 
-var User = mongoose.model("User", userSchema);
+const User = mongoose.model("User", userSchema);
 
 module.exports = User;
