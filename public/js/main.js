@@ -1,6 +1,12 @@
 var MIN_EVENTS = 100;
 var MIN_TIME = 15 * 1000;
 
+var FINAL_SENTINEL_IMAGE = {
+  "src": "/imgs/final-sentinel.jpg",
+  "w": 1920,
+  "h": 1080
+};
+
 
 /**
  * Get query params from URL
@@ -92,6 +98,7 @@ function openPhotoSwipe(items, dataset, workerID) {
 
   // Initializes and opens PhotoSwipe
   items.sort(function(a, b) { return Math.random() - 0.5 });
+  items.push(FINAL_SENTINEL_IMAGE);
   var pswp = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, pswpOptions);
   pswp.init();
 
@@ -163,13 +170,20 @@ function openPhotoSwipe(items, dataset, workerID) {
     x_max.push(Math.floor(-x / zoom + width) < item.w ? Math.floor(-x / zoom + width) : item.w);
     y_max.push(Math.floor(-y / zoom + height) < item.h ? Math.floor(-y / zoom + height) : item.h);
     times.push(time - start_time)
+  });
 
-    // if we are on the last photo, either show not done message or completion key
-    // NOTE: this feels slightly off; ideally we should have an extra "photo"
-    //   so that this check can be done *after* the last photo
+  // when we get to the last (sentinel) image
+  // we need to hide the experiment and show a message
+  pswp.listen('beforeChange', function() {
     if (pswp.getCurrentIndex() === pswp.options.getNumItemsFn() - 1) {
-      endTask();
-    };
+      $('#error-url').hide();
+      $('#experiment').hide();
+      checkEnd(function () {
+        $('#incomplete-task').show().delay(5000).fadeOut();
+        pswp.prev();
+        $('#experiment').delay(5000).fadeIn();;
+      });
+    }
   });
 }
 
@@ -209,20 +223,6 @@ function checkEnd(onNotDone) {
     error: function (err) {
       console.log("ERROR: could not connect to db server", err);
     }
-  });
-}
-
-/**
- * Hides the photo experiment.
- * Checks if the task has been completed (@see checkEnd).
- * If it hasn't, shows a message for 5 seconds then brings back the photos.
- */
-function endTask() {
-  $('#error-url').hide();
-  $('#experiment').hide();
-  checkEnd(function () {
-    $('#incomplete-task').show().delay(5000).fadeOut();
-    $('#experiment').delay(5000).fadeIn();;
   });
 }
 
@@ -293,6 +293,6 @@ function startTask() {
     path += '/';
   }
   path += workerID;
-  window.location.href = path + '?' + query;
+  window.location.href = path + (query ? '?' + query : '' );
   return false;
 }
