@@ -180,7 +180,7 @@ function openPhotoSwipe(items, dataset, workerID) {
       $('#experiment').hide();
       checkEnd(function () {
         $('#incomplete-task').show().delay(5000).fadeOut();
-        pswp.prev();
+        pswp.goTo(0);
         $('#experiment').delay(5000).fadeIn();;
       });
     }
