@@ -286,11 +286,13 @@ function showLinksForMobile() {
 function startTask() {
   window.localStorage.setItem("startTime", new Date().getTime());
   var workerID = document.getElementById('workerID').value;
-  var currentURL = window.location.href;
-  if ([currentURL.length - 1] !== '/') {
-    currentURL += '/';
+  var pathquery = window.location.href.split('?');
+  var path = pathquery[0];
+  var query = pathquery[1];
+  if ([path.length - 1] !== '/') {
+    path += '/';
   }
-  var workerURL = currentURL + workerID;
-  window.location.href = workerURL;
+  path += workerID;
+  window.location.href = path + '?' + query;
   return false;
 }
