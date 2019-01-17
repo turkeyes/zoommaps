@@ -89,3 +89,4 @@ input[type="text"]:focus + label{
 input[type="text"]:focus{
   padding: 10px;
   transition: all 0.3s ease-out;
+}

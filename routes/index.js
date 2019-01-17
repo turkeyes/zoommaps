@@ -1,83 +1,116 @@
-var express = require("express");
-var path = require("path");
-var mongoose = require("mongoose");
-var User = require('../models/user');
-var ObjectId = require('mongodb').ObjectID;
-var MobileDetect = require('mobile-detect');
-var fs = require('fs');
-var qr = require('qr-image');
+const express = require('express');
+const path = require('path');
+const MobileDetect = require('mobile-detect');
 
-var Label = require("../models/label");
+const Label = require('../models/label');
+const User = require('../models/user');
 
-var router = express.Router();
+const router = express.Router();
 
-router.get('*', function(req, res, next) {
-  var md = new MobileDetect(req.headers['user-agent']);
-  if (!Boolean(md.mobile() || md.phone() || md.tablet())) {
-    res.sendFile(path.join(__dirname, "../views/error.html"));
-  } else {
-    next();
-  }
-});
+const MIN_ZOOM = 5;
 
-router.get("/", function(req, res, next) {
-  res.sendFile(path.join(__dirname, "../views/viewer.html"));
-});
-
-router.get("/:dataset/:tag", function(req, res, next) {
-  User.findOne({
-    userId: req.params['tag'],
-    dataset: req.param['tag']
-  }, function(err, foundUser) {
-    if (err) {
-      console.log("Error finding existing user", err)
+/**
+ * Finds user & labels for given workerID x dataset
+ * Creates a user if one does not exist
+ * @param {string} workerID
+ * @param {string} dataset
+ * @param {(err, user?: User, labels?: Label[]) => void} f - callback
+ */
+function getUserData(workerID, dataset, f) {
+  User.findOne({ workerID, dataset }, (findUserErr, foundUser) => {
+    if (findUserErr) {
+      console.log('Error finding existing user', findUserErr);
+      f(findUserErr);
     } else if (foundUser) {
-      res.sendFile(path.join(__dirname, "../views/error.html"));
+      Label.find({ workerID, dataset }, (findLabelsErr, labels) => {
+        if (findLabelsErr) {
+          console.log('Error finding the user labels', findLabelsErr);
+          f(findLabelsErr);
+        } else {
+          f(null, foundUser, labels);
+        }
+      });
     } else {
-      new User({
-            userId: req.params['tag'],
-            dataset: req.params['dataset']
-          }).save((err, saved) => {
-            if (err) {
-              console.log("Error saving new user", err)
-            } else {
-            }
-          });
-      res.redirect('/?dataset=' + req.params['dataset'] + '&tag=' + req.params['tag']);
+      new User({ workerID, dataset }).save((newUserErr, newUser) => {
+        if (newUserErr) {
+          console.log('Error saving new user', newUserErr);
+          f(newUserErr);
+        } else {
+          f(null, newUser, []);
+        }
+      });
     }
-  })
-})
+  });
+}
 
-router.get("/:dataset", function(req, res, next) {
-  res.sendFile(path.join(__dirname, "../views/enterid.html"));
-})
 
-// send data
-router.post("/data", function(req, res, next) {
-  var label = new Label({ src:req.body.src, x_min:req.body.x_min, x_max:req.body.x_max, y_min:req.body.y_min, y_max:req.body.y_max, time:req.body.time, id:req.body.id, tag:req.body.tag, dataset:req.body.dataset});
-  label.save(function(err) {
+/**
+ * Bad link -- just send the photo view page which will show an error
+ */
+router.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../views/viewer.html'));
+});
+
+/**
+ * Show the photo viewing interface.
+ * Shows an error screen if the user is not done and not on mobile.
+ * If the user is done, desktop works for easy copying of completion code.
+ */
+router.get('/:dataset/:workerID', (req, res) => {
+  const { workerID, dataset } = req.params;
+  getUserData(workerID, dataset, (err, user, labels) => {
+    if (err) return res.sendFile(path.join(__dirname, '../views/enterid.html'));
+
+    const md = new MobileDetect(req.headers['user-agent']);
+    const notMobile = !(md.mobile() || md.phone() || md.tablet());
+    const notDone = labels.length < MIN_ZOOM;
+    if (notMobile && notDone) {
+      return res.sendFile(path.join(__dirname, '../views/error.html'));
+    }
+
+    return res.redirect(`/?dataset=${dataset}&workerID=${workerID}`);
+  });
+});
+
+/**
+ * Ask the user to enter their Worker ID
+ */
+router.get('/:dataset', (req, res) => {
+  res.sendFile(path.join(__dirname, '../views/enterid.html'));
+});
+
+
+/**
+ * Log a zoom label
+ */
+router.post('/data', (req, res) => {
+  const label = new Label({
+    src: req.body.src,
+    x_min: req.body.x_min,
+    x_max: req.body.x_max,
+    y_min: req.body.y_min,
+    y_max: req.body.y_max,
+    time: req.body.time,
+    id: req.body.id,
+    workerID: req.body.workerID,
+    dataset: req.body.dataset
+  });
+  label.save((err) => {
     if (err) res.send({ success: false, message: "Can't save label, please try again!" });
   });
 });
 
-router.post("/verification", function(req, res, next) {
-  User.findOne({ userId: req.body.userId }, function(err, foundUser) {
-    if (err) {
-      console.log("Error finding the user", err)
-    }
-    res.send({ success: true, key: foundUser._id });
-  })
-});
-
-router.post("/end", function(req, res, next) {
-  Label.find({ tag: req.body.userId }, function(err, userLabels) {
-    if (err) {
-      console.log("Error finding the user labels", err)
-    }
-    console.log(userLabels);
-    console.log(userLabels.length);
-    res.send({ success: true, numLabels: userLabels.length });
-  })
+/**
+ * Check if the user has completed the experiment, sending a completion key if so
+ */
+router.post('/end', (req, res) => {
+  const { workerID, dataset } = req.body;
+  getUserData(workerID, dataset, (err, user, labels) => {
+    res.send({
+      success: !err,
+      key: labels.length >= MIN_ZOOM ? user._id : '',
+    });
+  });
 });
 
 module.exports = router;

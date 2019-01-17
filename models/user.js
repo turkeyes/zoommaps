@@ -1,7 +1,7 @@
 var mongoose = require("mongoose");
 
 var userSchema = mongoose.Schema({
-  userId: String,
+  workerID: String,
   dataset: String
 });
 

@@ -8,7 +8,7 @@ var labelSchema = mongoose.Schema({
   y_max: [Number],
   time: [Number],
   id: String,
-  tag: String,
+  workerID: String,
   dataset: String
 });
 
