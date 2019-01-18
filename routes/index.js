@@ -60,6 +60,21 @@ function isZoom(label) {
   return x_min.size + x_max.size + y_min.size + y_max.size > 4;
 }
 
+/**
+ * Check whether or not the experiment has been completed.
+ * @param {Label[]} labels 
+ */
+function checkDone(labels) {
+  const enoughZooms = labels.map(isZoom).length >= MIN_ZOOM;
+
+  const times = labels.map(label => label._id.getTimestamp().getTime());
+  const startTime = Math.min(...times);
+  const endTime = Math.max(...times);
+  const enoughTime = endTime - startTime >= MIN_TIME;
+
+  return enoughZooms && enoughTime
+}
+
 
 /**
  * Bad link -- just send the photo view page which will show an error
@@ -75,12 +90,11 @@ router.get('/', (req, res) => {
   }
 
   getUserData(workerID, dataset, (err, user, labels) => {
-    console.log()
     if (err) return res.sendFile(path.join(__dirname, '../views/enterid.html'));
 
     const md = new MobileDetect(req.headers['user-agent']);
     const notMobile = !(md.mobile() || md.phone() || md.tablet());
-    const notDone = labels.length < MIN_ZOOM;
+    const notDone = !checkDone(labels);
     if (notMobile && notDone) {
       return res.sendFile(path.join(__dirname, '../views/error.html'));
     }
@@ -137,14 +151,8 @@ router.post('/end', (req, res) => {
       return res.send({ success: false, key: '' });
     }
 
-    const enoughZooms = labels.map(isZoom).length >= MIN_ZOOM;
+    const done = checkDone(labels);
 
-    const times = labels.map(label => label._id.getTimestamp().getTime());
-    const startTime = Math.min(...times);
-    const endTime = Math.max(...times);
-    const enoughTime = endTime - startTime >= MIN_TIME;
-
-    const done = enoughZooms && enoughTime
     res.send({
       success: true,
       key: done ? user._id : '',
