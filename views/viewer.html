@@ -1,18 +1,13 @@
 <html>
   <head>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-46779055-3"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments)};
-      gtag('js', new Date());
-
-      gtag('config', 'UA-46779055-3');
-    </script>
-
     <title>Poster Viewer</title>
-    <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" href="/css/default-skin/default-skin.css">
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/default-skin/default-skin.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/photoswipe/4.1.3/photoswipe-ui-default.min.js"></script>
+    <script src="/js/main.js"></script>
   </head>
   <body>
     <style>
@@ -52,10 +47,12 @@
 
                 <div class="pswp__counter"></div>
 
+                <!--
                 <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
                 <button class="pswp__button pswp__button--share" title="Share"></button>
                 <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
                 <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
+                -->
 
                 <!-- Preloader demo http://codepen.io/dimsemenov/pen/yyBWoR -->
                 <!-- element will get class pswp__preloader--active when preloader is running -->
@@ -100,8 +97,5 @@
       </div>
       <p class="ui header">You can refresh the page on your desktop to copy the code from there.</p>
     </div>
-    <script src="/js/photoswipe.js"></script>
-    <script src="/js/photoswipe-ui-default.js"></script>
-    <script src="/js/main.js"></script>
   </body>
 </html>
