@@ -8,12 +8,6 @@ body {
   text-align: center;
 }
 
-
-h1 .fa {
-  color: #e1b7b7;
-  animation: fa-spin 5s infinite linear;
-}
-
-h1 {
-  color: #df726a;
+h4 {
+  line-height: 125%;
 }
