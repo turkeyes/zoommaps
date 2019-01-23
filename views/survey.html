@@ -1,0 +1,227 @@
+<html>
+
+<head>
+  <title>Poster Viewer</title>
+  <meta name="viewport" content="width=device-width">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+  <script src="/js/shared.js"></script>
+  <script src="/js/survey.js"></script>
+</head>
+
+<body>
+  <div id="demo-survey" class="ui top aligned centered grid">
+    <div class="row">
+      <div class="left aligned fourteen wide column">
+        <h2>Demographic Survey</h2>
+        <p>Please take a moment to fill out this survey.<br />
+        You can refresh the page on your desktop to fill out the survey from there.</p>
+        <form class="ui form" id="survey-form">
+
+          <div class="inline fields">
+            <label>Gender</label>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="gender" id="genderMale" value="male">
+                <label>Male</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="gender" id="genderFemale" value="female">
+                <label>Female</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="gender" id="genderOther" value="unspecified">
+                <label>Prefer not to say</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="inline fields">
+            <label>Age</label>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="ageGroup" id="ageGroup1" value="ageGroup18">
+                <label>18 to 24</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="ageGroup" id="ageGroup2" value="ageGroup25">
+                <label>25 to 34</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="ageGroup" id="ageGroup3" value="ageGroup35">
+                <label>35 to 44</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="ageGroup" id="ageGroup4" value="ageGroup45">
+                <label>45 to 54</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="ageGroup" id="ageGroup5" value="ageGroup55">
+                <label>55 to 64</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="ageGroup" id="ageGroup6" value="ageGroup65">
+                <label>65 and over</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="ageGroup" id="ageGroup7" value="unspecified">
+                <label>Prefer not to say</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="grouped fields">
+            <label>Ethnicity</label>
+            <div class="field">
+              <div class="ui checkbox ethnicityOption">
+                <input name="ethnicity" type="checkbox" id="ethnicAsian" value="Asian">
+                <label>Asian</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui checkbox ethnicityOption">
+                <input name="ethnicity" type="checkbox" id="ethnicLatino" value="Latino_Hispanic">
+                <label>Latino / Hispanic</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui checkbox ethnicityOption">
+                <input name="ethnicity" type="checkbox" id="ethnicPacific" value="Pacific_Islander">
+                <label>Pacific Islander</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui checkbox ethnicityOption">
+                <input name="ethnicity" type="checkbox" id="ethnicAfrican" value="Black_African">
+                <label>Black / African Descent</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui checkbox ethnicityOption">
+                <input name="ethnicity" type="checkbox" id="ethnicMiddle" value="Middle_Eastern">
+                <label>Middle Eastern</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui checkbox ethnicityOption">
+                <input name="ethnicity" type="checkbox" id="ethnicWhite" value="White_Caucasian">
+                <label>White / Caucasian</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui checkbox ethnicityOption">
+                <input name="ethnicity" type="checkbox" id="ethnicEastInd" value="East_Indian">
+                <label>East Indian</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui checkbox ethnicityOption">
+                <input name="ethnicity" type="checkbox" id="ethnicNative" value="Native_American">
+                <label>Native American</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui checkbox ethnicityOption">
+                <input name="ethnicity" type="checkbox" id="ethnicOther" value="Other">
+                <label>Other</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui toggle checkbox">
+                <input name="ethnicity" type="checkbox" id="ethnicUnspecified" value="unspecified">
+                <label>Prefer not to say</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="grouped fields">
+            <label>Educational Background</label>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="education" id="education1" value="lessThanHighSchool">
+                <label>Less than high school</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="education" id="education2" value="highSchool">
+                <label>High school/GED</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="education" id="education3" value="someCollege">
+                <label>Some college</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="education" id="education4" value="twoYearDegree">
+                <label>2-year college degree</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="education" id="education5" value="fourYearDegree">
+                <label>4-year college degree</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="education" id="education6" value="mastersDegree">
+                <label>Master's degree</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="education" id="education7" value="doctoralDegree">
+                <label>Doctoral degree</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="education" id="education8" value="professionalDegree">
+                <label>Professional degree</label>
+              </div>
+            </div>
+            <div class="field">
+              <div class="ui radio checkbox">
+                <input type="radio" name="education" id="education9" value="unspecified">
+                <label>Prefer not to say</label>
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Feedback</label>
+            <textarea name="feedback" rows="2" placeholder="If you have any feedback, comments, or suggestions, please describe them here."></textarea>
+          </div>
+
+          <div class="ui error message"></div>
+
+          <input class="ui button" type="submit" value="Submit">
+
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

@@ -42,20 +42,6 @@ function getOS() {
 }
 
 /**
- * Get query params from URL
- * @return {{[key: string]: string}}
- */
-function getUrlVars() {
-  var vars = {}, hash;
-  var hashes = window.location.href.replace('\#', '').slice(window.location.href.indexOf('?') + 1).split('&');
-  for (var i = 0; i < hashes.length; i++) {
-    hash = hashes[i].split('=');
-    vars[hash[0]] = hash[1];
-  }
-  return vars;
-}
-
-/**
  * Get device orientation (just checks if width or height is greater)
  * @return {'Landscape' | 'Portrait'}
  */
@@ -245,9 +231,10 @@ function checkEnd(onNotDone) {
     contentType: "application/json",
     success: function (res) {
       if (res.success) {
-        var submitKey = res['key'];
-        if (submitKey.length > 0) {
-          showSubmitKey(submitKey);
+        var done = res['done'];
+        if (done) {
+          // showSubmitKey(submitKey);
+          location.reload(true);
         } else {
           onNotDone();
         }

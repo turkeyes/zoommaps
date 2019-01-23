@@ -8,8 +8,8 @@ const User = require('../models/user');
 
 const router = express.Router();
 
-const MIN_ZOOM = 5;
-const MIN_TIME = 5 * 60 * 1000; // 5 minutes in milliseconds
+const MIN_ZOOM = 0;
+const MIN_TIME = 0 * 60 * 1000; // 5 minutes in milliseconds
 
 
 /**
@@ -68,11 +68,20 @@ function checkDone(labels) {
   const enoughZooms = labels.map(isZoom).length >= MIN_ZOOM;
 
   const times = labels.map(label => label._id.getTimestamp().getTime());
-  const startTime = Math.min(...times);
-  const endTime = Math.max(...times);
+  const startTime = Math.min(...times, 0);
+  const endTime = Math.max(...times, 0);
   const enoughTime = endTime - startTime >= MIN_TIME;
 
   return enoughZooms && enoughTime
+}
+
+/**
+ * Check whether or not the user has completed the survey
+ * @param {User} user 
+ * @return {boolean}
+ */
+function checkSurvey(user) {
+  return user.gender && user.ageGroup && user.ethnicity && user.education;
 }
 
 
@@ -92,14 +101,21 @@ router.get('/', (req, res) => {
   getUserData(workerID, dataset, (err, user, labels) => {
     if (err) return res.sendFile(path.join(__dirname, '../views/enterid.html'));
 
-    const md = new MobileDetect(req.headers['user-agent']);
-    const notMobile = !(md.mobile() || md.phone() || md.tablet());
-    const notDone = !checkDone(labels);
-    if (notMobile && notDone) {
-      return res.sendFile(path.join(__dirname, '../views/error.html'));
+    if (!checkDone(labels)) {
+      const md = new MobileDetect(req.headers['user-agent']);
+      const notMobile = !(md.mobile() || md.phone() || md.tablet());
+      if (notMobile) {
+        res.sendFile(path.join(__dirname, '../views/error.html'));
+      } else {
+        res.sendFile(path.join(__dirname, '../views/viewer.html'));
+      }
+    } else {
+      if (!checkSurvey(user)) {
+        res.sendFile(path.join(__dirname, '../views/survey.html'));
+      } else {
+        res.sendFile(path.join(__dirname, '../views/done.html'));
+      }
     }
-
-    res.sendFile(path.join(__dirname, '../views/viewer.html'));
   });
 });
 
@@ -142,20 +158,46 @@ router.post('/data', (req, res) => {
 });
 
 /**
+ * Send survey data
+ */
+router.post('/survey', (req, res) => {
+  const query = {
+    workerID: req.body.workerID,
+    dataset: req.body.dataset
+  }
+  const update = {
+    gender: req.body.gender,
+    ageGroup: req.body.ageGroup,
+    ethnicity: req.body.ethnicity,
+    education: req.body.education,
+    feedback: req.body.feedback
+  };
+  User.updateOne(query, update, (err) => {
+    if (err) {
+      console.log('Error finding existing user', findUserErr);
+      res.send({ success: false });
+    } else {
+      res.send({ success: true });
+    }
+  });
+});
+
+/**
  * Check if the user has completed the experiment, sending a completion key if so
  */
 router.post('/end', (req, res) => {
   const { workerID, dataset } = req.body;
   getUserData(workerID, dataset, (err, user, labels) => {
     if (err) {
-      return res.send({ success: false, key: '' });
+      return res.send({ success: false, done: false, key: '' });
     }
 
     const done = checkDone(labels);
 
     res.send({
       success: true,
-      key: done ? user._id : '',
+      done,
+      key: done ? user._id : '', // TODO: survey check
     });
   });
 });
