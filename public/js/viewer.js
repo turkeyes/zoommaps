@@ -1,4 +1,3 @@
-var MIN_EVENTS = 100;
 var SEC_PER_PHOTO = 18; // not enforced; for the instruction
 
 var FINAL_SENTINEL_IMAGE = {
@@ -141,38 +140,35 @@ function openPhotoSwipe(items, dataset, workerID) {
   pswp.listen('position_change', function (item, x, y, zoom, time) {
     // new context, try to log
     if (item.src !== src || rotated) {
-      // only log if user moved around enough
-      if (x_min.length > MIN_EVENTS) {
-        console.log("saving to db");
-        $.ajax({
-          type: "POST",
-          url: "/data",
-          data: JSON.stringify({
-            src,
-            x_min,
-            x_max,
-            y_min,
-            y_max,
-            time: times,
-            id: uniq,
-            dataset,
-            workerID,
-            orientation,
-            browser: getBrowser(),
-            os: getOS()
-          }),
-          contentType: "application/json",
-          success: function (res) {
-            if (res.success) {
-            } else {
-              console.log("failed message");
-            }
-          },
-          error: function (err) {
-            console.log("could not connect to db server");
+      console.log("saving to db");
+      $.ajax({
+        type: "POST",
+        url: "/data",
+        data: JSON.stringify({
+          src,
+          x_min,
+          x_max,
+          y_min,
+          y_max,
+          time: times,
+          id: uniq,
+          dataset,
+          workerID,
+          orientation,
+          browser: getBrowser(),
+          os: getOS()
+        }),
+        contentType: "application/json",
+        success: function (res) {
+          if (res.success) {
+          } else {
+            console.log("failed message");
           }
-        });
-      }
+        },
+        error: function (err) {
+          console.log("could not connect to db server");
+        }
+      });
       // clear data for next logging
       src = item.src;
       x_min = [];
