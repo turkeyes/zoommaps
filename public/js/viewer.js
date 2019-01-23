@@ -135,7 +135,7 @@ function openPhotoSwipe(items, dataset, workerID) {
   var y_min = [];
   var y_max = [];
   var times = [];
-  var start_time = 0;
+  var start_time = (new Date()).getTime();
 
   pswp.listen('position_change', function (item, x, y, zoom, time) {
     // new context, try to log
@@ -156,7 +156,8 @@ function openPhotoSwipe(items, dataset, workerID) {
           workerID,
           orientation,
           browser: getBrowser(),
-          os: getOS()
+          os: getOS(),
+          duration: (new Date()).getTime() - start_time
         }),
         contentType: "application/json",
         success: function (res) {
@@ -191,7 +192,7 @@ function openPhotoSwipe(items, dataset, workerID) {
     }
     x_max.push(Math.floor(-x / zoom + width) < item.w ? Math.floor(-x / zoom + width) : item.w);
     y_max.push(Math.floor(-y / zoom + height) < item.h ? Math.floor(-y / zoom + height) : item.h);
-    times.push(time - start_time)
+    times.push(time - start_time);
   });
 
   // when we get to the last (sentinel) image
