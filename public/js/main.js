@@ -89,7 +89,6 @@ $(document).ready(function () {
             numPhotos += val['data'].length;
           });
         }
-        showLinksForMobile(numPhotos);
       });
     })
   }
@@ -296,42 +295,4 @@ function selectText(node) {
   } else {
     console.warn("Could not select text in node: Unsupported browser.");
   }
-}
-
-
-// ERROR (BAD DEVICE) PAGE
-
-/**
- * Shows a QR code and link of the current page
- * This should only render if the server has detected we are on desktop
- *   and sent the error page
- */
-function showLinksForMobile(numPhotos = 'some') {
-  if ($('#qrcode').length > 0) {
-    $('#qrcode').qrcode(window.location.href);
-  }
-  $('#mobile-link').text(window.location.href);
-  $('#num-photos').text(numPhotos);
-  var numMinutes = 10;
-  if (typeof numPhotos === 'number') {
-    numMinutes = Math.floor((numPhotos * SEC_PER_PHOTO) / 60)
-  }
-  $('#task-time').text(numMinutes);
-}
-
-
-// ENTER ID PAGE
-
-/**
- * Callback for the submit button after entering workerID
- * Just redirects to the experiment
- */
-function startTask() {
-  var workerID = document.getElementById('workerID').value;
-  var pathquery = window.location.href.split('?');
-  var path = pathquery[0];
-  var query = pathquery[1];
-  query += ((query ? '&' : '') + 'workerID=' + workerID);
-  window.location.href = path + '?' + query;
-  return false;
 }
