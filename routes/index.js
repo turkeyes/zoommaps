@@ -10,7 +10,7 @@ const User = require('../models/user');
 const router = express.Router();
 
 const MIN_EVENTS = 100; // num position changes for label to count as zoom event
-const MIN_ZOOM = 7; // num photos that must be zoomed on
+const MIN_ZOOM_FRAC = 0.2; // of photos that must be zoomed on
 const MIN_TOTAL_TIME = 5 * 60 * 1000; // msec must be spent on experiment (5min)
 const MIN_PHOTO_TIME = 2 * 1000; // msec must be spent on each photo (2sec)
 
@@ -102,7 +102,7 @@ function isZoom(label) {
  * @param {Label[]} labels 
  */
 function checkDone(labels, numPhotos) {
-  const enoughZooms = labels.map(isZoom).length >= MIN_ZOOM;
+  const enoughZooms = labels.map(isZoom).length >= numPhotos * MIN_ZOOM_FRAC;
 
   const times = labels.map(label => label._id.getTimestamp().getTime());
   const startTime = Math.min(...times, 0);
