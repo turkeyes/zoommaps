@@ -144,24 +144,20 @@ router.get('/', (req, res) => {
   getUserData(workerID, dataset, (err, user, labels, numPhotos) => {
     if (err) return res.sendFile(path.join(__dirname, '../views/enterid.html'));
 
-    const md = new MobileDetect(req.headers['user-agent']);
-    const mobile = !!(md.mobile() || md.phone() || md.tablet());
-    const done = checkDone(labels, numPhotos);
-
-    if (!done) {
-      if (!mobile) {
+    if (!checkDone(labels, numPhotos)) {
+      const md = new MobileDetect(req.headers['user-agent']);
+      const notMobile = !(md.mobile() || md.phone() || md.tablet());
+      if (notMobile) {
         res.sendFile(path.join(__dirname, '../views/error.html'));
       } else {
         res.sendFile(path.join(__dirname, '../views/viewer.html'));
       }
-    } else if (!mobile) {
+    } else {
       if (!checkSurvey(user)) {
         res.sendFile(path.join(__dirname, '../views/survey.html'));
       } else {
         res.sendFile(path.join(__dirname, '../views/done.html'));
       }
-    } else {
-      res.sendFile(path.join(__dirname, '../views/viewer.html'));
     }
   });
 });
