@@ -202,9 +202,10 @@ function openPhotoSwipe(items, dataset, workerID) {
       $('#error-url').hide();
       $('#experiment').hide();
       checkEnd(function () {
-        $('#incomplete-task').show().delay(5000).fadeOut();
-        pswp.goTo(0);
-        $('#experiment').delay(5000).fadeIn();;
+        $('#incomplete-task').show();
+        setTimeout(function() {
+          location.href = location.href.split('#')[0]; // easiest way to do a reshuffle
+        }, 5000);
       });
     }
   });
@@ -230,8 +231,8 @@ function checkEnd(onNotDone) {
       if (res.success) {
         var done = res['done'];
         if (done) {
-          // showSubmitKey(submitKey);
-          location.reload(true);
+          $('#error-url').hide();
+          $('#done').show();
         } else {
           onNotDone();
         }
