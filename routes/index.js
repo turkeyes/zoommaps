@@ -193,11 +193,12 @@ router.post('/end', (req, res) => {
     }
 
     const done = checkDone(labels);
+    const survey = checkSurvey(user);
 
     res.send({
       success: true,
       done,
-      key: done ? user._id : '', // TODO: survey check
+      key: survey ? user._id : '', // TODO: survey check
     });
   });
 });
