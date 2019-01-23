@@ -11,8 +11,8 @@ const router = express.Router();
 
 const MIN_EVENTS = 100; // num position changes for label to count as zoom event
 const MIN_ZOOM_FRAC = 0.2; // of photos that must be zoomed on
-const MIN_TOTAL_TIME = 5 * 60 * 1000; // msec must be spent on experiment (5min)
-const MIN_PHOTO_TIME = 2 * 1000; // msec must be spent on each photo (2sec)
+const MIN_TOTAL_TIME = 3 * 60 * 1000; // msec must be spent on experiment (5min)
+const MIN_PHOTO_TIME = 1 * 1000; // msec must be spent on each photo (2sec)
 
 
 const datasetSizeCache = {}; // unchanging and probably small
