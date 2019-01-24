@@ -105,8 +105,8 @@ function checkDone(labels, numPhotos) {
   const enoughZooms = labels.map(isZoom).length >= numPhotos * MIN_ZOOM_FRAC;
 
   const times = labels.map(label => label._id.getTimestamp().getTime());
-  const startTime = Math.min(...times, 0);
-  const endTime = Math.max(...times, 0);
+  const startTime = Math.min(...times);
+  const endTime = Math.max(...times);
   const enoughTime = endTime - startTime >= MIN_TOTAL_TIME;
 
   const uniquePhotos = new Set(labels
