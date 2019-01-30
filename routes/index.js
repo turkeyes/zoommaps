@@ -11,8 +11,9 @@ const router = express.Router();
 
 const MIN_EVENTS = 100; // num position changes for label to count as zoom event
 const MIN_ZOOM_FRAC = 0.2; // of photos that must be zoomed on
-const MIN_TOTAL_TIME = 3 * 60 * 1000; // msec must be spent on experiment (5min)
 const MIN_PHOTO_TIME = 1 * 1000; // msec must be spent on each photo (2sec)
+const MIN_PHOTO_FRAC = 0.85; // of photos that must be viewed for min time
+const MIN_AVG_PHOTO_TIME = 5 * 1000; // msec * num photos = min total time
 
 
 const datasetSizeCache = {}; // unchanging and probably small
@@ -107,13 +108,13 @@ function checkDone(labels, numPhotos) {
   const times = labels.map(label => label._id.getTimestamp().getTime());
   const startTime = Math.min(...times);
   const endTime = Math.max(...times);
-  const enoughTime = endTime - startTime >= MIN_TOTAL_TIME;
+  const enoughTime = endTime - startTime >= MIN_AVG_PHOTO_TIME * numPhotos;
 
   const uniquePhotos = new Set(labels
     .filter(label => label.duration >= MIN_PHOTO_TIME)
     .map(label => label.src)
   );
-  const allPhotos = uniquePhotos.size >= numPhotos; // TODO: dynamic from dataset
+  const allPhotos = uniquePhotos.size >= numPhotos * MIN_PHOTO_FRAC; // TODO: dynamic from dataset
 
   return enoughZooms && enoughTime && allPhotos
 }
