@@ -1,17 +1,18 @@
 {
   "hitCreation": {
-    "production": false,
-    "taskUrl": "https://enigmatic-everglades-39931.herokuapp.com/natural_test",
-    "title": "ZoomMaps Experiment: Natural Images",
-    "description": "This task must be completed on a <strong>mobile device</strong>. In this task, you will be presented with a photo gallery of 35 images. Please inspect each image carefully, using the pinch zoom gesture on your mobile device to study image details. Please spend about 5-10 seconds per image looking around and zooming. Please swipe right after viewing each image to move to the next one. You will not be allowed to submit the HIT unless you have done the task sufficiently thoroughly. The entire task should take you about 5-8 minutes and must be completed in one sitting.",
-    "numTasks": 1,
-    "numAssignments": 100,
-    "rewardAmount": "1.00",
-    "keywords": "zoom, pinch, gesture, mobile, phone, tablet, image, photo, picture",
-    "duration": 12000,
-    "lifetime": 16400,
-    "email": "zoya@mit.edu",
-    "linkType": "external"
+      "title": "ZoomMaps Experiment: Natural Images",
+      "description": "This task must be completed on a <strong>mobile device</strong>. In this task, you will be presented with a photo gallery of 35 images. Please inspect each image carefully, using the pinch zoom gesture on your mobile device to study image details. Please spend about 5-10 seconds per image looking around and zooming. Please swipe right after viewing each image to move to the next one. You will not be allowed to submit the HIT unless you have done the task sufficiently thoroughly. The entire task should take you about 5-8 minutes and must be completed in one sitting.",
+      "numTasks": 1,
+      "numAssignments": 30,
+      "rewardAmount": "1.25",
+      "keywords": "zoom, pinch, gesture, mobile, phone, tablet, image, photo, picture",
+      "duration": 1500,
+      "lifetime": 86400,
+      "taskUrl": "https://enigmatic-everglades-39931.herokuapp.com/natural_test",
+      "variants": []
   },
-  "variants": []
+  "advanced": {
+      "externalSubmit": true,
+      "externalSubmitUrl": ""
+  }
 }
