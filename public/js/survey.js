@@ -44,9 +44,9 @@ $(document).ready(function () {
       var education = $("input[type=radio][name=education]:checked").val();
       var feedback = $("textarea[name=feedback]").val();
   
-      var page_vars = getUrlVars();
-      var workerID = page_vars['workerID'] || 'none';
-      var dataset = page_vars['dataset'] || 'none';
+      var page_vars = new URLSearchParams(window.location.search);
+      var workerID = page_vars.get('workerID') || '?';
+      var dataset = page_vars.get('dataset') || '?';
   
       var data = {
         workerID,

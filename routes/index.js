@@ -3,6 +3,7 @@ const path = require('path');
 const MobileDetect = require('mobile-detect');
 const url = require('url');
 const fs = require('fs');
+const debug = require('debug')('zoommaps');
 
 const Label = require('../models/label');
 const User = require('../models/user');
@@ -11,34 +12,44 @@ const router = express.Router();
 
 const MIN_EVENTS = 100; // num position changes for label to count as zoom event
 const MIN_ZOOM_FRAC = 0.2; // of photos that must be zoomed on
-const MIN_PHOTO_TIME = 1 * 1000; // msec must be spent on each photo (2sec)
 const MIN_PHOTO_FRAC = 0.85; // of photos that must be viewed for min time
-const MIN_AVG_PHOTO_TIME = 5 * 1000; // msec * num photos = min total time
-
 
 const datasetSizeCache = {}; // unchanging and probably small
 /**
  * Get the number of photos in the dataset by name
  * Done by reading a local file, but the result is cached
- * @param {string} dataset 
- * @param {(err, numPhotos?: number) => void} f 
+ * @param {string} dataset
+ * @param {(err, datasetDetails?: { numPhotos: number, minTimePerPhoto: number, minTimeTotal: number }) => void} f
  */
-function getDatasetSize(dataset, f) {
+function getDatasetDetails(dataset, f) {
   if (dataset in datasetSizeCache) return f(null, datasetSizeCache[dataset]);
 
   const filePath = path.join(__dirname, '..', 'public', 'datasets', `${dataset}.json`);
   fs.readFile(filePath, 'utf8', (readErr, dataStr) => {
     if (readErr) {
-      console.log('Error finding dataset');
+      debug('Error finding dataset', readErr);
       f(readErr);
     } else {
       try {
         const data = JSON.parse(dataStr);
-        const numPhotos = data.map(o => o.data.length)
-          .reduce((a, b) => a + b, 0);
-        f(null, numPhotos);
+        let numPhotos = 0;
+        let minTimePerPhoto = Infinity;
+        let minTimeTotal = 0;
+        data.forEach((d) => {
+          numPhotos += d.sampleSize || d.data.length;
+          if (d.minTimePerPhoto !== undefined) {
+            minTimePerPhoto = Math.min(minTimePerPhoto, d.minTimePerPhoto);
+          }
+          if (d.minTimeTotal !== undefined) {
+            minTimeTotal += d.minTimeTotal;
+          }
+        });
+        if (minTimePerPhoto === Infinity) {
+          minTimePerPhoto = 0;
+        }
+        f(null, { numPhotos, minTimePerPhoto, minTimeTotal });
       } catch (parseErr) {
-        console.log('Error parsing dataset file.');
+        debug('Error parsing dataset file.', parseErr);
         f(parseErr);
       }
     }
@@ -53,29 +64,29 @@ function getDatasetSize(dataset, f) {
  * @param {(err, user?: User, labels?: Label[], numPhotos: number) => void} f - callback
  */
 function getUserData(workerID, dataset, f) {
-  getDatasetSize(dataset, (getSizeError, numPhotos) => {
+  getDatasetDetails(dataset, (getSizeError, datasetDetails) => {
     if (getSizeError) return f(getSizeError);
 
     User.findOne({ workerID, dataset }, (findUserErr, foundUser) => {
       if (findUserErr) {
-        console.log('Error finding existing user', findUserErr);
+        debug('Error finding existing user', findUserErr);
         f(findUserErr);
       } else if (foundUser) {
         Label.find({ workerID, dataset }, (findLabelsErr, labels) => {
           if (findLabelsErr) {
-            console.log('Error finding the user labels', findLabelsErr);
+            debug('Error finding the user labels', findLabelsErr);
             f(findLabelsErr);
           } else {
-            f(null, foundUser, labels, numPhotos);
+            f(null, foundUser, labels, datasetDetails);
           }
         });
       } else {
         new User({ workerID, dataset }).save((newUserErr, newUser) => {
           if (newUserErr) {
-            console.log('Error saving new user', newUserErr);
+            debug('Error saving new user', newUserErr);
             f(newUserErr);
           } else {
-            f(null, newUser, [], numPhotos);
+            f(null, newUser, [], datasetDetails);
           }
         });
       }
@@ -100,18 +111,18 @@ function isZoom(label) {
 
 /**
  * Check whether or not the experiment has been completed.
- * @param {Label[]} labels 
+ * @param {Label[]} labels
  */
-function checkDone(labels, numPhotos) {
+function checkDone(labels, { numPhotos, minTimePerPhoto, minTimeTotal }) {
   const enoughZooms = labels.map(isZoom).length >= numPhotos * MIN_ZOOM_FRAC;
 
   const times = labels.map(label => label._id.getTimestamp().getTime());
   const startTime = Math.min(...times);
   const endTime = Math.max(...times);
-  const enoughTime = endTime - startTime >= MIN_AVG_PHOTO_TIME * numPhotos;
+  const enoughTime = endTime - startTime >= minTimeTotal;
 
   const uniquePhotos = new Set(labels
-    .filter(label => label.duration >= MIN_PHOTO_TIME)
+    .filter(label => label.duration >= minTimePerPhoto)
     .map(label => label.src)
   );
   const allPhotos = uniquePhotos.size >= numPhotos * MIN_PHOTO_FRAC; // TODO: dynamic from dataset
@@ -130,22 +141,24 @@ function checkSurvey(user) {
 
 
 /**
- * Bad link -- just send the photo view page which will show an error
+ * Get the task
  */
 router.get('/', (req, res) => {
   const { workerID, dataset } = req.query;
 
+  // Bad link -- just send the photo view page which will show an error
   if (!dataset) {
     return res.sendFile(path.join(__dirname, '../views/viewer.html'))
   }
+
   if (!workerID) {
     return res.sendFile(path.join(__dirname, '../views/enterid.html'));
   }
 
-  getUserData(workerID, dataset, (err, user, labels, numPhotos) => {
+  getUserData(workerID, dataset, (err, user, labels, datasetDetails) => {
     if (err) return res.sendFile(path.join(__dirname, '../views/enterid.html'));
 
-    if (!checkDone(labels, numPhotos)) {
+    if (!checkDone(labels, datasetDetails)) {
       const md = new MobileDetect(req.headers['user-agent']);
       const notMobile = !(md.mobile() || md.phone() || md.tablet());
       if (notMobile) {
@@ -176,7 +189,6 @@ router.get('/:dataset', (req, res) => {
     }
   }));
 });
-
 
 /**
  * Log a zoom label
@@ -228,9 +240,9 @@ router.post('/survey', (req, res) => {
     education: req.body.education,
     feedback: req.body.feedback
   };
-  User.updateOne(query, update, (err) => {
-    if (err) {
-      console.log('Error finding existing user', findUserErr);
+  User.updateOne(query, update, (findUserErr) => {
+    if (findUserErr) {
+      debug('Error finding existing user', findUserErr);
       res.send({ success: false });
     } else {
       res.send({ success: true });
@@ -243,12 +255,12 @@ router.post('/survey', (req, res) => {
  */
 router.post('/end', (req, res) => {
   const { workerID, dataset } = req.body;
-  getUserData(workerID, dataset, (err, user, labels, numPhotos) => {
+  getUserData(workerID, dataset, (err, user, labels, datasetDetails) => {
     if (err) {
       return res.send({ success: false, done: false, key: '' });
     }
 
-    const done = checkDone(labels, numPhotos);
+    const done = checkDone(labels, datasetDetails);
     const survey = checkSurvey(user);
 
     res.send({

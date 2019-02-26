@@ -1,7 +1,7 @@
 $(document).ready(function() {
-  var page_vars = getUrlVars();
-  var workerID = page_vars['workerID'] || 'none';
-  var dataset = page_vars['dataset'] || 'none';
+  var page_vars = new URLSearchParams(window.location.search);
+  var workerID = page_vars.get('workerID') || '?';
+  var dataset = page_vars.get('dataset') || '?';
 
   $.ajax({
     type: "POST",

@@ -9,7 +9,8 @@
       "duration": 1500,
       "lifetime": 86400,
       "taskUrl": "https://enigmatic-everglades-39931.herokuapp.com/natural_test",
-      "variants": []
+      "variants": [],
+      "production": "false"
   },
   "advanced": {
       "externalSubmit": true,

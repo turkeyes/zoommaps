@@ -10,7 +10,7 @@
   "dependencies": {
     "body-parser": "^1.18.3",
     "cookie-parser": "~1.4.3",
-    "debug": "^4.1.0",
+    "debug": "^4.1.1",
     "ejs": "~1.0",
     "express": "^4.16.4",
     "fs": "0.0.1-security",
@@ -21,5 +21,9 @@
     "qr-image": "^3.2.0",
     "serve-favicon": "^2.5.0",
     "url-join": "^4.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.14.1",
+    "image-size": "^0.7.2"
   }
 }

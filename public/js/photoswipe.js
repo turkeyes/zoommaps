@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 // This is modified (see line 451)
 
 /*! PhotoSwipe - v4.1.2 - 2017-04-05

@@ -1,11 +1,10 @@
-var SEC_PER_PHOTO = 18; // not enforced; for the instruction
+/* global PhotoSwipeUI_Default PhotoSwipe */
 
 var FINAL_SENTINEL_IMAGE = {
   "src": "/imgs/final-sentinel.jpg",
   "w": 1920,
   "h": 1080
 };
-
 
 /**
  * Find the first substring from an array in a string
@@ -49,17 +48,37 @@ function getOrientation() {
   return orientation;
 }
 
+/**
+ * Sample items randomly from an array
+ * Source: Bergi, StackOverflow
+ */
+function getRandom(arr, n) {
+  var result = new Array(n),
+      len = arr.length,
+      taken = new Array(len);
+  if (n > len)
+      throw new RangeError("getRandom: more elements taken than available");
+  while (n--) {
+      var x = Math.floor(Math.random() * len);
+      result[n] = arr[x in taken ? taken[x] : x];
+      taken[x] = --len in taken ? taken[len] : len;
+  }
+  return result;
+}
 
 $(document).ready(function () {
-  var page_vars = getUrlVars();
-  var workerID = page_vars['workerID'] || 'none';
-  if ('dataset' in page_vars) {
+  var page_vars = new URLSearchParams(window.location.search);
+  var workerID = page_vars.get('workerID') || '?';
+  var dataset = page_vars.get('dataset');
+  if (dataset) {
     checkEnd(function() {
       var numPhotos = 0;
-      $.getJSON('../datasets/' + page_vars['dataset'] + '.json', function (data) {
+      $.getJSON('../datasets/' + dataset + '.json', function (data) {
         if (data.length == 1) {
-          openPhotoSwipe(data[0]['data'], page_vars['dataset'], workerID);
-          numPhotos = data[0]['data'].length;
+          data = data[0];
+          numPhotos = data['sampleSize'] || data['data'].length;
+          var photos = getRandom(data['data'], numPhotos);
+          openPhotoSwipe(photos, dataset, workerID);
         } else {
           $.each(data, function (key, val) {
             var r = $('<input/>').attr({
@@ -67,18 +86,19 @@ $(document).ready(function () {
               id: "field",
               value: val["name"]
             });
+            var numPhotosForSubtask = val['sampleSize'] || val['data'].length;
+            var photos = getRandom(val['data'], numPhotosForSubtask);
             r.click(function () {
-              openPhotoSwipe(val['data'], page_vars['dataset'], workerID);
+              openPhotoSwipe(photos, dataset, workerID);
             });
             $("#galleries").append(r);
-            numPhotos += val['data'].length;
+            numPhotos += numPhotosForSubtask;
           });
         }
       });
     })
   }
 });
-
 
 // PHOTO VIEWER PAGE
 
@@ -124,10 +144,6 @@ function openPhotoSwipe(items, dataset, workerID) {
   var pswp = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, pswpOptions);
   pswp.init();
 
-  pswp.listen('setImageSize', function (w, h) {
-    console.log('w:' + w + ' h:' + h);
-  })
-
   // state for data logging
   var src = '';
   var x_min = [];
@@ -140,7 +156,6 @@ function openPhotoSwipe(items, dataset, workerID) {
   pswp.listen('position_change', function (item, x, y, zoom, time) {
     // new context, try to log
     if (item.src !== src || rotated) {
-      console.log("saving to db");
       $.ajax({
         type: "POST",
         url: "/data",
@@ -159,16 +174,7 @@ function openPhotoSwipe(items, dataset, workerID) {
           os: getOS(),
           duration: (new Date()).getTime() - start_time
         }),
-        contentType: "application/json",
-        success: function (res) {
-          if (res.success) {
-          } else {
-            console.log("failed message");
-          }
-        },
-        error: function (err) {
-          console.log("could not connect to db server");
-        }
+        contentType: "application/json"
       });
       // clear data for next logging
       src = item.src;
@@ -183,12 +189,14 @@ function openPhotoSwipe(items, dataset, workerID) {
     // store data for logging
     x_min.push(x < 0 ? Math.floor(-x / zoom) : 0);
     y_min.push(y < 0 ? Math.floor(-y / zoom) : 0);
+    var width;
+    var height;
     if ((item.w / item.h) > (window.innerWidth / window.innerHeight)) {
-      var width = item.w * item.fitRatio / zoom;
-      var height = width * window.innerHeight / window.innerWidth;
+      width = item.w * item.fitRatio / zoom;
+      height = width * window.innerHeight / window.innerWidth;
     } else {
-      var height = item.h * item.fitRatio / zoom;
-      var width = height * window.innerWidth / window.innerHeight;
+      height = item.h * item.fitRatio / zoom;
+      width = height * window.innerWidth / window.innerHeight;
     }
     x_max.push(Math.floor(-x / zoom + width) < item.w ? Math.floor(-x / zoom + width) : item.w);
     y_max.push(Math.floor(-y / zoom + height) < item.h ? Math.floor(-y / zoom + height) : item.h);
@@ -218,9 +226,9 @@ function openPhotoSwipe(items, dataset, workerID) {
  * @param {() => void} onNotDone
  */
 function checkEnd(onNotDone) {
-  var page_vars = getUrlVars();
-  var workerID = page_vars['workerID'] || 'none';
-  var dataset = page_vars['dataset'] || 'none';
+  var page_vars = new URLSearchParams(window.location.search);
+  var workerID = page_vars.get('workerID') || '?';
+  var dataset = page_vars.get('dataset') || '?';
 
   $.ajax({
     type: "POST",
@@ -236,13 +244,7 @@ function checkEnd(onNotDone) {
         } else {
           onNotDone();
         }
-      } else {
-        console.log(res);
-        console.log("ERROR: cannot find user labels");
       }
-    },
-    error: function (err) {
-      console.log("ERROR: could not connect to db server", err);
     }
   });
 }
@@ -277,7 +279,5 @@ function selectText(node) {
     range.selectNodeContents(node);
     selection.removeAllRanges();
     selection.addRange(range);
-  } else {
-    console.warn("Could not select text in node: Unsupported browser.");
   }
 }
