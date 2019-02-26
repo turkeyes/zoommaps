@@ -1,0 +1,158 @@
+{
+    "subsets": [
+        {
+            "name": "graphic_designers_selection",
+            "data": [
+                {
+                    "src": "imgs/graphic_designers_selection/CV_1_21_MACE-Y8syTs.png",
+                    "w": 556,
+                    "h": 720
+                },
+                {
+                    "src": "imgs/graphic_designers_selection/CV_1_22_MACFanwW5oU.png",
+                    "w": 556,
+                    "h": 720
+                },
+                {
+                    "src": "imgs/graphic_designers_selection/CV_1_30_MACKYrAXzNM.png",
+                    "w": 556,
+                    "h": 720
+                },
+                {
+                    "src": "imgs/graphic_designers_selection/CV_1_31_MACLt7yUEQ4.png",
+                    "w": 556,
+                    "h": 720
+                },
+                {
+                    "src": "imgs/graphic_designers_selection/CV_1_7_MACE-bU8Y-Y.png",
+                    "w": 556,
+                    "h": 720
+                },
+                {
+                    "src": "imgs/graphic_designers_selection/CV_2_10_MACF6COJT40.png",
+                    "w": 556,
+                    "h": 720
+                },
+                {
+                    "src": "imgs/graphic_designers_selection/CV_2_13_MACEl7z3RLc.png",
+                    "w": 556,
+                    "h": 720
+                },
+                {
+                    "src": "imgs/graphic_designers_selection/CV_2_14_MACL4oc3UMw.png",
+                    "w": 556,
+                    "h": 720
+                },
+                {
+                    "src": "imgs/graphic_designers_selection/CV_2_15_MACKervc_i0.png",
+                    "w": 556,
+                    "h": 720
+                },
+                {
+                    "src": "imgs/graphic_designers_selection/CV_2_32_MACLt1mZgrc.png",
+                    "w": 556,
+                    "h": 720
+                },
+                {
+                    "src": "imgs/graphic_designers_selection/CV_2_34_MACE34j-iSo.png",
+                    "w": 556,
+                    "h": 720
+                },
+                {
+                    "src": "imgs/graphic_designers_selection/CV_3_14_MACL4toagcQ.png",
+                    "w": 556,
+                    "h": 720
+                },
+                {
+                    "src": "imgs/graphic_designers_selection/CV_3_20_MACLynDoR8s.png",
+                    "w": 556,
+                    "h": 720
+                },
+                {
+                    "src": "imgs/graphic_designers_selection/CV_3_26_MACLzO-HHSI.png",
+                    "w": 556,
+                    "h": 720
+                },
+                {
+                    "src": "imgs/graphic_designers_selection/CV_3_28_MACFWC6Zv84.png",
+                    "w": 556,
+                    "h": 720
+                },
+                {
+                    "src": "imgs/graphic_designers_selection/CV_3_29_MACLyhPo4Ng.png",
+                    "w": 556,
+                    "h": 720
+                },
+                {
+                    "src": "imgs/graphic_designers_selection/CV_3_32_MACF6ezBqY4.png",
+                    "w": 556,
+                    "h": 720
+                },
+                {
+                    "src": "imgs/graphic_designers_selection/CV_3_4_MACKe67c0aQ.png",
+                    "w": 556,
+                    "h": 720
+                },
+                {
+                    "src": "imgs/graphic_designers_selection/CV_3_5_MACLzp75rs0.png",
+                    "w": 556,
+                    "h": 720
+                },
+                {
+                    "src": "imgs/graphic_designers_selection/CV_3_6_MACL4vgn5tE.png",
+                    "w": 556,
+                    "h": 720
+                },
+                {
+                    "src": "imgs/graphic_designers_selection/CV_3_8_MACKegTuP10.png",
+                    "w": 556,
+                    "h": 720
+                },
+                {
+                    "src": "imgs/graphic_designers_selection/CV_4_10_MACErx-uDmc.png",
+                    "w": 556,
+                    "h": 720
+                },
+                {
+                    "src": "imgs/graphic_designers_selection/CV_4_13_MACL_tE5kBE.png",
+                    "w": 556,
+                    "h": 720
+                },
+                {
+                    "src": "imgs/graphic_designers_selection/CV_4_27_MACL4X0UjWI.png",
+                    "w": 556,
+                    "h": 720
+                },
+                {
+                    "src": "imgs/graphic_designers_selection/CV_4_3_MACKZ0QQ8Fo.png",
+                    "w": 556,
+                    "h": 720
+                },
+                {
+                    "src": "imgs/graphic_designers_selection/CV_4_6_MACE36k_iBc.png",
+                    "w": 556,
+                    "h": 720
+                },
+                {
+                    "src": "imgs/graphic_designers_selection/CV_5_0_MACL5A0DtnY.png",
+                    "w": 557,
+                    "h": 722
+                },
+                {
+                    "src": "imgs/graphic_designers_selection/CV_5_8_MACE3z5jDl4.png",
+                    "w": 556,
+                    "h": 720
+                },
+                {
+                    "src": "imgs/graphic_designers_selection/CV_6_10_MACKlzfu2Hc.png",
+                    "w": 556,
+                    "h": 720
+                }
+            ],
+            "sampleSize": 15,
+            "minSecPhoto": 0,
+            "minSecTotal": 0
+        }
+    ],
+    "extraQuestions": ["Which candidate would you hire and why?"]
+}

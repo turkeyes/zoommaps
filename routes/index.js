@@ -4,6 +4,7 @@ const MobileDetect = require('mobile-detect');
 const url = require('url');
 const fs = require('fs');
 const debug = require('debug')('zoommaps');
+const seedrandom = require('seedrandom');
 
 const Label = require('../models/label');
 const User = require('../models/user');
@@ -14,45 +15,105 @@ const MIN_EVENTS = 100; // num position changes for label to count as zoom event
 const MIN_ZOOM_FRAC = 0.2; // of photos that must be zoomed on
 const MIN_PHOTO_FRAC = 0.85; // of photos that must be viewed for min time
 
-const datasetSizeCache = {}; // unchanging and probably small
 /**
- * Get the number of photos in the dataset by name
- * Done by reading a local file, but the result is cached
- * @param {string} dataset
- * @param {(err, datasetDetails?: { numPhotos: number, minTimePerPhoto: number, minTimeTotal: number }) => void} f
+ * @typedef Dataset
+ * @prop {DataSubset[]} subsets
+ * @prop {string[]} extraQuestions
  */
-function getDatasetDetails(dataset, f) {
-  if (dataset in datasetSizeCache) return f(null, datasetSizeCache[dataset]);
 
-  const filePath = path.join(__dirname, '..', 'public', 'datasets', `${dataset}.json`);
+/**
+ * @typedef DataSubset
+ * @prop {string} name
+ * @prop {Image[]} data
+ * @prop {number} sampleSize
+ * @prop {number} minSecPhoto
+ * @prop {number} minSecTotal
+ */
+
+/**
+ * @typedef Image
+ * @prop {string} src
+ * @prop {number} w
+ * @prop {number} h
+ */
+
+/**
+ * Sample items randomly from an array
+ * Source: Bergi, StackOverflow
+ * (altered by me to pass in a random function)
+ */
+function getRandom(arr, n, rand=Math.random) {
+  var result = new Array(n),
+      len = arr.length,
+      taken = new Array(len);
+  if (n > len)
+      throw new RangeError("getRandom: more elements taken than available");
+  while (n--) {
+      var x = Math.floor(rand() * len);
+      result[n] = arr[x in taken ? taken[x] : x];
+      taken[x] = --len in taken ? taken[len] : len;
+  }
+  return result;
+}
+
+const datasetCache = {};
+/**
+ * @param {string} dataset
+ * @param {(err, data?: Dataset)} f
+ */
+function readDatasetFile(dataset, f) {
+  if (dataset in datasetCache) return f(null, datasetCache[dataset]);
+  const filePath = path.join(__dirname, '..', 'datasets', `${dataset}.json`);
   fs.readFile(filePath, 'utf8', (readErr, dataStr) => {
     if (readErr) {
       debug('Error finding dataset', readErr);
       f(readErr);
     } else {
       try {
-        const data = JSON.parse(dataStr);
-        let numPhotos = 0;
-        let minTimePerPhoto = Infinity;
-        let minTimeTotal = 0;
-        data.forEach((d) => {
-          numPhotos += d.sampleSize || d.data.length;
-          if (d.minTimePerPhoto !== undefined) {
-            minTimePerPhoto = Math.min(minTimePerPhoto, d.minTimePerPhoto);
-          }
-          if (d.minTimeTotal !== undefined) {
-            minTimeTotal += d.minTimeTotal;
-          }
-        });
-        if (minTimePerPhoto === Infinity) {
-          minTimePerPhoto = 0;
+        let data = JSON.parse(dataStr);
+        if (Array.isArray(data)) {
+          data = {
+            subsets: data,
+            extraQuestions: [],
+          };
         }
-        f(null, { numPhotos, minTimePerPhoto, minTimeTotal });
+        data.subsets.forEach((subset) => {
+          subset.minSecPhoto = subset.minSecPhoto || 0;
+          subset.minSecTotal = subset.minSecTotal || 0;
+          subset.sampleSize = subset.sampleSize || subset.data.length;
+        });
+        datasetCache[dataset] = data;
+        f(null, data);
       } catch (parseErr) {
         debug('Error parsing dataset file.', parseErr);
         f(parseErr);
       }
     }
+  });
+}
+
+/**
+ * @typedef DatasetDetails
+ * @prop {number} numPhotos
+ * @prop {number} minSecPhoto
+ * @prop {number} minSecTotal
+ */
+
+/**
+ * Get the number of photos in the dataset by name
+ * Done by reading a local file, but the result is cached
+ * @param {string} dataset
+ * @param {(err, datasetDetails?: DatasetDetails) => void} f
+ */
+function getDatasetDetails(dataset, f) {
+  readDatasetFile(dataset, (readDatasetErr, data) => {
+    if (readDatasetErr) return f(readDatasetErr);
+    const datasetDetails = data.subsets.reduce((d, s) => ({
+      numPhotos: d.numPhotos + s.sampleSize,
+      minSecPhoto: Math.min(d.minSecPhoto, s.minSecPhoto),
+      minSecTotal: d.minSecTotal + s.minSecTotal
+    }), { numPhotos: 0, minSecPhoto: Infinity, minSecTotal: 0 });
+    f(null, datasetDetails);
   });
 }
 
@@ -113,21 +174,28 @@ function isZoom(label) {
  * Check whether or not the experiment has been completed.
  * @param {Label[]} labels
  */
-function checkDone(labels, { numPhotos, minTimePerPhoto, minTimeTotal }) {
-  const enoughZooms = labels.map(isZoom).length >= numPhotos * MIN_ZOOM_FRAC;
+function checkDone(labels, { numPhotos, minSecPhoto, minSecTotal }) {
+  const numZooms = labels.map(isZoom).length;
+  const enoughZooms = numZooms >= numPhotos * MIN_ZOOM_FRAC;
 
   const times = labels.map(label => label._id.getTimestamp().getTime());
   const startTime = Math.min(...times);
   const endTime = Math.max(...times);
-  const enoughTime = endTime - startTime >= minTimeTotal;
+  const time = (endTime - startTime) / 1000;
+  const enoughTime = time >= minSecTotal;
 
   const uniquePhotos = new Set(labels
-    .filter(label => label.duration >= minTimePerPhoto)
+    .filter(label => (label.duration / 1000) >= minSecPhoto)
     .map(label => label.src)
   );
-  const allPhotos = uniquePhotos.size >= numPhotos * MIN_PHOTO_FRAC; // TODO: dynamic from dataset
+  const enoughPhotos = uniquePhotos.size >= numPhotos * MIN_PHOTO_FRAC; // TODO: dynamic from dataset
+  const done = enoughZooms && enoughTime && enoughPhotos;
+  if (!done) {
+    debug(`Thresholds (#Photos=${numPhotos}): Zoom: ${MIN_ZOOM_FRAC*100}%@${MIN_EVENTS}ev, Task: ${minSecTotal}s, Photo: ${MIN_PHOTO_FRAC*100}%@${minSecPhoto}s`);
+    debug(`Values: Zooms: ${numZooms} (${enoughZooms}), Total Time: ${time}s (${enoughTime}), Photos: ${uniquePhotos.size} (${enoughPhotos})`);
+  }
 
-  return enoughZooms && enoughTime && allPhotos
+  return done;
 }
 
 /**
@@ -191,6 +259,26 @@ router.get('/:dataset', (req, res) => {
 });
 
 /**
+ * Get a dataset file
+ */
+router.get('/dataset/:dataset', (req, res) => {
+  const { dataset } = req.params;
+  const { workerID } = req.query;
+  readDatasetFile(dataset, (readDatasetErr, data) => {
+    if (readDatasetErr) { return res.status(404).send() }
+
+    if (workerID) {
+      data = JSON.parse(JSON.stringify(data)); // deepcopy
+      const rand = seedrandom(workerID); // consistent sample per worker
+      data.subsets.forEach((subset) => {
+        subset.data = getRandom(subset.data, subset.sampleSize, rand);
+      });
+    }
+    res.send(data);
+  });
+});
+
+/**
  * Log a zoom label
  */
 router.post('/data', (req, res) => {
@@ -238,7 +326,9 @@ router.post('/survey', (req, res) => {
     ageGroup: req.body.ageGroup,
     ethnicity: req.body.ethnicity,
     education: req.body.education,
-    feedback: req.body.feedback
+    feedback: req.body.feedback,
+    zoom: req.body.zoom,
+    extraAnswers: req.body.extraAnswers
   };
   User.updateOne(query, update, (findUserErr) => {
     if (findUserErr) {

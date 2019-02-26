@@ -7,7 +7,9 @@ const userSchema = mongoose.Schema({
   ageGroup: String,
   ethnicity: String,
   education: String,
-  feedback: String
+  feedback: String,
+  zoomUse: String,
+  extraAnswers: [String],
 });
 
 const User = mongoose.model("User", userSchema);

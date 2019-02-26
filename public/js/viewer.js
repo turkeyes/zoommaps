@@ -48,24 +48,6 @@ function getOrientation() {
   return orientation;
 }
 
-/**
- * Sample items randomly from an array
- * Source: Bergi, StackOverflow
- */
-function getRandom(arr, n) {
-  var result = new Array(n),
-      len = arr.length,
-      taken = new Array(len);
-  if (n > len)
-      throw new RangeError("getRandom: more elements taken than available");
-  while (n--) {
-      var x = Math.floor(Math.random() * len);
-      result[n] = arr[x in taken ? taken[x] : x];
-      taken[x] = --len in taken ? taken[len] : len;
-  }
-  return result;
-}
-
 $(document).ready(function () {
   var page_vars = new URLSearchParams(window.location.search);
   var workerID = page_vars.get('workerID') || '?';
@@ -73,30 +55,32 @@ $(document).ready(function () {
   if (dataset) {
     checkEnd(function() {
       var numPhotos = 0;
-      $.getJSON('../datasets/' + dataset + '.json', function (data) {
-        if (data.length == 1) {
-          data = data[0];
-          numPhotos = data['sampleSize'] || data['data'].length;
-          var photos = getRandom(data['data'], numPhotos);
-          openPhotoSwipe(photos, dataset, workerID);
-        } else {
-          $.each(data, function (key, val) {
-            var r = $('<input/>').attr({
-              type: "button",
-              id: "field",
-              value: val["name"]
+      $.ajax({
+        url: '/dataset/' + dataset + '?workerID=' + workerID,
+        type: 'GET',
+        dataType: 'json',
+        success: function (data) {
+          var subsets = data.subsets
+          if (subsets.length == 1) {
+            var singleTask = subsets[0];
+            openPhotoSwipe(singleTask.data, dataset, workerID);
+          } else {
+            $.each(subsets, function (key, val) {
+              var r = $('<input/>').attr({
+                type: "button",
+                id: "field",
+                value: val["name"]
+              });
+              r.click(function () {
+                openPhotoSwipe(val.data, dataset, workerID);
+              });
+              $("#galleries").append(r);
+              numPhotos += val.data.length;
             });
-            var numPhotosForSubtask = val['sampleSize'] || val['data'].length;
-            var photos = getRandom(val['data'], numPhotosForSubtask);
-            r.click(function () {
-              openPhotoSwipe(photos, dataset, workerID);
-            });
-            $("#galleries").append(r);
-            numPhotos += numPhotosForSubtask;
-          });
+          }
         }
       });
-    })
+    });
   }
 });
 
@@ -139,7 +123,7 @@ function openPhotoSwipe(items, dataset, workerID) {
   }
 
   // Initializes and opens PhotoSwipe
-  items.sort(function(a, b) { return Math.random() - 0.5 });
+  // no need to randomize order since the server does that
   items.push(FINAL_SENTINEL_IMAGE);
   var pswp = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, pswpOptions);
   pswp.init();

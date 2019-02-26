@@ -4,8 +4,8 @@ var sizeOf = require('image-size');
 
 const dir = process.argv[2];
 const images = fs.readdirSync(path.join(__dirname, 'public', 'imgs', dir));
-const datasetFileContent = [
-  {
+const datasetFileContent = {
+  subsets: [{
     name: dir,
     data: images.map((filename) => {
       const absolutePath = path.join(__dirname, 'public', 'imgs', dir, filename);
@@ -14,12 +14,13 @@ const datasetFileContent = [
       return { src, w, h };
     }),
     sampleSize: images.length,
-    minTimePerPhoto: 0,
-    minTimeTotal: 0,
-  }
-];
+    minSecPhoto: 0,
+    minSecTotal: 0,
+  }],
+  extraQuestions: []
+};
 fs.writeFileSync(
-  path.join(__dirname, 'public', 'datasets', `${dir}.json`),
+  path.join(__dirname, 'datasets', `${dir}.json`),
   JSON.stringify(datasetFileContent, null, 4),
   'utf8'
 );
