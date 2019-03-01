@@ -2,12 +2,12 @@ const express = require('express');
 const path = require('path');
 const MobileDetect = require('mobile-detect');
 const url = require('url');
-const fs = require('fs');
 const debug = require('debug')('zoommaps');
 const seedrandom = require('seedrandom');
 
 const Label = require('../models/label');
 const User = require('../models/user');
+const { readDatasetFile, getDatasetDetails } = require('../utils/read-dataset');
 
 const router = express.Router();
 
@@ -54,67 +54,6 @@ function getRandom(arr, n, rand=Math.random) {
       taken[x] = --len in taken ? taken[len] : len;
   }
   return result;
-}
-
-const datasetCache = {};
-/**
- * @param {string} dataset
- * @param {(err, data?: Dataset)} f
- */
-function readDatasetFile(dataset, f) {
-  if (dataset in datasetCache) return f(null, datasetCache[dataset]);
-  const filePath = path.join(__dirname, '..', 'datasets', `${dataset}.json`);
-  fs.readFile(filePath, 'utf8', (readErr, dataStr) => {
-    if (readErr) {
-      debug('Error finding dataset', readErr);
-      f(readErr);
-    } else {
-      try {
-        let data = JSON.parse(dataStr);
-        if (Array.isArray(data)) {
-          data = {
-            subsets: data,
-            extraQuestions: [],
-          };
-        }
-        data.subsets.forEach((subset) => {
-          subset.minSecPhoto = subset.minSecPhoto || 0;
-          subset.minSecTotal = subset.minSecTotal || 0;
-          subset.sampleSize = subset.sampleSize || subset.data.length;
-        });
-        datasetCache[dataset] = data;
-        f(null, data);
-      } catch (parseErr) {
-        debug('Error parsing dataset file.', parseErr);
-        f(parseErr);
-      }
-    }
-  });
-}
-
-/**
- * @typedef DatasetDetails
- * @prop {number} numPhotos
- * @prop {number} minSecPhoto
- * @prop {number} minSecTotal
- */
-
-/**
- * Get the number of photos in the dataset by name
- * Done by reading a local file, but the result is cached
- * @param {string} dataset
- * @param {(err, datasetDetails?: DatasetDetails) => void} f
- */
-function getDatasetDetails(dataset, f) {
-  readDatasetFile(dataset, (readDatasetErr, data) => {
-    if (readDatasetErr) return f(readDatasetErr);
-    const datasetDetails = data.subsets.reduce((d, s) => ({
-      numPhotos: d.numPhotos + s.sampleSize,
-      minSecPhoto: Math.min(d.minSecPhoto, s.minSecPhoto),
-      minSecTotal: d.minSecTotal + s.minSecTotal
-    }), { numPhotos: 0, minSecPhoto: Infinity, minSecTotal: 0 });
-    f(null, datasetDetails);
-  });
 }
 
 /**

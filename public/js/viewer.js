@@ -48,6 +48,14 @@ function getOrientation() {
   return orientation;
 }
 
+/**
+ * Scales up and rounds to nearest 5, always showing at least 5
+ */
+function overestimate(realSeconds) {
+  realSeconds += 0.0001; // don't want to show zero
+  Math.ceil((realSeconds * 1.25) / 5) * 5; // scale up and round to nearest 5
+}
+
 $(document).ready(function () {
   var page_vars = new URLSearchParams(window.location.search);
   var workerID = page_vars.get('workerID') || '?';
@@ -63,6 +71,7 @@ $(document).ready(function () {
           var subsets = data.subsets
           if (subsets.length == 1) {
             var singleTask = subsets[0];
+            $('#sec-photo').text(overestimate(singleTask.minSecPhoto));
             openPhotoSwipe(singleTask.data, dataset, workerID);
           } else {
             $.each(subsets, function (key, val) {
@@ -72,6 +81,7 @@ $(document).ready(function () {
                 value: val["name"]
               });
               r.click(function () {
+                $('#sec-photo').text(overestimate(val.minSecPhoto));
                 openPhotoSwipe(val.data, dataset, workerID);
               });
               $("#galleries").append(r);

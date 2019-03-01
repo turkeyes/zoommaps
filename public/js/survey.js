@@ -27,6 +27,9 @@ function loadSurvey(workerID, dataset, extraQuestions) {
     $field.append($textarea);
     $extraQuestions.append($field);
   });
+  if (extraQuestions.length === 0) {
+    $extraQuestions.hide();
+  }
   var formData = {
     fields: {
       gender: {
