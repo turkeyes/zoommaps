@@ -1,3 +1,7 @@
+/**
+ * A command-line tool for building dataset files from a folder of images
+ */
+
 const path = require('path');
 const fs = require('fs');
 var sizeOf = require('image-size');
@@ -17,10 +21,17 @@ const datasetFileContent = {
     minSecPhoto: 0,
     minSecTotal: 0,
   }],
-  extraQuestions: []
+  extraQuestions: [],
+  category: dir
 };
+const writePath = path.join(__dirname, 'datasets', `${dir}.json`);
 fs.writeFileSync(
   path.join(__dirname, 'datasets', `${dir}.json`),
   JSON.stringify(datasetFileContent, null, 4),
   'utf8'
 );
+
+/* eslint-disable no-console */
+console.log('Dataset has been created.');
+console.log(writePath);
+console.log('Edit file to set thresholds, image category, and extra questions.');

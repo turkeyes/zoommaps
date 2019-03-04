@@ -13,23 +13,6 @@ $(document).ready(function() {
 });
 
 function loadSurvey(workerID, dataset, extraQuestions) {
-  var $extraQuestions = $('#extra-questions');
-  extraQuestions.forEach(function(question, i) {
-    var $textarea = $('<textarea></textarea>')
-      .addClass('extra-answer')
-      .attr('name', 'eq' + i)
-      .attr('rows', 2);
-    var $prompt = $('<div></div>')
-      .html(question);
-    var $field = $('<div></div>')
-      .addClass('field');
-    $field.append($prompt);
-    $field.append($textarea);
-    $extraQuestions.append($field);
-  });
-  if (extraQuestions.length === 0) {
-    $extraQuestions.hide();
-  }
   var formData = {
     fields: {
       gender: {
@@ -62,6 +45,33 @@ function loadSurvey(workerID, dataset, extraQuestions) {
       }
     }
   };
+  var $extraQuestions = $('#extra-questions');
+  extraQuestions.forEach(function(question, i) {
+    var name = 'eq' + i;
+    var $textarea = $('<textarea></textarea>')
+      .addClass('extra-answer')
+      .attr('name', name)
+      .attr('rows', 2);
+    var $prompt = $('<div></div>')
+      .html(question);
+    var $field = $('<div></div>')
+      .addClass('field');
+    $field.append($prompt);
+    $field.append($textarea);
+    $extraQuestions.append($field);
+    formData.fields[name] = {
+      identifier: 'name',
+      rules: [
+        {
+          type: 'empty',
+          prompt: 'Please answer the question.'
+        }
+      ]
+    };
+  });
+  if (extraQuestions.length === 0) {
+    $extraQuestions.hide();
+  }
   $('#survey-form').form(formData);
 
   $('#survey-form').submit(function(e) {

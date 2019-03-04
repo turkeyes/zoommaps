@@ -1,3 +1,9 @@
+/**
+ * Code for reading dataset files (which can take different forms)
+ * It exports functions, but it can also be used from the command line
+ *    so that the Python notebook can call it
+ */
+
 const fs = require('fs');
 const path = require('path');
 const debug = require('debug')('zoommaps');
@@ -45,6 +51,7 @@ function readDatasetFile(dataset, f) {
  * @prop {number} numPhotos
  * @prop {number} minSecPhoto
  * @prop {number} minSecTotal
+ * @prop {string} name
  */
 
 /**
@@ -56,11 +63,20 @@ function readDatasetFile(dataset, f) {
 function getDatasetDetails(dataset, f) {
   readDatasetFile(dataset, (readDatasetErr, data) => {
     if (readDatasetErr) return f(readDatasetErr);
-    const datasetDetails = data.subsets.reduce((d, s) => ({
+    let datasetDetails = {
+      numPhotos: 0,
+      minSecPhoto: Infinity,
+      minSecTotal: 0,
+      category: data.category,
+    };
+    datasetDetails = data.subsets.reduce((d, s) => ({
       numPhotos: d.numPhotos + s.sampleSize,
       minSecPhoto: Math.min(d.minSecPhoto, s.minSecPhoto),
-      minSecTotal: d.minSecTotal + s.minSecTotal
-    }), { numPhotos: 0, minSecPhoto: Infinity, minSecTotal: 0 });
+      minSecTotal: d.minSecTotal + s.minSecTotal,
+      category: d.category || s.name
+    }), datasetDetails);
+    datasetDetails.extraQuestions = data.extraQuestions;
+    data.category = data.category || 'Images';
     f(null, datasetDetails);
   });
 }

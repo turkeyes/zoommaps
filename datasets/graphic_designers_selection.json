@@ -1,7 +1,7 @@
 {
     "subsets": [
         {
-            "name": "graphic_designers_selection",
+            "name": "Graphic Designer CVs",
             "data": [
                 {
                     "src": "imgs/graphic_designers_selection/CV_1_21_MACE-Y8syTs.png",
@@ -150,9 +150,10 @@
                 }
             ],
             "sampleSize": 15,
-            "minSecPhoto": 0,
-            "minSecTotal": 0
+            "minSecPhoto": 3,
+            "minSecTotal": 90
         }
     ],
+    "category": "Graphic Designer CVs", 
     "extraQuestions": ["Which candidate would you hire and why?"]
 }
