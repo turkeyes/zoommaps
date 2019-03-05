@@ -67,16 +67,13 @@ function getDatasetDetails(dataset, f) {
       numPhotos: 0,
       minSecPhoto: Infinity,
       minSecTotal: 0,
-      category: data.category,
     };
     datasetDetails = data.subsets.reduce((d, s) => ({
       numPhotos: d.numPhotos + s.sampleSize,
       minSecPhoto: Math.min(d.minSecPhoto, s.minSecPhoto),
       minSecTotal: d.minSecTotal + s.minSecTotal,
-      category: d.category || s.name
     }), datasetDetails);
     datasetDetails.extraQuestions = data.extraQuestions;
-    data.category = data.category || 'Images';
     f(null, datasetDetails);
   });
 }

@@ -21,8 +21,7 @@ const datasetFileContent = {
     minSecPhoto: 0,
     minSecTotal: 0,
   }],
-  extraQuestions: [],
-  category: dir
+  extraQuestions: []
 };
 const writePath = path.join(__dirname, 'datasets', `${dir}.json`);
 fs.writeFileSync(
@@ -34,4 +33,4 @@ fs.writeFileSync(
 /* eslint-disable no-console */
 console.log('Dataset has been created.');
 console.log(writePath);
-console.log('Edit file to set thresholds, image category, and extra questions.');
+console.log('Edit file to set thresholds and extra questions.');
