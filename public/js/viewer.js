@@ -53,7 +53,7 @@ function getOrientation() {
  */
 function overestimate(realSeconds) {
   realSeconds += 0.0001; // don't want to show zero
-  Math.ceil((realSeconds * 1.25) / 5) * 5; // scale up and round to nearest 5
+  return Math.ceil((realSeconds * 1.25) / 5) * 5; // scale up and round to nearest 5
 }
 
 $(document).ready(function () {
