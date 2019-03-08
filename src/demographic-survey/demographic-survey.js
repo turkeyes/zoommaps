@@ -82,8 +82,7 @@ const surveyConfig = [
 ];
 
 class DemoSurvey {
-  constructor($container, key, data) {
-    this.key = key;
+  constructor($container, data) {
     this.data = data;
     this.$survey = $(surveyHTML);
     $container.append(this.$survey);
@@ -190,7 +189,6 @@ class DemoSurvey {
       ethnicity,
       education,
       feedback,
-      key: this.key,
       zoom,
       extraAnswers
     };
@@ -238,7 +236,7 @@ class DemoSurvey {
         url: "/api/survey" + window.location.search,
         data: JSON.stringify(data),
         contentType: "application/json"
-      }).then(() => {
+      }).then(({ id }) => {
         // submit to MTurk
         const urlParams = new URLSearchParams(window.location.search);
         let submitDomain = urlParams.get('turkSubmitTo');
@@ -246,7 +244,7 @@ class DemoSurvey {
         if (submitDomain && assignmentId) {
           if (!submitDomain.endsWith('/')) { submitDomain += '/'; }
           const submitURL = `${submitDomain}mturk/externalSubmit`;
-          formPOST(submitURL, { key: this.key, assignmentId });
+          formPOST(submitURL, { key: id, assignmentId });
         } else {
           alert('Done! (You are not on AMT)');
         }
@@ -255,6 +253,6 @@ class DemoSurvey {
   }
 }
 
-export default function survey($container, key, data) {
-  new DemoSurvey($container, key, data);
+export default function survey($container, data) {
+  new DemoSurvey($container, data);
 }

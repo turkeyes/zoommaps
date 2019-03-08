@@ -30,11 +30,12 @@ export default function main($container, data, onValidKey) {
   $instructions.find('.qr .code')
     .append(qr.createSvgTag({ scalable: true, margin: 0 }));
   $instructions.find('.qr .link').text(mobileLink);
-  $instructions.find('.enter-key button').click(async () => {
+  $instructions.find('.enter-key').submit(async (e) => {
+    e.preventDefault();
     const submitKey = $instructions.find('.enter-key input').val();
     const keyIsValid = await $.get(`/api/validate?key=${submitKey}`);
     if (keyIsValid) {
-      onValidKey(submitKey);
+      onValidKey();
     } else {
       alert('This key is not valid. Please complete the task.');
     }

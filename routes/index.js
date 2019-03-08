@@ -1,6 +1,7 @@
 const express = require('express');
 const debug = require('debug')('zoommaps');
 const seedrandom = require('seedrandom');
+const randomWords = require('random-words');
 
 const Label = require('../models/label');
 const User = require('../models/user');
@@ -53,6 +54,20 @@ function getRandom(arr, n, rand=Math.random) {
   return result;
 }
 
+function getUniqueKey(f) {
+  const key = randomWords();
+  User.findOne({ key }, (findUserErr, user) => {
+    debug('Error finding user.', findUserErr);
+    if (findUserErr) {
+      f(findUserErr);
+    } else if (user) {
+      getUniqueKey(f);
+    } else {
+      return f(null, key);
+    }
+  });
+}
+
 /**
  * Finds user & labels for given workerId x dataset
  * Creates a user if one does not exist
@@ -94,13 +109,13 @@ function getUserData(workerId, dataset, f) {
 /**
  * Finds user & labels for given user ID
  * Throws an error if the user does not exist
- * @param {string} userID
+ * @param {string} key - the submit key
  * @param {(err, user?: User, labels?: Label[], numPhotos: number) => void} f - callback
  */
-function getUserDataByID(userID, f) {
-  User.findById(userID, (findUserErr, foundUser) => {
+function getUserDataByKey(key, f) {
+  User.findOne({ key }, (findUserErr, foundUser) => {
     if (findUserErr) return f(findUserErr);
-    if (!foundUser) return f(new Error('User not found.'));
+    if (!foundUser) return f('User not found.');
     getUserData(foundUser.workerId, foundUser.dataset, f);
   });
 }
@@ -236,14 +251,23 @@ router.post('/survey', (req, res) => {
     education: req.body.education,
     feedback: req.body.feedback,
     zoom: req.body.zoom,
-    extraAnswers: req.body.extraAnswers
+    extraAnswers: req.body.extraAnswers,
+    key: '' // clear the key so we don't run out of words
   };
-  User.updateOne({ workerId, dataset }, update, (findUserErr) => {
+  User.findOne({ workerId, dataset }, (findUserErr, user) => {
     if (findUserErr) {
       debug('Error finding existing user', findUserErr);
       res.send({ success: false });
     } else {
-      res.send({ success: true });
+      User.updateOne({ _id: user.id }, update, (updateUserErr) => {
+        if (updateUserErr) {
+          debug('Error updating existing user', updateUserErr);
+          res.send({ success: false });
+        } else {
+          // the id is used to match data with mturk
+          res.send({ success: true, id: user._id });
+        }
+      });
     }
   });
 });
@@ -259,12 +283,25 @@ router.get('/end', (req, res) => {
     }
 
     const done = checkDone(labels, datasetDetails);
-
-    res.send({
-      success: true,
-      done,
-      key: done ? user._id : '',
-    });
+    const survey = checkSurvey(user);
+    if (!user.key && done && !survey) {
+      getUniqueKey((getKeyErr, key) => {
+        if (getKeyErr) {
+          res.send({ success: false });
+        } else {
+          User.updateOne({ _id: user._id }, { key }, (setKeyErr) => {
+            if (err) {
+              debug('Error saving submit key', setKeyErr);
+              res.send({ success: false });
+            } else {
+              res.send({ success: true, done, key });
+            }
+          });
+        }
+      });
+    } else {
+      res.send({ success: true, done, key: user.key });
+    }
   });
 });
 
@@ -273,7 +310,7 @@ router.get('/end', (req, res) => {
  */
 router.get('/validate', (req, res) => {
   const { key } = req.query;
-  getUserDataByID(key, (err, user, labels, datasetDetails) => {
+  getUserDataByKey(key, (err, user, labels, datasetDetails) => {
     if (
       err
       || !checkDone(labels, datasetDetails)

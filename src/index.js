@@ -14,9 +14,9 @@ function navigate($container, data) {
   if (mobile && window.location.pathname.startsWith('/viewer')) {
     viewer($container, data);
   } else {
-    instructions($container, data, (key) => {
+    instructions($container, data, () => {
       $container.empty();
-      survey($container, key, data);
+      survey($container, data);
     });
   }
 }
