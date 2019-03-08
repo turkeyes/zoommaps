@@ -204,8 +204,8 @@ class Viewer {
       url: "/api/end" + window.location.search,
       contentType: "application/json",
       success: (res) => {
-        const { success, done, key } = res;
-        if (success && done && key) {
+        const { success, key } = res;
+        if (success && key) {
           $('#error-url').hide();
           this.showSubmitKey(key);
         } else {

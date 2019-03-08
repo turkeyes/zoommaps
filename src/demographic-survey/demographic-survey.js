@@ -165,9 +165,12 @@ class DemoSurvey {
     const ageGroup = this.$survey
       .find('input[type=radio][name=ageGroup]:checked')
       .val();
-    const ethnicity = this.$survey
+    const ethnicity = [];
+    this.$survey
       .find('input[type=checkbox][name=ethnicity]:checked')
-      .val();
+      .each(function() {
+        ethnicity.push($(this).val());
+      });
     const education = this.$survey
       .find('input[type=radio][name=education]:checked')
       .val();
@@ -193,7 +196,7 @@ class DemoSurvey {
       extraAnswers
     };
 
-    return { survey_data: data };
+    return data;
   }
 
   /**
@@ -201,7 +204,7 @@ class DemoSurvey {
    * @return { false | { errorMessage: string } }
    */
   validateTask() {
-    const { survey_data: data } = this.collectData();
+    const data = this.collectData();
     const {
       gender,
       ageGroup,
@@ -244,7 +247,7 @@ class DemoSurvey {
         if (submitDomain && assignmentId) {
           if (!submitDomain.endsWith('/')) { submitDomain += '/'; }
           const submitURL = `${submitDomain}mturk/externalSubmit`;
-          formPOST(submitURL, { key: id, assignmentId });
+          formPOST(submitURL, { userId: id, assignmentId });
         } else {
           alert('Done! (You are not on AMT)');
         }

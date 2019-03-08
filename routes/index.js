@@ -169,7 +169,7 @@ function checkDone(labels, { numPhotos, minSecPhoto, minSecTotal }) {
  * @return {boolean}
  */
 function checkSurvey(user) {
-  return user.gender && user.ageGroup && user.ethnicity && user.education;
+  return !!(user.gender && user.ageGroup && user.ethnicity && user.education);
 }
 
 // Helpers above
@@ -200,6 +200,7 @@ router.get('/dataset', (req, res) => {
 router.post('/data', (req, res) => {
   const { workerId, dataset } = req.query;
   const {
+    src,
     x_min,
     x_max,
     y_min,
@@ -214,7 +215,7 @@ router.post('/data', (req, res) => {
     .map(a => a.length)).size === 1;
   if (valid) {
     const label = new Label({
-      src: req.body.src,
+      src,
       x_min,
       x_max,
       y_min,
@@ -244,22 +245,31 @@ router.post('/data', (req, res) => {
  */
 router.post('/survey', (req, res) => {
   const { workerId, dataset } = req.query;
+  const { 
+    gender,
+    ageGroup,
+    ethnicity,
+    education,
+    feedback,
+    zoom,
+    extraAnswers
+  } = req.body;
   const update = {
-    gender: req.body.gender,
-    ageGroup: req.body.ageGroup,
-    ethnicity: req.body.ethnicity,
-    education: req.body.education,
-    feedback: req.body.feedback,
-    zoom: req.body.zoom,
-    extraAnswers: req.body.extraAnswers,
+    gender,
+    ageGroup,
+    ethnicity,
+    education,
+    feedback,
+    zoom,
+    extraAnswers,
     key: '' // clear the key so we don't run out of words
   };
   User.findOne({ workerId, dataset }, (findUserErr, user) => {
-    if (findUserErr) {
+    if (findUserErr || !user) {
       debug('Error finding existing user', findUserErr);
       res.send({ success: false });
     } else {
-      User.updateOne({ _id: user.id }, update, (updateUserErr) => {
+      User.updateOne({ _id: user._id }, update, (updateUserErr) => {
         if (updateUserErr) {
           debug('Error updating existing user', updateUserErr);
           res.send({ success: false });
@@ -294,13 +304,13 @@ router.get('/end', (req, res) => {
               debug('Error saving submit key', setKeyErr);
               res.send({ success: false });
             } else {
-              res.send({ success: true, done, key });
+              res.send({ success: true, completed: false, key });
             }
           });
         }
       });
     } else {
-      res.send({ success: true, done, key: user.key });
+      res.send({ success: true, completed: done && survey, key: user.key });
     }
   });
 });

@@ -6,7 +6,7 @@ const userSchema = mongoose.Schema({
   key: String,
   gender: String,
   ageGroup: String,
-  ethnicity: String,
+  ethnicity: [String],
   education: String,
   feedback: String,
   zoomUse: String,

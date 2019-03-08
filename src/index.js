@@ -21,6 +21,13 @@ function navigate($container, data) {
   }
 }
 
+async function checkCompleted() {
+  const { completed } = await $.get({
+    url: '/api/end' + window.location.search,
+  });
+  return completed;
+}
+
 async function getData() {
   const query = new URLSearchParams(window.location.search);
   const workerId = query.get('workerId');
@@ -38,14 +45,21 @@ $(document).ready(async () => {
   const $main = $('#main');
   if (window.supportedBrowser === false) {
     $main.html('<p>Your browser is not able to run this HIT.</p>');
-  } else {
-    let data;
-    try {
-      data = await getData();
-    } catch (e) {
-      $main.html('<p>HIT could not be found. Check the URL.</p>');
-      return;
-    }
-    navigate($main, data);
+    return;
   }
+
+  const completed = await checkCompleted();
+  if (completed) {
+    $main.html('<p>You already did this HIT.</p>');
+    return;
+  }
+
+  let data;
+  try {
+    data = await getData();
+  } catch (e) {
+    $main.html('<p>HIT could not be found. Check the URL.</p>');
+    return;
+  }
+  navigate($main, data);
 });
