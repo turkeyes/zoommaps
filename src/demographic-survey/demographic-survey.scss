@@ -1,0 +1,33 @@
+.demographic-survey {
+  text-align: left;
+
+  // inject a newline after each label element
+  label::after {
+    content: '\A';
+    white-space: pre;
+  }
+
+  label, input[type="radio"], input[type="checkbox"], button {
+    cursor: pointer;
+  }
+
+  label {
+    margin-left: 16px;
+    line-height: 150%;
+  }
+
+  h4 {
+    margin-bottom: 0;
+  }
+
+  textarea {
+    width: 100%;
+    font-size: 100%;
+  }
+
+  button {
+    display: block;
+    margin-top: 16px;
+    margin-left: auto;
+  }
+}

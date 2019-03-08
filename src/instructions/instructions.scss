@@ -1,0 +1,30 @@
+.instructions {
+  .enter-key {
+    text-align: center;
+    * {
+      font-size: 100%;
+    }
+  }
+
+  .qr {
+    text-align: center;
+    .code {
+      text-align: center;
+      padding: 16px;
+      > * {
+        width: 100%;
+        max-width: 3in;
+      }
+    }
+    .link {
+      font-size: 75%;
+    }
+    margin-bottom: 32px;
+  }
+
+  .disclaimer {
+    font-size: 75%;
+    border-top: 1px solid lightgray;
+    margin-top: 32px;
+  }
+}

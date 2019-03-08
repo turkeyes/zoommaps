@@ -30,10 +30,18 @@ function readDatasetFile(dataset, f) {
             extraQuestions: [],
           };
         }
+        data.bigName = data.bigName || 'Images'
+        data.smallName = data.smallName || 'image';
+        data.numPhotos = 0;
+        data.minSecPhoto = Infinity;
+        data.minSecTotal = 0;
         data.subsets.forEach((subset) => {
           subset.minSecPhoto = subset.minSecPhoto || 0;
           subset.minSecTotal = subset.minSecTotal || 0;
           subset.sampleSize = subset.sampleSize || subset.data.length;
+          data.numPhotos += subset.sampleSize;
+          data.minSecPhoto = Math.min(data.minSecPhoto, subset.minSecPhoto);
+          data.minSecTotal = Math.min(data.minSecTotal, subset.minSecTotal);
         });
         datasetCache[dataset] = data;
         f(null, data);
@@ -51,43 +59,17 @@ function readDatasetFile(dataset, f) {
  * @prop {number} numPhotos
  * @prop {number} minSecPhoto
  * @prop {number} minSecTotal
- * @prop {string} name
+ * @prop {string[]} extraQuestions
  */
-
-/**
- * Get the number of photos in the dataset by name
- * Done by reading a local file, but the result is cached
- * @param {string} dataset
- * @param {(err, datasetDetails?: DatasetDetails) => void} f
- */
-function getDatasetDetails(dataset, f) {
-  readDatasetFile(dataset, (readDatasetErr, data) => {
-    if (readDatasetErr) return f(readDatasetErr);
-    let datasetDetails = {
-      numPhotos: 0,
-      minSecPhoto: Infinity,
-      minSecTotal: 0,
-    };
-    datasetDetails = data.subsets.reduce((d, s) => ({
-      numPhotos: d.numPhotos + s.sampleSize,
-      minSecPhoto: Math.min(d.minSecPhoto, s.minSecPhoto),
-      minSecTotal: d.minSecTotal + s.minSecTotal,
-    }), datasetDetails);
-    datasetDetails.extraQuestions = data.extraQuestions;
-    f(null, datasetDetails);
-  });
-}
 
 
 module.exports = {
-  readDatasetFile,
-  getDatasetDetails
+  readDatasetFile
 };
-
 
 /* eslint-disable no-console */
 if (require.main === module) {
-  getDatasetDetails(process.argv[2], (err, data) => {
+  readDatasetFile(process.argv[2], (err, data) => {
     if (err) console.error(JSON.stringify(err));
     else console.log(JSON.stringify(data));
   });

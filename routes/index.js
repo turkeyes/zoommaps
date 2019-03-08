@@ -1,13 +1,10 @@
 const express = require('express');
-const path = require('path');
-const MobileDetect = require('mobile-detect');
-const url = require('url');
 const debug = require('debug')('zoommaps');
 const seedrandom = require('seedrandom');
 
 const Label = require('../models/label');
 const User = require('../models/user');
-const { readDatasetFile, getDatasetDetails } = require('../utils/read-dataset');
+const { readDatasetFile } = require('../utils/read-dataset');
 
 const router = express.Router();
 
@@ -57,22 +54,22 @@ function getRandom(arr, n, rand=Math.random) {
 }
 
 /**
- * Finds user & labels for given workerID x dataset
+ * Finds user & labels for given workerId x dataset
  * Creates a user if one does not exist
- * @param {string} workerID
+ * @param {string} workerId
  * @param {string} dataset
  * @param {(err, user?: User, labels?: Label[], numPhotos: number) => void} f - callback
  */
-function getUserData(workerID, dataset, f) {
-  getDatasetDetails(dataset, (getSizeError, datasetDetails) => {
+function getUserData(workerId, dataset, f) {
+  readDatasetFile(dataset, (getSizeError, datasetDetails) => {
     if (getSizeError) return f(getSizeError);
 
-    User.findOne({ workerID, dataset }, (findUserErr, foundUser) => {
+    User.findOne({ workerId, dataset }, (findUserErr, foundUser) => {
       if (findUserErr) {
         debug('Error finding existing user', findUserErr);
         f(findUserErr);
       } else if (foundUser) {
-        Label.find({ workerID, dataset }, (findLabelsErr, labels) => {
+        Label.find({ workerId, dataset }, (findLabelsErr, labels) => {
           if (findLabelsErr) {
             debug('Error finding the user labels', findLabelsErr);
             f(findLabelsErr);
@@ -81,7 +78,7 @@ function getUserData(workerID, dataset, f) {
           }
         });
       } else {
-        new User({ workerID, dataset }).save((newUserErr, newUser) => {
+        new User({ workerId, dataset }).save((newUserErr, newUser) => {
           if (newUserErr) {
             debug('Error saving new user', newUserErr);
             f(newUserErr);
@@ -91,6 +88,19 @@ function getUserData(workerID, dataset, f) {
         });
       }
     });
+  });
+}
+
+/**
+ * Finds user & labels for given user ID
+ * Throws an error if the user does not exist
+ * @param {string} userID
+ * @param {(err, user?: User, labels?: Label[], numPhotos: number) => void} f - callback
+ */
+function getUserDataByID(userID, f) {
+  User.findById(userID, (findUserErr, foundUser) => {
+    if (findUserErr) return f(findUserErr);
+    getUserData(foundUser.workerId, foundUser.dataset, f);
   });
 }
 
@@ -146,69 +156,20 @@ function checkSurvey(user) {
   return user.gender && user.ageGroup && user.ethnicity && user.education;
 }
 
-
-/**
- * Get the task
- */
-router.get('/', (req, res) => {
-  const { workerID, dataset } = req.query;
-
-  // Bad link -- just send the photo view page which will show an error
-  if (!dataset) {
-    return res.sendFile(path.join(__dirname, '../views/viewer.html'))
-  }
-
-  if (!workerID) {
-    return res.sendFile(path.join(__dirname, '../views/enterid.html'));
-  }
-
-  getUserData(workerID, dataset, (err, user, labels, datasetDetails) => {
-    if (err) return res.sendFile(path.join(__dirname, '../views/enterid.html'));
-
-    if (!checkDone(labels, datasetDetails)) {
-      const md = new MobileDetect(req.headers['user-agent']);
-      const notMobile = !(md.mobile() || md.phone() || md.tablet());
-      if (notMobile) {
-        res.sendFile(path.join(__dirname, '../views/error.html'));
-      } else {
-        res.sendFile(path.join(__dirname, '../views/viewer.html'));
-      }
-    } else {
-      if (!checkSurvey(user)) {
-        res.sendFile(path.join(__dirname, '../views/survey.html'));
-      } else {
-        res.sendFile(path.join(__dirname, '../views/done.html'));
-      }
-    }
-  });
-});
-
-/**
- * experimentdomain/dataset -- convenient for MTurk links
- */
-router.get('/:dataset', (req, res) => {
-  const { dataset } = req.params;
-  res.redirect(url.format({
-    pathname: '/',
-    query: {
-      dataset,
-      ...req.query
-    }
-  }));
-});
+// Helpers above
+// API below
 
 /**
  * Get a dataset file
  */
-router.get('/dataset/:dataset', (req, res) => {
-  const { dataset } = req.params;
-  const { workerID } = req.query;
+router.get('/dataset', (req, res) => {
+  const { workerId, dataset } = req.query;
   readDatasetFile(dataset, (readDatasetErr, data) => {
     if (readDatasetErr) { return res.status(404).send() }
 
-    if (workerID) {
+    if (workerId) {
       data = JSON.parse(JSON.stringify(data)); // deepcopy
-      const rand = seedrandom(workerID); // consistent sample per worker
+      const rand = seedrandom(workerId); // consistent sample per worker
       data.subsets.forEach((subset) => {
         subset.data = getRandom(subset.data, subset.sampleSize, rand);
       });
@@ -221,7 +182,18 @@ router.get('/dataset/:dataset', (req, res) => {
  * Log a zoom label
  */
 router.post('/data', (req, res) => {
-  const { x_min, x_max, y_min, y_max, time } = req.body;
+  const { workerId, dataset } = req.query;
+  const {
+    x_min,
+    x_max,
+    y_min,
+    y_max,
+    time,
+    orientation,
+    browser,
+    os,
+    duration,
+  } = req.body;
   const valid = new Set([x_min, x_max, y_min, y_max, time]
     .map(a => a.length)).size === 1;
   if (valid) {
@@ -232,13 +204,12 @@ router.post('/data', (req, res) => {
       y_min,
       y_max,
       time,
-      id: req.body.id,
-      workerID: req.body.workerID,
-      dataset: req.body.dataset,
-      orientation: req.body.orientation,
-      browser: req.body.browser,
-      os: req.body.os,
-      duration: req.body.duration
+      workerId,
+      dataset,
+      orientation,
+      browser,
+      os,
+      duration,
     });
     label.save((err) => {
       if (err) {
@@ -256,10 +227,7 @@ router.post('/data', (req, res) => {
  * Send survey data
  */
 router.post('/survey', (req, res) => {
-  const query = {
-    workerID: req.body.workerID,
-    dataset: req.body.dataset
-  }
+  const { workerId, dataset } = req.query;
   const update = {
     gender: req.body.gender,
     ageGroup: req.body.ageGroup,
@@ -269,7 +237,7 @@ router.post('/survey', (req, res) => {
     zoom: req.body.zoom,
     extraAnswers: req.body.extraAnswers
   };
-  User.updateOne(query, update, (findUserErr) => {
+  User.updateOne({ workerId, dataset }, update, (findUserErr) => {
     if (findUserErr) {
       debug('Error finding existing user', findUserErr);
       res.send({ success: false });
@@ -282,21 +250,38 @@ router.post('/survey', (req, res) => {
 /**
  * Check if the user has completed the experiment, sending a completion key if so
  */
-router.post('/end', (req, res) => {
-  const { workerID, dataset } = req.body;
-  getUserData(workerID, dataset, (err, user, labels, datasetDetails) => {
+router.get('/end', (req, res) => {
+  const { workerId, dataset } = req.query;
+  getUserData(workerId, dataset, (err, user, labels, datasetDetails) => {
     if (err) {
       return res.send({ success: false, done: false, key: '' });
     }
 
     const done = checkDone(labels, datasetDetails);
-    const survey = checkSurvey(user);
 
     res.send({
       success: true,
       done,
-      key: survey ? user._id : '',
+      key: done ? user._id : '',
     });
+  });
+});
+
+/**
+ * Checks if a submit key corresponds to a valid id for a user that did the task
+ */
+router.get('/validate', (req, res) => {
+  const { key } = req.query;
+  getUserDataByID(key, (err, user, labels, datasetDetails) => {
+    if (
+      err
+      || !checkDone(labels, datasetDetails)
+      || checkSurvey(user) // codes are invalid after being used
+    ) {
+      res.status(200).send(false);
+    } else {
+      res.status(200).send(true);
+    }
   });
 });
 

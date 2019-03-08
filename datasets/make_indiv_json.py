@@ -19,7 +19,7 @@ posters = data[0]["data"] #array of posters
 def make_subjects(subjects): 
     placeholder = [
             {
-                "src": "/imgs/CVPR_studies_12_2017/slot_7_placeholder.JPG",
+                "src": "CVPR_studies_12_2017/slot_7_placeholder.JPG",
                 "w": 3000,
                 "h": 1500
             }

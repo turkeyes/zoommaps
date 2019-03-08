@@ -3,52 +3,52 @@
     "name" : "section 1",
     "data" : [
       {
-          "src": "/imgs/infographic/vis428.png",
+          "src": "infographic/vis428.png",
           "w": 600,
           "h": 1448
       },
       {
-          "src": "/imgs/infographic/vis512.png",
+          "src": "infographic/vis512.png",
           "w": 850,
           "h": 1524
       },
       {
-          "src": "/imgs/infographic/visMost745.png",
+          "src": "infographic/visMost745.png",
           "w": 1969,
           "h": 1737
       },
       {
-          "src": "/imgs/infographic/whoB19_1.png",
+          "src": "infographic/whoB19_1.png",
           "w": 1273,
           "h": 1217
       },
       {
-          "src": "/imgs/infographic/wsj21.png",
+          "src": "infographic/wsj21.png",
           "w": 600,
           "h": 223
       },
       {
-          "src": "/imgs/infographic/wsj116.png",
+          "src": "infographic/wsj116.png",
           "w": 555,
           "h": 879
       },
       {
-          "src": "/imgs/infographic/wsj214.png",
+          "src": "infographic/wsj214.png",
           "w": 600,
           "h": 620
       },
       {
-          "src": "/imgs/infographic/wsj233.png",
+          "src": "infographic/wsj233.png",
           "w": 555,
           "h": 568
       },
       {
-          "src": "/imgs/infographic/wsj240.png",
+          "src": "infographic/wsj240.png",
           "w": 555,
           "h": 543
       },
       {
-          "src": "/imgs/infographic/wsj264.png",
+          "src": "infographic/wsj264.png",
           "w": 555,
           "h": 338
       }

@@ -1,6 +1,7 @@
 /* eslint-disable */
 
 // This is modified (see line 451)
+// We also add imports at the very bottom
 
 /*! PhotoSwipe - v4.1.2 - 2017-04-05
 * http://photoswipe.com
@@ -13,7 +14,7 @@
 	} else {
 		root.PhotoSwipe = factory();
 	}
-})(this, function () {
+})(window, function () {
 
 	'use strict';
 	var PhotoSwipe = function(template, UiClass, items, options){
@@ -3737,3 +3738,9 @@ _registerModule('History', {
 	framework.extend(self, publicMethods); };
 	return PhotoSwipe;
 });
+
+import * as PhotoSwipeUI_Default from 'photoswipe/dist/photoswipe-ui-default'
+import 'photoswipe/dist/photoswipe.css';
+import 'photoswipe/dist/default-skin/default-skin.css';
+
+window.PhotoSwipeUI_Default = PhotoSwipeUI_Default

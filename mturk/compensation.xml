@@ -10,7 +10,7 @@
         </FormattedContent>
     </Overview>
     <Question>
-        <QuestionIdentifier>workerID</QuestionIdentifier>
+        <QuestionIdentifier>workerId</QuestionIdentifier>
         <DisplayName>Worker ID</DisplayName>
         <IsRequired>true</IsRequired>
         <QuestionContent>

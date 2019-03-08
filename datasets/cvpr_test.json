@@ -3,27 +3,27 @@
     "name" : "section 1",
     "data" : [
       {
-          "src": "/imgs/cvpr17_poster_wenzhen.png",
+          "src": "cvpr17_poster_wenzhen.png",
           "w": 3000,
           "h": 1468
       },
       {
-          "src": "/imgs/DavidBau.png",
+          "src": "DavidBau.png",
           "w": 3000,
           "h": 1500
       },
       {
-          "src": "/imgs/jiajun.jpg",
+          "src": "jiajun.jpg",
           "w": 3000,
           "h": 1500
       },
       {
-          "src": "/imgs/julian_trevor.jpg",
+          "src": "julian_trevor.jpg",
           "w": 3000,
           "h": 1800
       },
       {
-          "src": "/imgs/poster_v1_sceneparsing.jpg",
+          "src": "poster_v1_sceneparsing.jpg",
           "w": 3000,
           "h": 1500
       }

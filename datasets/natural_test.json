@@ -3,177 +3,177 @@
     "name" : "Natural Images",
     "data" : [
       {
-          "src": "/imgs/natural/Action/023.jpg",
+          "src": "natural/Action/023.jpg",
           "w": 1920,
           "h": 1080
       },
       {
-          "src": "/imgs/natural/Action/027.jpg",
+          "src": "natural/Action/027.jpg",
           "w": 1920,
           "h": 1080
       },
       {
-          "src": "/imgs/natural/Action/065.jpg",
+          "src": "natural/Action/065.jpg",
           "w": 1920,
           "h": 1080
       },
       {
-          "src": "/imgs/natural/Action/091.jpg",
+          "src": "natural/Action/091.jpg",
           "w": 1920,
           "h": 1080
       },
       {
-          "src": "/imgs/natural/Action/093.jpg",
+          "src": "natural/Action/093.jpg",
           "w": 1920,
           "h": 1080
       },
       {
-          "src": "/imgs/natural/Art/017.jpg",
+          "src": "natural/Art/017.jpg",
           "w": 1920,
           "h": 1080
       },
       {
-          "src": "/imgs/natural/Art/055.jpg",
+          "src": "natural/Art/055.jpg",
           "w": 1920,
           "h": 1080
       },
       {
-          "src": "/imgs/natural/Art/121.jpg",
+          "src": "natural/Art/121.jpg",
           "w": 1920,
           "h": 1080
       },
       {
-          "src": "/imgs/natural/Art/175.jpg",
+          "src": "natural/Art/175.jpg",
           "w": 1920,
           "h": 1080
       },
       {
-          "src": "/imgs/natural/Art/197.jpg",
+          "src": "natural/Art/197.jpg",
           "w": 1920,
           "h": 1080
       },
       {
-          "src": "/imgs/natural/Fractal/003.jpg",
+          "src": "natural/Fractal/003.jpg",
           "w": 1920,
           "h": 1080
       },
       {
-          "src": "/imgs/natural/Fractal/031.jpg",
+          "src": "natural/Fractal/031.jpg",
           "w": 1920,
           "h": 1080
       },
       {
-          "src": "/imgs/natural/Fractal/051.jpg",
+          "src": "natural/Fractal/051.jpg",
           "w": 1920,
           "h": 1080
       },
       {
-          "src": "/imgs/natural/Fractal/063.jpg",
+          "src": "natural/Fractal/063.jpg",
           "w": 1920,
           "h": 1080
       },
       {
-          "src": "/imgs/natural/Fractal/067.jpg",
+          "src": "natural/Fractal/067.jpg",
           "w": 1920,
           "h": 1080
       },
       {
-          "src": "/imgs/natural/OutdoorManMade/011.jpg",
+          "src": "natural/OutdoorManMade/011.jpg",
           "w": 1920,
           "h": 1080
       },
       {
-          "src": "/imgs/natural/OutdoorManMade/049.jpg",
+          "src": "natural/OutdoorManMade/049.jpg",
           "w": 1920,
           "h": 1080
       },
       {
-          "src": "/imgs/natural/OutdoorManMade/057.jpg",
+          "src": "natural/OutdoorManMade/057.jpg",
           "w": 1920,
           "h": 1080
       },
       {
-          "src": "/imgs/natural/OutdoorManMade/063.jpg",
+          "src": "natural/OutdoorManMade/063.jpg",
           "w": 1920,
           "h": 1080
       },
       {
-          "src": "/imgs/natural/OutdoorManMade/117.jpg",
+          "src": "natural/OutdoorManMade/117.jpg",
           "w": 1920,
           "h": 1080
       },
       {
-          "src": "/imgs/natural/OutdoorNatural/005.jpg",
+          "src": "natural/OutdoorNatural/005.jpg",
           "w": 1920,
           "h": 1080
       },
       {
-          "src": "/imgs/natural/OutdoorNatural/029.jpg",
+          "src": "natural/OutdoorNatural/029.jpg",
           "w": 1920,
           "h": 1080
       },
       {
-          "src": "/imgs/natural/OutdoorNatural/043.jpg",
+          "src": "natural/OutdoorNatural/043.jpg",
           "w": 1920,
           "h": 1080
       },
       {
-          "src": "/imgs/natural/OutdoorNatural/057.jpg",
+          "src": "natural/OutdoorNatural/057.jpg",
           "w": 1920,
           "h": 1080
       },
       {
-          "src": "/imgs/natural/OutdoorNatural/119.jpg",
+          "src": "natural/OutdoorNatural/119.jpg",
           "w": 1920,
           "h": 1080
       },
       {
-          "src": "/imgs/natural/Satelite/005.jpg",
+          "src": "natural/Satelite/005.jpg",
           "w": 1920,
           "h": 1080
       },
       {
-          "src": "/imgs/natural/Satelite/007.jpg",
+          "src": "natural/Satelite/007.jpg",
           "w": 1920,
           "h": 1080
       },
       {
-          "src": "/imgs/natural/Satelite/027.jpg",
+          "src": "natural/Satelite/027.jpg",
           "w": 1920,
           "h": 1080
       },
       {
-          "src": "/imgs/natural/Satelite/037.jpg",
+          "src": "natural/Satelite/037.jpg",
           "w": 1920,
           "h": 1080
       },
       {
-          "src": "/imgs/natural/Satelite/075.jpg",
+          "src": "natural/Satelite/075.jpg",
           "w": 1920,
           "h": 1080
       },
       {
-          "src": "/imgs/natural/Social/001.jpg",
+          "src": "natural/Social/001.jpg",
           "w": 1920,
           "h": 1080
       },
       {
-          "src": "/imgs/natural/Social/015.jpg",
+          "src": "natural/Social/015.jpg",
           "w": 1920,
           "h": 1080
       },
       {
-          "src": "/imgs/natural/Social/023.jpg",
+          "src": "natural/Social/023.jpg",
           "w": 1920,
           "h": 1080
       },
       {
-          "src": "/imgs/natural/Social/025.jpg",
+          "src": "natural/Social/025.jpg",
           "w": 1920,
           "h": 1080
       },
       {
-          "src": "/imgs/natural/Social/171.jpg",
+          "src": "natural/Social/171.jpg",
           "w": 1920,
           "h": 1080
       }

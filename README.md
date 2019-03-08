@@ -1,5 +1,9 @@
 #ZoomMaps
 
+## usage
+- development: `npm run dev`
+- produciton `npm run build` then `npm start`
+
 ## mLab
 We have been hosting this project on Heroku and using the mLab add-on for storage.
 

@@ -3,52 +3,52 @@
     "name" : "section 1",
     "data" : [
       {
-          "src": "/imgs/CVPR2017_MIT_imgs/cvpr17_poster_wenzhen.jpg",
+          "src": "CVPR2017_MIT_imgs/cvpr17_poster_wenzhen.jpg",
           "w": 3000,
           "h": 1468
       },
       {
-          "src": "/imgs/CVPR2017_MIT_imgs/DavidBau.jpg",
+          "src": "CVPR2017_MIT_imgs/DavidBau.jpg",
           "w": 3000,
           "h": 1500
       },
       {
-          "src": "/imgs/CVPR2017_MIT_imgs/jiajun.jpg",
+          "src": "CVPR2017_MIT_imgs/jiajun.jpg",
           "w": 3000,
           "h": 1500
       },
       {
-          "src": "/imgs/CVPR2017_MIT_imgs/julian_trevor.jpg",
+          "src": "CVPR2017_MIT_imgs/julian_trevor.jpg",
           "w": 3000,
           "h": 1800
       },
       {
-          "src": "/imgs/CVPR2017_MIT_imgs/poster_v1_sceneparsing.jpg",
+          "src": "CVPR2017_MIT_imgs/poster_v1_sceneparsing.jpg",
           "w": 3000,
           "h": 1500
       },
       {
-          "src": "/imgs/CVPR2017_MIT_imgs/Amir_poster.jpg",
+          "src": "CVPR2017_MIT_imgs/Amir_poster.jpg",
           "w": 3500,
           "h": 1857
       },
       {
-          "src": "/imgs/CVPR2017_MIT_imgs/carlVondrick.jpg",
+          "src": "CVPR2017_MIT_imgs/carlVondrick.jpg",
           "w": 3500,
           "h": 1750
       },
       {
-          "src": "/imgs/CVPR2017_MIT_imgs/emotion_recognition.jpg",
+          "src": "CVPR2017_MIT_imgs/emotion_recognition.jpg",
           "w": 3500,
           "h": 1713
       },
       {
-          "src": "/imgs/CVPR2017_MIT_imgs/recipes.jpg",
+          "src": "CVPR2017_MIT_imgs/recipes.jpg",
           "w": 3500,
           "h": 1713
       },
       {
-          "src": "/imgs/CVPR2017_MIT_imgs/watermarks_cvpr17_poster.jpg",
+          "src": "CVPR2017_MIT_imgs/watermarks_cvpr17_poster.jpg",
           "w": 3500,
           "h": 1713
       }
