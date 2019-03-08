@@ -209,7 +209,6 @@ class DemoSurvey {
       ageGroup,
       ethnicity,
       education,
-      vizExperience,
       zoom,
       extraAnswers,
     } = data;
@@ -218,7 +217,6 @@ class DemoSurvey {
       && ageGroup
       && ethnicity.length > 0
       && education
-      && vizExperience
       && zoom
       && extraAnswers.filter(a => a.length === 0).length === 0
     );
