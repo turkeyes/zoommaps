@@ -14,13 +14,25 @@ export default function main($container, data, onValidKey) {
   // overview text
   const [minSecPhoto, maxSecPhoto] = humanRange(data.minSecPhoto, 5, 1.25);
   const [minMinTotal, maxMinTotal] = humanRange(data.minSecTotal / 60, 1, 1.5);
-  $overview.find('.num-photos').text(15);
+  $overview.find('.num-photos').text(data.numPhotos);
   $overview.find('.big-name').text(data.bigName);
   $overview.find('.small-name').text(data.smallName);
   $overview.find('.min-sec-photo').text(minSecPhoto);
   $overview.find('.max-sec-photo').text(maxSecPhoto);
   $overview.find('.min-min-total').text(minMinTotal);
   $overview.find('.max-min-total').text(maxMinTotal);
+
+  if (data.extraQuestions.length > 0) {
+    const $eq = $instructions.find('.extra-questions');
+    $eq.append($('<p>At the end of the task, you will be asked:</p>'));
+    const $ul = $('<ul></ul>');
+    data.extraQuestions.forEach((question) => {
+      const $li = $('<li></li>');
+      $li.text(question);
+      $ul.append($li);
+    });
+    $eq.append($ul);
+  }
 
   // qr code
   const urlParams = new URLSearchParams(window.location.search);
