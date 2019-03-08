@@ -100,6 +100,7 @@ function getUserData(workerId, dataset, f) {
 function getUserDataByID(userID, f) {
   User.findById(userID, (findUserErr, foundUser) => {
     if (findUserErr) return f(findUserErr);
+    if (!foundUser) return f(new Error('User not found.'));
     getUserData(foundUser.workerId, foundUser.dataset, f);
   });
 }
