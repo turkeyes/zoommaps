@@ -251,7 +251,7 @@ router.post('/survey', (req, res) => {
     ethnicity,
     education,
     feedback,
-    zoom,
+    zoomUse,
     extraAnswers
   } = req.body;
   const update = {
@@ -260,7 +260,7 @@ router.post('/survey', (req, res) => {
     ethnicity,
     education,
     feedback,
-    zoom,
+    zoomUse,
     extraAnswers,
     key: '' // clear the key so we don't run out of words
   };

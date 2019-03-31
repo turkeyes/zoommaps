@@ -156,7 +156,7 @@ class DemoSurvey {
    * Return the survey data
    */
   collectData() {
-    const zoom = this.$survey
+    const zoomUse = this.$survey
       .find('textarea[name=zoom]')
       .val();
     const gender = this.$survey
@@ -192,7 +192,7 @@ class DemoSurvey {
       ethnicity,
       education,
       feedback,
-      zoom,
+      zoomUse,
       extraAnswers
     };
 
@@ -210,7 +210,7 @@ class DemoSurvey {
       ageGroup,
       ethnicity,
       education,
-      zoom,
+      zoomUse,
       extraAnswers,
     } = data;
     const isValid = (
@@ -218,7 +218,7 @@ class DemoSurvey {
       && ageGroup
       && ethnicity.length > 0
       && education
-      && zoom
+      && zoomUse
       && extraAnswers.filter(a => a.length === 0).length === 0
     );
     // falsey value indicates no error...
