@@ -12,23 +12,29 @@ export default function main($container, data, onValidKey) {
   $overview.html(overviewHTML);
 
   // overview text
-  const [minSecPhoto, maxSecPhoto] = humanRange(data.minSecPhoto, 5, 1.25);
-  const [minMinTotal, maxMinTotal] = humanRange(data.minSecTotal / 60, 1, 1.5);
-  $overview.find('.num-photos').text(data.numPhotos);
+  const numImages = data.groups.reduce((s, g) => s + g.data.length, 0);
+  const minSecTotal = Math.max(
+    data.minSecImage * numImages,
+    data.minSecGroup * data.groups.length
+  );
+  const [minSecImage, maxSecImage] = humanRange(data.minSecImage, 5, 1.25);
+  const [minMinTotal, maxMinTotal] = humanRange(minSecTotal / 60, 1, 1.5);
+  $overview.find('.num-images').text(numImages);
   $overview.find('.big-name').text(data.bigName);
   $overview.find('.small-name').text(data.smallName);
-  $overview.find('.min-sec-photo').text(minSecPhoto);
-  $overview.find('.max-sec-photo').text(maxSecPhoto);
+  $overview.find('.min-sec-image').text(minSecImage);
+  $overview.find('.max-sec-image').text(maxSecImage);
   $overview.find('.min-min-total').text(minMinTotal);
   $overview.find('.max-min-total').text(maxMinTotal);
 
-  if (_.size(data.extraQuestions.schema) > 0) {
+  const extraQuestions = data.extraQuestionsEnd;
+  if (_.size(extraQuestions.schema) > 0) {
     const $eq = $instructions.find('.extra-questions');
     $eq.append($('<p>At the end of the task, you will be asked:</p>'));
     const $ul = $('<ul></ul>');
-    const eqUsedSchemas = data.extraQuestions.form
-      ? data.extraQuestions.form.map(({ key }) => data.extraQuestions.schema[key])
-      : _.values(data.extraQuestions.schema);
+    const eqUsedSchemas = extraQuestions.form
+      ? extraQuestions.form.map(({ key }) => extraQuestions.schema[key])
+      : _.values(extraQuestions.schema);
     eqUsedSchemas.forEach(({ title }) => { // TODO: alternatives to title
       const $li = $('<li></li>');
       $li.text(title);

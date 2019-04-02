@@ -150,7 +150,7 @@
                 }
             ],
             "sampleSize": 15,
-            "minSecPhoto": 3,
+            "minSecImage": 3,
             "minSecTotal": 150
         }
     ],

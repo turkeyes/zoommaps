@@ -1,19 +1,17 @@
 {
-    "bigName": "images",
-    "smallName": "image",
+    "bigName": "Infographics",
+    "smallName": "infographic",
     "groups": [
         {
             "name": "Image 1",
             "data": [
                 {
-                    "src": "images/infographics_impannots/vis139.png",
+                    "src": "infographics_impannots/vis139.png",
                     "w": 900,
                     "h": 2161
                 }
             ],
-            "imageSampleSize": 1,
-            "minSecImage": 0,
-            "minSecGroup": 5,
+            "sampleSize": 1,
             "questions": {
                 "schema": {},
                 "form": []
@@ -23,14 +21,12 @@
             "name": "Image 2",
             "data": [
                 {
-                    "src": "images/infographics_impannots/vis147.png",
-                    "w": 640,
-                    "h": 1566
+                    "src": "infographics_impannots/vis152.png",
+                    "w": 800,
+                    "h": 1554
                 }
             ],
-            "imageSampleSize": 1,
-            "minSecImage": 0,
-            "minSecGroup": 5,
+            "sampleSize": 1,
             "questions": {
                 "schema": {},
                 "form": []
@@ -40,14 +36,12 @@
             "name": "Image 3",
             "data": [
                 {
-                    "src": "images/infographics_impannots/vis152.png",
-                    "w": 800,
-                    "h": 1554
+                    "src": "infographics_impannots/vis147.png",
+                    "w": 640,
+                    "h": 1566
                 }
             ],
-            "imageSampleSize": 1,
-            "minSecImage": 0,
-            "minSecGroup": 5,
+            "sampleSize": 1,
             "questions": {
                 "schema": {},
                 "form": []
@@ -57,14 +51,12 @@
             "name": "Image 4",
             "data": [
                 {
-                    "src": "images/infographics_impannots/vis285.png",
+                    "src": "infographics_impannots/vis285.png",
                     "w": 936,
                     "h": 1500
                 }
             ],
-            "imageSampleSize": 1,
-            "minSecImage": 0,
-            "minSecGroup": 5,
+            "sampleSize": 1,
             "questions": {
                 "schema": {},
                 "form": []
@@ -74,14 +66,12 @@
             "name": "Image 5",
             "data": [
                 {
-                    "src": "images/infographics_impannots/vis318.png",
+                    "src": "infographics_impannots/vis318.png",
                     "w": 3271,
                     "h": 9603
                 }
             ],
-            "imageSampleSize": 1,
-            "minSecImage": 0,
-            "minSecGroup": 5,
+            "sampleSize": 1,
             "questions": {
                 "schema": {},
                 "form": []
@@ -91,14 +81,12 @@
             "name": "Image 6",
             "data": [
                 {
-                    "src": "images/infographics_impannots/vis349.png",
+                    "src": "infographics_impannots/vis349.png",
                     "w": 880,
                     "h": 2200
                 }
             ],
-            "imageSampleSize": 1,
-            "minSecImage": 0,
-            "minSecGroup": 5,
+            "sampleSize": 1,
             "questions": {
                 "schema": {},
                 "form": []
@@ -108,14 +96,12 @@
             "name": "Image 7",
             "data": [
                 {
-                    "src": "images/infographics_impannots/vis419.png",
+                    "src": "infographics_impannots/vis419.png",
                     "w": 1008,
                     "h": 1440
                 }
             ],
-            "imageSampleSize": 1,
-            "minSecImage": 0,
-            "minSecGroup": 5,
+            "sampleSize": 1,
             "questions": {
                 "schema": {},
                 "form": []
@@ -125,14 +111,12 @@
             "name": "Image 8",
             "data": [
                 {
-                    "src": "images/infographics_impannots/vis463.png",
+                    "src": "infographics_impannots/vis463.png",
                     "w": 1200,
                     "h": 3200
                 }
             ],
-            "imageSampleSize": 1,
-            "minSecImage": 0,
-            "minSecGroup": 5,
+            "sampleSize": 1,
             "questions": {
                 "schema": {},
                 "form": []
@@ -142,14 +126,12 @@
             "name": "Image 9",
             "data": [
                 {
-                    "src": "images/infographics_impannots/vis499.png",
+                    "src": "infographics_impannots/vis499.png",
                     "w": 550,
                     "h": 956
                 }
             ],
-            "imageSampleSize": 1,
-            "minSecImage": 0,
-            "minSecGroup": 5,
+            "sampleSize": 1,
             "questions": {
                 "schema": {},
                 "form": []
@@ -159,14 +141,12 @@
             "name": "Image 10",
             "data": [
                 {
-                    "src": "images/infographics_impannots/vis50.png",
+                    "src": "infographics_impannots/vis50.png",
                     "w": 975,
                     "h": 2247
                 }
             ],
-            "imageSampleSize": 1,
-            "minSecImage": 0,
-            "minSecGroup": 5,
+            "sampleSize": 1,
             "questions": {
                 "schema": {},
                 "form": []
@@ -176,14 +156,12 @@
             "name": "Image 11",
             "data": [
                 {
-                    "src": "images/infographics_impannots/vis552.png",
+                    "src": "infographics_impannots/vis552.png",
                     "w": 2000,
                     "h": 3474
                 }
             ],
-            "imageSampleSize": 1,
-            "minSecImage": 0,
-            "minSecGroup": 5,
+            "sampleSize": 1,
             "questions": {
                 "schema": {},
                 "form": []
@@ -193,14 +171,12 @@
             "name": "Image 12",
             "data": [
                 {
-                    "src": "images/infographics_impannots/vis593.png",
-                    "w": 700,
-                    "h": 1288
+                    "src": "infographics_impannots/vis876.png",
+                    "w": 3300,
+                    "h": 5100
                 }
             ],
-            "imageSampleSize": 1,
-            "minSecImage": 0,
-            "minSecGroup": 5,
+            "sampleSize": 1,
             "questions": {
                 "schema": {},
                 "form": []
@@ -210,14 +186,12 @@
             "name": "Image 13",
             "data": [
                 {
-                    "src": "images/infographics_impannots/vis876.png",
-                    "w": 3300,
-                    "h": 5100
+                    "src": "infographics_impannots/vis593.png",
+                    "w": 700,
+                    "h": 1288
                 }
             ],
-            "imageSampleSize": 1,
-            "minSecImage": 0,
-            "minSecGroup": 5,
+            "sampleSize": 1,
             "questions": {
                 "schema": {},
                 "form": []
@@ -227,14 +201,12 @@
             "name": "Image 14",
             "data": [
                 {
-                    "src": "images/infographics_impannots/vis924.png",
+                    "src": "infographics_impannots/vis924.png",
                     "w": 787,
                     "h": 1250
                 }
             ],
-            "imageSampleSize": 1,
-            "minSecImage": 0,
-            "minSecGroup": 5,
+            "sampleSize": 1,
             "questions": {
                 "schema": {},
                 "form": []
@@ -244,14 +216,12 @@
             "name": "Image 15",
             "data": [
                 {
-                    "src": "images/infographics_impannots/visMost158.png",
+                    "src": "infographics_impannots/visMost158.png",
                     "w": 1024,
                     "h": 1195
                 }
             ],
-            "imageSampleSize": 1,
-            "minSecImage": 0,
-            "minSecGroup": 5,
+            "sampleSize": 1,
             "questions": {
                 "schema": {},
                 "form": []
@@ -261,14 +231,12 @@
             "name": "Image 16",
             "data": [
                 {
-                    "src": "images/infographics_impannots/visMost227.png",
+                    "src": "infographics_impannots/visMost227.png",
                     "w": 960,
                     "h": 1736
                 }
             ],
-            "imageSampleSize": 1,
-            "minSecImage": 0,
-            "minSecGroup": 5,
+            "sampleSize": 1,
             "questions": {
                 "schema": {},
                 "form": []
@@ -278,14 +246,12 @@
             "name": "Image 17",
             "data": [
                 {
-                    "src": "images/infographics_impannots/visMost671.png",
+                    "src": "infographics_impannots/visMost671.png",
                     "w": 812,
                     "h": 1738
                 }
             ],
-            "imageSampleSize": 1,
-            "minSecImage": 0,
-            "minSecGroup": 5,
+            "sampleSize": 1,
             "questions": {
                 "schema": {},
                 "form": []
@@ -295,14 +261,12 @@
             "name": "Image 18",
             "data": [
                 {
-                    "src": "images/infographics_impannots/visMost689.png",
+                    "src": "infographics_impannots/visMost689.png",
                     "w": 775,
                     "h": 1050
                 }
             ],
-            "imageSampleSize": 1,
-            "minSecImage": 0,
-            "minSecGroup": 5,
+            "sampleSize": 1,
             "questions": {
                 "schema": {},
                 "form": []
@@ -312,14 +276,12 @@
             "name": "Image 19",
             "data": [
                 {
-                    "src": "images/infographics_impannots/visMost758.png",
+                    "src": "infographics_impannots/visMost758.png",
                     "w": 640,
                     "h": 1750
                 }
             ],
-            "imageSampleSize": 1,
-            "minSecImage": 0,
-            "minSecGroup": 5,
+            "sampleSize": 1,
             "questions": {
                 "schema": {},
                 "form": []
@@ -329,21 +291,21 @@
             "name": "Image 20",
             "data": [
                 {
-                    "src": "images/infographics_impannots/visMost77.png",
+                    "src": "infographics_impannots/visMost77.png",
                     "w": 1220,
                     "h": 889
                 }
             ],
-            "imageSampleSize": 1,
-            "minSecImage": 0,
-            "minSecGroup": 5,
+            "sampleSize": 1,
             "questions": {
                 "schema": {},
                 "form": []
             }
         }
     ],
-    "groupSampleSize": 20,
+    "sampleSize": 5,
+    "minSecGroup": 5,
+    "minSecImage": 5,
     "extraQuestionsEachGroup": {
         "schema": {},
         "form": []

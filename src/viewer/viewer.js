@@ -60,21 +60,19 @@ class Viewer {
     $container.append($(html));
     this.data = data;
 
-    var subsets = data.subsets;
-    if (subsets.length == 1) {
-      var singleTask = subsets[0];
-      $('#sec-photo').text(humanRange(singleTask.minSecPhoto, 5, 1.5)[0]);
-      this.openPhotoSwipe(singleTask.data);
+    $('#sec-image').text(humanRange(this.data.minSecImage, 5, 1.5)[0]);
+    const groups = this.data.groups;
+    if (groups.length == 1) {
+      this.openPhotoSwipe(groups[0].data);
     } else {
-      $.each(subsets, (key, val) => {
-        var r = $('<input/>').attr({
-          type: "button",
-          id: "field",
-          value: val["name"]
+      groups.forEach((group) => {
+        const r = $('<input/>').attr({
+          type: 'button',
+          id: 'field',
+          value: group.name
         });
         r.click(() => {
-          $('#sec-photo').text(humanRange(val.minSecPhoto, 5, 1.5)[0]);
-          this.openPhotoSwipe(val.data);
+          this.openPhotoSwipe(group.data);
         });
         $("#galleries").append(r);
       });
@@ -83,7 +81,7 @@ class Viewer {
 
   /**
    * Opens the PhotoSwipe UI and sets up handlers for logging
-   * @param {Object[]} items - photo objects from dataset JSON
+   * @param {Object[]} items - image objects from dataset JSON
    * @param {string} dataset - name of the dataset
    * @param {workerId} workerId
    */

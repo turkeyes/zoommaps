@@ -1,184 +1,202 @@
-[
-  {
-    "name" : "Natural Images",
-    "data" : [
-      {
-          "src": "natural/Action/023.jpg",
-          "w": 1920,
-          "h": 1080
-      },
-      {
-          "src": "natural/Action/027.jpg",
-          "w": 1920,
-          "h": 1080
-      },
-      {
-          "src": "natural/Action/065.jpg",
-          "w": 1920,
-          "h": 1080
-      },
-      {
-          "src": "natural/Action/091.jpg",
-          "w": 1920,
-          "h": 1080
-      },
-      {
-          "src": "natural/Action/093.jpg",
-          "w": 1920,
-          "h": 1080
-      },
-      {
-          "src": "natural/Art/017.jpg",
-          "w": 1920,
-          "h": 1080
-      },
-      {
-          "src": "natural/Art/055.jpg",
-          "w": 1920,
-          "h": 1080
-      },
-      {
-          "src": "natural/Art/121.jpg",
-          "w": 1920,
-          "h": 1080
-      },
-      {
-          "src": "natural/Art/175.jpg",
-          "w": 1920,
-          "h": 1080
-      },
-      {
-          "src": "natural/Art/197.jpg",
-          "w": 1920,
-          "h": 1080
-      },
-      {
-          "src": "natural/Fractal/003.jpg",
-          "w": 1920,
-          "h": 1080
-      },
-      {
-          "src": "natural/Fractal/031.jpg",
-          "w": 1920,
-          "h": 1080
-      },
-      {
-          "src": "natural/Fractal/051.jpg",
-          "w": 1920,
-          "h": 1080
-      },
-      {
-          "src": "natural/Fractal/063.jpg",
-          "w": 1920,
-          "h": 1080
-      },
-      {
-          "src": "natural/Fractal/067.jpg",
-          "w": 1920,
-          "h": 1080
-      },
-      {
-          "src": "natural/OutdoorManMade/011.jpg",
-          "w": 1920,
-          "h": 1080
-      },
-      {
-          "src": "natural/OutdoorManMade/049.jpg",
-          "w": 1920,
-          "h": 1080
-      },
-      {
-          "src": "natural/OutdoorManMade/057.jpg",
-          "w": 1920,
-          "h": 1080
-      },
-      {
-          "src": "natural/OutdoorManMade/063.jpg",
-          "w": 1920,
-          "h": 1080
-      },
-      {
-          "src": "natural/OutdoorManMade/117.jpg",
-          "w": 1920,
-          "h": 1080
-      },
-      {
-          "src": "natural/OutdoorNatural/005.jpg",
-          "w": 1920,
-          "h": 1080
-      },
-      {
-          "src": "natural/OutdoorNatural/029.jpg",
-          "w": 1920,
-          "h": 1080
-      },
-      {
-          "src": "natural/OutdoorNatural/043.jpg",
-          "w": 1920,
-          "h": 1080
-      },
-      {
-          "src": "natural/OutdoorNatural/057.jpg",
-          "w": 1920,
-          "h": 1080
-      },
-      {
-          "src": "natural/OutdoorNatural/119.jpg",
-          "w": 1920,
-          "h": 1080
-      },
-      {
-          "src": "natural/Satelite/005.jpg",
-          "w": 1920,
-          "h": 1080
-      },
-      {
-          "src": "natural/Satelite/007.jpg",
-          "w": 1920,
-          "h": 1080
-      },
-      {
-          "src": "natural/Satelite/027.jpg",
-          "w": 1920,
-          "h": 1080
-      },
-      {
-          "src": "natural/Satelite/037.jpg",
-          "w": 1920,
-          "h": 1080
-      },
-      {
-          "src": "natural/Satelite/075.jpg",
-          "w": 1920,
-          "h": 1080
-      },
-      {
-          "src": "natural/Social/001.jpg",
-          "w": 1920,
-          "h": 1080
-      },
-      {
-          "src": "natural/Social/015.jpg",
-          "w": 1920,
-          "h": 1080
-      },
-      {
-          "src": "natural/Social/023.jpg",
-          "w": 1920,
-          "h": 1080
-      },
-      {
-          "src": "natural/Social/025.jpg",
-          "w": 1920,
-          "h": 1080
-      },
-      {
-          "src": "natural/Social/171.jpg",
-          "w": 1920,
-          "h": 1080
-      }
+{
+    "bigName": "Natural Images",
+    "smallName": "image",
+    "groups": [
+        {
+            "name": "NAME DOES NOT MATTER",
+            "data": [
+                {
+                    "src": "natural/Action/023.jpg",
+                    "w": 1920,
+                    "h": 1080
+                },
+                {
+                    "src": "natural/Action/027.jpg",
+                    "w": 1920,
+                    "h": 1080
+                },
+                {
+                    "src": "natural/Action/065.jpg",
+                    "w": 1920,
+                    "h": 1080
+                },
+                {
+                    "src": "natural/Action/091.jpg",
+                    "w": 1920,
+                    "h": 1080
+                },
+                {
+                    "src": "natural/Action/093.jpg",
+                    "w": 1920,
+                    "h": 1080
+                },
+                {
+                    "src": "natural/Fractal/003.jpg",
+                    "w": 1920,
+                    "h": 1080
+                },
+                {
+                    "src": "natural/Fractal/031.jpg",
+                    "w": 1920,
+                    "h": 1080
+                },
+                {
+                    "src": "natural/Fractal/051.jpg",
+                    "w": 1920,
+                    "h": 1080
+                },
+                {
+                    "src": "natural/Fractal/063.jpg",
+                    "w": 1920,
+                    "h": 1080
+                },
+                {
+                    "src": "natural/Fractal/067.jpg",
+                    "w": 1920,
+                    "h": 1080
+                },
+                {
+                    "src": "natural/Art/017.jpg",
+                    "w": 1920,
+                    "h": 1080
+                },
+                {
+                    "src": "natural/Art/121.jpg",
+                    "w": 1920,
+                    "h": 1080
+                },
+                {
+                    "src": "natural/Art/175.jpg",
+                    "w": 1920,
+                    "h": 1080
+                },
+                {
+                    "src": "natural/Art/055.jpg",
+                    "w": 1920,
+                    "h": 1080
+                },
+                {
+                    "src": "natural/Art/197.jpg",
+                    "w": 1920,
+                    "h": 1080
+                },
+                {
+                    "src": "natural/Satelite/005.jpg",
+                    "w": 1920,
+                    "h": 1080
+                },
+                {
+                    "src": "natural/Satelite/007.jpg",
+                    "w": 1920,
+                    "h": 1080
+                },
+                {
+                    "src": "natural/Satelite/027.jpg",
+                    "w": 1920,
+                    "h": 1080
+                },
+                {
+                    "src": "natural/Satelite/037.jpg",
+                    "w": 1920,
+                    "h": 1080
+                },
+                {
+                    "src": "natural/Satelite/075.jpg",
+                    "w": 1920,
+                    "h": 1080
+                },
+                {
+                    "src": "natural/OutdoorManMade/011.jpg",
+                    "w": 1920,
+                    "h": 1080
+                },
+                {
+                    "src": "natural/OutdoorManMade/049.jpg",
+                    "w": 1920,
+                    "h": 1080
+                },
+                {
+                    "src": "natural/OutdoorManMade/057.jpg",
+                    "w": 1920,
+                    "h": 1080
+                },
+                {
+                    "src": "natural/OutdoorManMade/063.jpg",
+                    "w": 1920,
+                    "h": 1080
+                },
+                {
+                    "src": "natural/OutdoorManMade/117.jpg",
+                    "w": 1920,
+                    "h": 1080
+                },
+                {
+                    "src": "natural/Social/001.jpg",
+                    "w": 1920,
+                    "h": 1080
+                },
+                {
+                    "src": "natural/Social/015.jpg",
+                    "w": 1920,
+                    "h": 1080
+                },
+                {
+                    "src": "natural/Social/023.jpg",
+                    "w": 1920,
+                    "h": 1080
+                },
+                {
+                    "src": "natural/Social/025.jpg",
+                    "w": 1920,
+                    "h": 1080
+                },
+                {
+                    "src": "natural/Social/171.jpg",
+                    "w": 1920,
+                    "h": 1080
+                },
+                {
+                    "src": "natural/OutdoorNatural/005.jpg",
+                    "w": 1920,
+                    "h": 1080
+                },
+                {
+                    "src": "natural/OutdoorNatural/057.jpg",
+                    "w": 1920,
+                    "h": 1080
+                },
+                {
+                    "src": "natural/OutdoorNatural/119.jpg",
+                    "w": 1920,
+                    "h": 1080
+                },
+                {
+                    "src": "natural/OutdoorNatural/043.jpg",
+                    "w": 1920,
+                    "h": 1080
+                },
+                {
+                    "src": "natural/OutdoorNatural/029.jpg",
+                    "w": 1920,
+                    "h": 1080
+                }
+            ],
+            "sampleSize": 35,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        }
     ],
-    "minSecPhoto": 1,
-    "minSecTotal": 180
-  }
-]
+    "sampleSize": 1,
+    "minSecGroup": 180,
+    "minSecImage": 1,
+    "extraQuestionsEachGroup": {
+        "schema": {},
+        "form": []
+    },
+    "extraQuestionsEnd": {
+        "schema": {},
+        "form": []
+    }
+}

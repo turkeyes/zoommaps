@@ -140,9 +140,9 @@ class DemoSurvey {
    */
   loadSurvey() {
     const $form = this.$survey.find('.demo-survey-form');
-    Object.assign(schemaform.schema, this.data.extraQuestions.schema);
-    const extraQuestionsForm = this.data.extraQuestions.form
-      || Object.keys(this.data.extraQuestions.schema).map(key => ({ key }));
+    Object.assign(schemaform.schema, this.data.extraQuestionsEnd.schema);
+    const extraQuestionsForm = this.data.extraQuestionsEnd.form
+      || Object.keys(this.data.extraQuestionsEnd.schema).map(key => ({ key }));
     schemaform.form.splice(1, 0, ...extraQuestionsForm);
     $form.jsonForm({
       ...schemaform,

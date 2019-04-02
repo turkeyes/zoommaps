@@ -2,38 +2,17 @@ const express = require('express');
 const debug = require('debug')('zoommaps');
 const seedrandom = require('seedrandom');
 const randomWords = require('random-words');
+const fs = require('fs');
+const path = require('path');
 
 const Label = require('../models/label');
 const User = require('../models/user');
-const { readDatasetFile } = require('../utils/read-dataset');
 
 const router = express.Router();
 
 const MIN_EVENTS = 100; // num position changes for label to count as zoom event
-const MIN_ZOOM_FRAC = 0.2; // of photos that must be zoomed on
-const MIN_PHOTO_FRAC = 0.85; // of photos that must be viewed for min time
-
-/**
- * @typedef Dataset
- * @prop {DataSubset[]} subsets
- * @prop {{ schema: Object, form?: Array }} extraQuestions
- */
-
-/**
- * @typedef DataSubset
- * @prop {string} name
- * @prop {Image[]} data
- * @prop {number} sampleSize
- * @prop {number} minSecPhoto
- * @prop {number} minSecTotal
- */
-
-/**
- * @typedef Image
- * @prop {string} src
- * @prop {number} w
- * @prop {number} h
- */
+const MIN_ZOOM_FRAC = 0.2; // of images that must be zoomed on
+const MIN_IMAGE_FRAC = 0.85; // of images that must be viewed for min time
 
 /**
  * Sample items randomly from an array
@@ -54,11 +33,58 @@ function getRandom(arr, n, rand=Math.random) {
   return result;
 }
 
+/**
+ * Read the dataset
+ * @param {string} dataset file name (no ext)
+ * @param {(err, d: Dataset) => void} f callback
+ */
+function readDatasetFile(dataset, f) {
+  fs.readFile(
+    path.join(__dirname, '..', 'datasets', `${dataset}.json`),
+    'utf8',
+    (readErr, data) => {
+      if (readErr) {
+        debug('Error reading dataset file', readErr);
+      }
+      let obj;
+      try {
+        obj = JSON.parse(data);
+      } catch (parseErr) {
+        debug('Error parsing dataset file', parseErr);
+        return f(parseErr);
+      }
+      return f(null, obj);
+    }
+  )
+}
+
+/**
+ * Read the dataset and perform a random sample
+ * @param {string} dataset filename (no ext)
+ * @param {string} seed any string to seed random function (worker ID)
+ * @param {(err, d: Dataset) => void} f callback
+ */
+function readDatasetAndSample(dataset, seed, f) {
+  readDatasetFile(dataset, (readDatasetErr, data) => {
+    if (readDatasetErr) return f(readDatasetErr);
+    const rand = seedrandom(seed); // consistent sample per worker
+    data.groups = getRandom(data.groups, data.sampleSize, rand);
+    data.groups.forEach((group) => {
+      group.data = getRandom(group.data, group.sampleSize, rand);
+    });
+    f(null, data);
+  });
+}
+
+/**
+ * Get a unique submit key, an English word
+ * @param {(err, key: string) => void} f 
+ */
 function getUniqueKey(f) {
   const key = randomWords();
   User.findOne({ key }, (findUserErr, user) => {
-    debug('Error finding user.', findUserErr);
     if (findUserErr) {
+      debug('Error finding user.', findUserErr);
       f(findUserErr);
     } else if (user) {
       getUniqueKey(f);
@@ -73,11 +99,11 @@ function getUniqueKey(f) {
  * Creates a user if one does not exist
  * @param {string} workerId
  * @param {string} dataset
- * @param {(err, user?: User, labels?: Label[], numPhotos: number) => void} f - callback
+ * @param {(err, u?: User, l?: Label[], d: Dataset) => void} f - callback
  */
 function getUserData(workerId, dataset, f) {
-  readDatasetFile(dataset, (getSizeError, datasetDetails) => {
-    if (getSizeError) return f(getSizeError);
+  readDatasetAndSample(dataset, workerId, (readDatasetErr, datasetDetails) => {
+    if (readDatasetErr) return f(readDatasetErr);
 
     User.findOne({ workerId, dataset }, (findUserErr, foundUser) => {
       if (findUserErr) {
@@ -110,7 +136,7 @@ function getUserData(workerId, dataset, f) {
  * Finds user & labels for given user ID
  * Throws an error if the user does not exist
  * @param {string} key - the submit key
- * @param {(err, user?: User, labels?: Label[], numPhotos: number) => void} f - callback
+ * @param {(err, u?: User, l?: Label[], d: Dataset) => void} f - callback
  */
 function getUserDataByKey(key, f) {
   User.findOne({ key }, (findUserErr, foundUser) => {
@@ -135,32 +161,40 @@ function isZoom(label) {
   return longEnough && didMove;
 }
 
+// TODO: check if group is done
+
+function checkGroupDone(labels, minSecImage, minSecGroup, group) {
+  const imagesInGroup = new Set(group.map(img => img.src));
+  const labelsInGroup = labels.filter(l => imagesInGroup.has(l.src));
+
+  const numZooms = labelsInGroup.map(isZoom).length;
+  const enoughZooms = numZooms >= group.length * MIN_ZOOM_FRAC;
+
+  const times = labelsInGroup.map(l => l._id.getTimestamp().getTime());
+  const startTime = Math.min(...times);
+  const endTime = Math.max(...times);
+  const time = (endTime - startTime) / 1000;
+  const enoughTime = time >= minSecGroup;
+
+  const uniqueImagesForMinSec = new Set(labelsInGroup
+    .filter(l => (l.duration / 1000) >= minSecImage)
+    .map(l => l.src)
+  );
+  const enoughImages = uniqueImagesForMinSec.size >= group.length * MIN_IMAGE_FRAC;
+
+  const done = enoughZooms && enoughTime && enoughImages;
+  return done;
+}
+
 /**
  * Check whether or not the experiment has been completed.
  * @param {Label[]} labels
  */
-function checkDone(labels, { numPhotos, minSecPhoto, minSecTotal }) {
-  const numZooms = labels.map(isZoom).length;
-  const enoughZooms = numZooms >= numPhotos * MIN_ZOOM_FRAC;
-
-  const times = labels.map(label => label._id.getTimestamp().getTime());
-  const startTime = Math.min(...times);
-  const endTime = Math.max(...times);
-  const time = (endTime - startTime) / 1000;
-  const enoughTime = time >= minSecTotal;
-
-  const uniquePhotos = new Set(labels
-    .filter(label => (label.duration / 1000) >= minSecPhoto)
-    .map(label => label.src)
-  );
-  const enoughPhotos = uniquePhotos.size >= numPhotos * MIN_PHOTO_FRAC; // TODO: dynamic from dataset
-  const done = enoughZooms && enoughTime && enoughPhotos;
-  if (!done) {
-    debug(`Thresholds (#Photos=${numPhotos}): Zoom: ${MIN_ZOOM_FRAC*100}%@${MIN_EVENTS}ev, Task: ${minSecTotal}s, Photo: ${MIN_PHOTO_FRAC*100}%@${minSecPhoto}s`);
-    debug(`Values: Zooms: ${numZooms} (${enoughZooms}), Total Time: ${time}s (${enoughTime}), Photos: ${uniquePhotos.size} (${enoughPhotos})`);
-  }
-
-  return done;
+function checkDone(labels, { minSecImage, minSecGroup, groups }) {
+  return groups.reduce((b, g) => (
+    b
+    && checkGroupDone(labels, minSecImage, minSecGroup, g)
+  ), true); // all groups done
 }
 
 /**
@@ -180,16 +214,8 @@ function checkSurvey(user) {
  */
 router.get('/dataset', (req, res) => {
   const { workerId, dataset } = req.query;
-  readDatasetFile(dataset, (readDatasetErr, data) => {
-    if (readDatasetErr) { return res.status(404).send() }
-
-    if (workerId) {
-      data = JSON.parse(JSON.stringify(data)); // deepcopy
-      const rand = seedrandom(workerId); // consistent sample per worker
-      data.subsets.forEach((subset) => {
-        subset.data = getRandom(subset.data, subset.sampleSize, rand);
-      });
-    }
+  readDatasetAndSample(dataset, workerId, (readDatasetErr, data) => {
+    if (readDatasetErr) return res.status(404).send();
     res.send(data);
   });
 });
@@ -283,9 +309,26 @@ router.post('/survey', (req, res) => {
 });
 
 /**
+ * Check if the user has completed the group
+ * Requires the index of the group (in the user's personally-sampled array) in the query
+ */
+router.get('/end-group', (req, res) => {
+  const { workerId, dataset, groupIdx } = req.query;
+  getUserData(workerId, dataset, (err, user, labels, datasetDetails) => {
+    if (err) {
+      return res.send({ success: false, done: false });
+    }
+
+    const { minSecImage, minSecGroup, groups } = datasetDetails;
+    const done = checkGroupDone(labels, minSecImage, minSecGroup, groups[groupIdx]);
+    res.send({ success: true, completed: done });
+  });
+});
+
+/**
  * Check if the user has completed the experiment, sending a completion key if so
  */
-router.get('/end', (req, res) => {
+router.get('/end-task', (req, res) => {
   const { workerId, dataset } = req.query;
   getUserData(workerId, dataset, (err, user, labels, datasetDetails) => {
     if (err) {
