@@ -1,5 +1,5 @@
-import $ from 'jquery';
 import qrcode from 'qrcode-generator';
+import { $, _ } from '../legacy-imports';
 import html from './instructions.html';
 import overviewHTML from './overview.html';
 import './instructions.scss';
@@ -22,13 +22,16 @@ export default function main($container, data, onValidKey) {
   $overview.find('.min-min-total').text(minMinTotal);
   $overview.find('.max-min-total').text(maxMinTotal);
 
-  if (data.extraQuestions.length > 0) {
+  if (_.size(data.extraQuestions.schema) > 0) {
     const $eq = $instructions.find('.extra-questions');
     $eq.append($('<p>At the end of the task, you will be asked:</p>'));
     const $ul = $('<ul></ul>');
-    data.extraQuestions.forEach((question) => {
+    const eqUsedSchemas = data.extraQuestions.form
+      ? data.extraQuestions.form.map(({ key }) => data.extraQuestions.schema[key])
+      : _.values(data.extraQuestions.schema);
+    eqUsedSchemas.forEach(({ title }) => { // TODO: alternatives to title
       const $li = $('<li></li>');
-      $li.text(question);
+      $li.text(title);
       $ul.append($li);
     });
     $eq.append($ul);

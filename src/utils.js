@@ -1,13 +1,11 @@
+import { _ } from './legacy-imports';
+
 export function humanRange(base, nearest, exaggeration) {
   base += 0.0001;
   const rmin = Math.ceil((base * exaggeration) / nearest) * nearest;
   let rmax = Math.ceil((base * exaggeration ** 2) / nearest) * nearest;
   rmax = Math.max(rmin + nearest, rmax);
   return [rmin, rmax];
-}
-
-function isString(maybeString) {
-  return typeof maybeString === 'string' || maybeString instanceof String;
 }
 
 /**
@@ -24,7 +22,7 @@ export function formPOST(url, data) {
   Object.entries(data).forEach(([name, value]) => {
     const input = document.createElement('input');
     input.name = name;
-    input.value = isString(value) ? value : JSON.stringify(value);
+    input.value = _.isString(value) ? value : JSON.stringify(value);
     input.type = 'hidden';
     form.append(input);
   });

@@ -1,5 +1,5 @@
 /**
- * Code for reading dataset files (which can take different forms)
+ * Code for reading dataset files; creates some derived properties
  * It exports functions, but it can also be used from the command line
  *    so that the Python notebook can call it
  */
@@ -7,7 +7,6 @@
 const fs = require('fs');
 const path = require('path');
 const debug = require('debug')('zoommaps');
-
 
 /**
  * @param {string} dataset
@@ -21,27 +20,15 @@ function readDatasetFile(dataset, f) {
       f(readErr);
     } else {
       try {
-        let data = JSON.parse(dataStr);
-        if (Array.isArray(data)) {
-          data = {
-            subsets: data,
-            extraQuestions: [],
-          };
-        }
-        data.bigName = data.bigName || 'Images'
-        data.smallName = data.smallName || 'image';
+        const data = JSON.parse(dataStr);
         data.numPhotos = 0;
-        data.minSecPhoto = Infinity;
+        data.minSecPhoto = 0;
         data.minSecTotal = 0;
-        data.subsets.forEach((subset) => {
-          subset.minSecPhoto = subset.minSecPhoto || 0;
-          subset.minSecTotal = subset.minSecTotal || 0;
-          subset.sampleSize = subset.sampleSize || subset.data.length;
-          data.numPhotos += subset.sampleSize;
-          data.minSecPhoto = Math.min(data.minSecPhoto, subset.minSecPhoto);
-          data.minSecTotal = data.minSecTotal + subset.minSecTotal;
+        data.groups.forEach((group) => {
+          data.numPhotos += group.sampleSize;
+          data.minSecImage = Math.max(data.minSecImage, group.minSecImage);
+          data.minSecTotal = data.minSecTotal + group.minSecGroup;
         });
-        if (data.minSecPhoto === Infinity) { data.minSecPhoto = 0; }
         f(null, data);
       } catch (parseErr) {
         debug('Error parsing dataset file.', parseErr);
@@ -50,16 +37,6 @@ function readDatasetFile(dataset, f) {
     }
   });
 }
-
-
-/**
- * @typedef DatasetDetails
- * @prop {number} numPhotos
- * @prop {number} minSecPhoto
- * @prop {number} minSecTotal
- * @prop {string[]} extraQuestions
- */
-
 
 module.exports = {
   readDatasetFile

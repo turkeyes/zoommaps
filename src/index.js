@@ -1,12 +1,9 @@
 import './polyfills';
-import $ from 'jquery';
 import MobileDetect from 'mobile-detect';
-// import config from '../config.json';
+import { $ } from './legacy-imports';
 import viewer from './viewer/viewer';
 import survey from './demographic-survey/demographic-survey';
 import instructions from './instructions/instructions';
-
-// document.title = config.meta.title;
 
 function navigate($container, data) {
   const md = new MobileDetect(window.navigator.userAgent);

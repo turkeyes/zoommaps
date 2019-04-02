@@ -22,7 +22,7 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: APP_NAME,
       template: 'src/index.html',
-    }),
+    })
   ],
   module: {
     rules: [

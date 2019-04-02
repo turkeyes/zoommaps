@@ -154,7 +154,22 @@
             "minSecTotal": 150
         }
     ],
-    "extraQuestions": ["Which candidate would you hire and why?"],
+    "extraQuestions": {
+        "schema": {
+            "eq1": {
+                "type": "string",
+                "title": "Which candidate would you hire and why?",
+                "required": true,
+                "minLength": 50
+            }
+        },
+        "form": [
+            {
+                "key": "eq1",
+                "type": "textarea"
+            }
+        ]
+    },
     "bigName": "Graphic Designer Résumés",
     "smallName": "résumé"
 }

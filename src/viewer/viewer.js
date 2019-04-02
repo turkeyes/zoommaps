@@ -1,4 +1,4 @@
-import $ from 'jquery';
+import { $ } from '../legacy-imports';
 import html from './viewer.html';
 import './viewer.scss';
 import './photoswipe';

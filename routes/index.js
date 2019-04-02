@@ -16,7 +16,7 @@ const MIN_PHOTO_FRAC = 0.85; // of photos that must be viewed for min time
 /**
  * @typedef Dataset
  * @prop {DataSubset[]} subsets
- * @prop {string[]} extraQuestions
+ * @prop {{ schema: Object, form?: Array }} extraQuestions
  */
 
 /**
