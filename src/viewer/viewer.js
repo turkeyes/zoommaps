@@ -1,8 +1,10 @@
 import { $ } from '../legacy-imports';
 import html from './viewer.html';
+import pswpHTML from './photoswipe.html';
 import './viewer.scss';
 import './photoswipe';
-import { humanRange } from '../utils';
+import { humanRange, getOrientation, getBrowser, getOS } from '../utils';
+import formFromJSON from '../form/form';
 
 /* global PhotoSwipeUI_Default PhotoSwipe */
 
@@ -12,71 +14,43 @@ const FINAL_SENTINEL_IMAGE = {
   "h": 1080
 };
 
-/**
- * Find the first substring from an array in a string
- * @param {string} str string
- * @param {string[]} choices substrings
- * @return {string} first substring in string, else '?'
- */
-function findFirstString(str, choices) {
-  for (var j = 0; j < choices.length; j++) {
-    if (str.indexOf(choices[j]) >= 0) {
-      return choices[j];
-    }
-  }
-  return '?';
-}
-
-/**
- * Get the user's browser, or ? if unknown
- */
-function getBrowser() {
-  return findFirstString(navigator.userAgent, [
-    'Seamonkey', 'Firefox', 'Chromium', 'Chrome', 'Safari', 'OPR', 'Opera',
-    'Edge', 'MSIE', 'Blink', 'Webkit', 'Gecko', 'Trident', 'Mozilla']);
-}
-
-/**
- * Get the user's OS, or ? if unknown
- */
-function getOS() {
-  return findFirstString(navigator.userAgent, [
-    'Android', 'iOS', 'Symbian', 'Blackberry', 'Windows Phone', 'Windows',
-    'OS X', 'Linux', 'iOS', 'CrOS']).replace(/ /g, '_');
-}
-
-/**
- * Get device orientation (just checks if width or height is greater)
- * @return {'Landscape' | 'Portrait'}
- */
-function getOrientation() {
-  var orientation = window.innerWidth > window.innerHeight ? "Landscape" : "Portrait";
-  return orientation;
-}
-
 class Viewer {
 
   constructor($container, data) {
     $container.append($(html));
+    if (!data) {
+      $('#error-url').show();
+      return;
+    }
+  
     this.data = data;
+    this.groupIdx = 0;
+    this.completed = this.data.groups.map(() => false); // TODO: get from server
 
     $('#sec-image').text(humanRange(this.data.minSecImage, 5, 1.5)[0]);
-    const groups = this.data.groups;
-    if (groups.length == 1) {
-      this.openPhotoSwipe(groups[0].data);
+    if (this.data.groups.length === 1) {
+      this.openPhotoSwipe(this.data.groups[0].data);
     } else {
-      groups.forEach((group) => {
+      this.data.groups.forEach((group, i) => {
         const r = $('<input/>').attr({
           type: 'button',
           id: 'field',
           value: group.name
         });
         r.click(() => {
+          this.groupIdx = i;
           this.openPhotoSwipe(group.data);
         });
         $("#galleries").append(r);
+        this.showGalleries();
       });
     }
+  }
+
+  showGalleries() {
+    $('form').hide();
+    $('#experiment').hide();
+    $("#galleries").show();
   }
 
   /**
@@ -86,11 +60,16 @@ class Viewer {
    * @param {workerId} workerId
    */
   openPhotoSwipe(items) {
-    if (!window.PhotoSwipe) return;
+    $('#experiment').empty();
+    $('#experiment').append($(pswpHTML));
 
-    var pswpElement = document.querySelectorAll('.pswp')[0];
+    $('#experiment').show();
+    $('form').hide();
+    $("#galleries").hide();
 
-    var pswpOptions = {
+    const pswpElement = $('#experiment').children()[0];
+
+    const pswpOptions = {
       index: 0, // start at first slide
       maxSpreadZoom: 4,
       pinchToClose: false,
@@ -100,10 +79,11 @@ class Viewer {
       loop: false
     };
 
-    var rotated = false;
-    var orientation = getOrientation();
+    // orientation tracking
+    let rotated = false;
+    let orientation = getOrientation();
     window.onresize = () => {
-      var newOrientation = getOrientation();
+      const newOrientation = getOrientation();
       if (newOrientation !== orientation) {
         rotated = true;
         orientation = newOrientation;
@@ -116,49 +96,54 @@ class Viewer {
 
     // Initializes and opens PhotoSwipe
     // no need to randomize order since the server does that
-    items.push(FINAL_SENTINEL_IMAGE);
-    var pswp = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, pswpOptions);
+    items = [...items, FINAL_SENTINEL_IMAGE];
+    const pswp = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, pswpOptions);
     pswp.init();
 
     // state for data logging
-    var src = '';
-    var x_min = [];
-    var x_max = [];
-    var y_min = [];
-    var y_max = [];
-    var times = [];
-    var start_time = (new Date()).getTime();
+    let src = items[0].src;
+    let x_min = [];
+    let x_max = [];
+    let y_min = [];
+    let y_max = [];
+    let times = [];
+    let start_time = (new Date()).getTime();
 
+    // post a label to the server
+    function postLabel(time) {
+      $.post({
+        url: "/api/data" + window.location.search,
+        data: JSON.stringify({
+          src,
+          x_min,
+          x_max,
+          y_min,
+          y_max,
+          time: times,
+          orientation,
+          browser: getBrowser(),
+          os: getOS(),
+          duration: (new Date()).getTime() - start_time
+        }),
+        contentType: "application/json"
+      });
+      // clear data for next logging
+      x_min = [];
+      x_max = [];
+      y_min = [];
+      y_max = [];
+      times = [];
+      start_time = time;
+      rotated = false;
+    }
+
+    // save data to log whenever the user zooms/moves the photo
     pswp.listen('position_change', (item, x, y, zoom, time) => {
-      // new context, try to log
-      if (item.src !== src || rotated) {
-        $.post({
-          url: "/api/data" + window.location.search,
-          data: JSON.stringify({
-            src,
-            x_min,
-            x_max,
-            y_min,
-            y_max,
-            time: times,
-            orientation,
-            browser: getBrowser(),
-            os: getOS(),
-            duration: (new Date()).getTime() - start_time
-          }),
-          contentType: "application/json"
-        });
-        // clear data for next logging
-        src = item.src;
-        x_min = [];
-        x_max = [];
-        y_min = [];
-        y_max = [];
-        times = [];
-        start_time = time;
-        rotated = false;
+      // if they rotated their screen then we start a new label
+      if (rotated) {
+        postLabel(time);
       }
-      // store data for logging
+
       x_min.push(x < 0 ? Math.floor(-x / zoom) : 0);
       y_min.push(y < 0 ? Math.floor(-y / zoom) : 0);
       var width;
@@ -175,16 +160,19 @@ class Viewer {
       times.push(time - start_time);
     });
 
-    // when we get to the last (sentinel) image
-    // we need to hide the experiment and show a message
+    // when photo changes, send data and check for end
     pswp.listen('beforeChange', () => {
+      postLabel((new Date()).getTime());
+      src = items[pswp.getCurrentIndex()].src;
+      // when we get to the last (sentinel) image
       if (pswp.getCurrentIndex() === pswp.options.getNumItemsFn() - 1) {
-        $('#error-url').hide();
+        pswp.goTo(0);
         $('#experiment').hide();
-        this.checkEnd(() => {
+        this.checkGroupEnd(() => {
           $('#incomplete-task').show();
           setTimeout(() => {
-            location.href = location.href.split('#')[0]; // easiest way to do a reshuffle
+            $('#incomplete-task').hide();
+            $('#experiment').show();
           }, 5000);
         });
       }
@@ -197,15 +185,17 @@ class Viewer {
    * Calls onNotDone if it hasn't.
    * @param {() => void} onNotDone
    */
-  checkEnd(onNotDone) {
+  checkGroupEnd(onNotDone) {
+    let search = window.location.search;
+    search += search ? '&' : '?';
+    search += `groupIdx=${this.groupIdx}`;
     $.get({
-      url: "/api/end" + window.location.search,
+      url: "/api/end-group" + search,
       contentType: "application/json",
       success: (res) => {
-        const { success, key } = res;
-        if (success && key) {
-          $('#error-url').hide();
-          this.showSubmitKey(key);
+        const { success, completed } = res;
+        if (success && completed) {
+          this.showGroupQuestions();
         } else {
           onNotDone();
         }
@@ -218,10 +208,47 @@ class Viewer {
    * @param {string} key 
    */
   showSubmitKey(key) {
-    $('#error-url').hide();
+    $('#experiment').hide();
+    $('form').hide();
+    $('#galleries').hide();
+
     $('#submit-code').text(key);
-    $('#submit-page').hide();
     $('#succesful-submit').show();
+  }
+
+  showGroupQuestions() {
+    $('#galleries').hide();
+    $('#experiment').hide();
+    $('form').show();
+
+    const group = this.data.groups[this.groupIdx];
+    const schemaform = {
+      schema: {
+        ...group.questions.schema,
+        ...this.data.extraQuestionsEachGroup.schema
+      },
+      form: [
+        ...group.questions.form,
+        ...this.data.extraQuestionsEachGroup.form
+      ]
+    };
+    const $form = $('form');
+    $form.empty();
+    formFromJSON($form, schemaform, (values) => {
+      // TODO: post to server
+      $.get({
+        url: "/api/end-task" + window.location.search,
+        contentType: "application/json",
+        success: (res) => {
+          const { success, completed, key } = res;
+          if (success && completed && key) {
+            this.showSubmitKey(key);
+          } else {
+            this.showGalleries();
+          }
+        }
+      });
+    })
   }
 
 }

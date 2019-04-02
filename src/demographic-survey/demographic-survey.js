@@ -1,9 +1,9 @@
 import surveyHTML from './demographic-survey.html';
-import './demographic-survey.scss';
 
 import { $ } from '../legacy-imports';
 
 import { formPOST } from '../utils';
+import formFromJSON from '../form/form';
 
 const genders = {
   male: 'Male',
@@ -127,34 +127,15 @@ const schemaform = {
   ]
 };
 
-class DemoSurvey {
-  constructor($container, data) {
-    this.data = data;
-    this.$survey = $(surveyHTML);
-    $container.append(this.$survey);
-    this.loadSurvey(data);
-  }
-
-  /**
-   * Initialize the survey
-   */
-  loadSurvey() {
-    const $form = this.$survey.find('.demo-survey-form');
-    Object.assign(schemaform.schema, this.data.extraQuestionsEnd.schema);
-    const extraQuestionsForm = this.data.extraQuestionsEnd.form
-      || Object.keys(this.data.extraQuestionsEnd.schema).map(key => ({ key }));
-    schemaform.form.splice(1, 0, ...extraQuestionsForm);
-    $form.jsonForm({
-      ...schemaform,
-      onSubmit: (errors, values) => {
-        if (errors) return;
-        this.submit(values);
-      }
-    });
-  }
-
-  submit(values) {
-    // send survey data to server
+export default function survey($container, data) {
+  const $survey = $(surveyHTML);
+  $container.append($survey);
+  const $form = $survey.find('.demo-survey-form');
+  Object.assign(schemaform.schema, data.extraQuestionsEnd.schema);
+  const extraQuestionsForm = data.extraQuestionsEnd.form
+    || Object.keys(data.extraQuestionsEnd.schema).map(key => ({ key }));
+  schemaform.form.splice(1, 0, ...extraQuestionsForm);
+  formFromJSON($form, schemaform, (values) => {
     $.post({
       url: "/api/survey" + window.location.search,
       data: JSON.stringify(values),
@@ -172,9 +153,5 @@ class DemoSurvey {
         alert('Done! (You are not on AMT)');
       }
     });
-  }
-}
-
-export default function survey($container, data) {
-  new DemoSurvey($container, data);
+  });
 }

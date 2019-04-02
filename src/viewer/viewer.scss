@@ -7,3 +7,21 @@
 #submit-code {
   font-size: 150%;
 }
+
+#galleries {
+  padding: 0 16px;
+  input[type="button"] {
+    margin-top: 16px;
+    width: 100%;
+    line-height: 400%;
+    background: lightblue;
+    ::after {
+      content: '\A';
+      white-space: pre;
+    }
+  }
+}
+
+#error-url {
+  display: none;
+}

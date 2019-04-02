@@ -164,11 +164,11 @@ function isZoom(label) {
 // TODO: check if group is done
 
 function checkGroupDone(labels, minSecImage, minSecGroup, group) {
-  const imagesInGroup = new Set(group.map(img => img.src));
+  const imagesInGroup = new Set(group.data.map(img => img.src));
   const labelsInGroup = labels.filter(l => imagesInGroup.has(l.src));
 
   const numZooms = labelsInGroup.map(isZoom).length;
-  const enoughZooms = numZooms >= group.length * MIN_ZOOM_FRAC;
+  const enoughZooms = numZooms >= group.data.length * MIN_ZOOM_FRAC;
 
   const times = labelsInGroup.map(l => l._id.getTimestamp().getTime());
   const startTime = Math.min(...times);
@@ -180,9 +180,13 @@ function checkGroupDone(labels, minSecImage, minSecGroup, group) {
     .filter(l => (l.duration / 1000) >= minSecImage)
     .map(l => l.src)
   );
-  const enoughImages = uniqueImagesForMinSec.size >= group.length * MIN_IMAGE_FRAC;
+  const enoughImages = uniqueImagesForMinSec.size >= group.data.length * MIN_IMAGE_FRAC;
 
   const done = enoughZooms && enoughTime && enoughImages;
+  if (!done) {
+    debug(`Thresholds (#Images=${group.data.length}): Zoom: ${MIN_ZOOM_FRAC*100}%@${MIN_EVENTS}ev, Group: ${minSecGroup}s, Image: ${MIN_IMAGE_FRAC*100}%@${minSecImage}s`);
+    debug(`Values: Zooms: ${numZooms} (${enoughZooms}), Total Time: ${time}s (${enoughTime}), Photos: ${uniqueImagesForMinSec.size} (${enoughImages})`);
+  }
   return done;
 }
 

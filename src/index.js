@@ -1,3 +1,4 @@
+import './index.scss';
 import './polyfills';
 import MobileDetect from 'mobile-detect';
 import { $ } from './legacy-imports';

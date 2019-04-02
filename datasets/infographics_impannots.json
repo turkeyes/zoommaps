@@ -307,8 +307,20 @@
     "minSecGroup": 5,
     "minSecImage": 5,
     "extraQuestionsEachGroup": {
-        "schema": {},
-        "form": []
+        "schema": {
+            "eq1": {
+                "type": "string",
+                "title": "Which candidate would you hire and why?",
+                "required": true,
+                "minLength": 50
+            }
+        },
+        "form": [
+            {
+                "key": "eq1",
+                "type": "textarea"
+            }
+        ]
     },
     "extraQuestionsEnd": {
         "schema": {},
