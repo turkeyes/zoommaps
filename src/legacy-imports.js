@@ -1,4 +1,4 @@
-import jQuery from 'jQuery';
+import jQuery from 'jquery';
 import underscore from 'underscore';
 import jsonform from './jsonform/jsonform';
 jsonform(window, jQuery, underscore);
