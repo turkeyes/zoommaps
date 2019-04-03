@@ -1,12 +1,6 @@
 form {
   text-align: left;
 
-  // inject a newline after each label element
-  label::after {
-    content: '\A';
-    white-space: pre;
-  }
-
   // label that wraps a checkbox / radio button is clickable
   label:not([for]) {
     cursor: pointer;
@@ -36,5 +30,14 @@ form {
   .jsonform-errortext {
     color: red;
     margin-bottom: 16px;
+  }
+
+  div.form-group.radio-range {
+    div.input-group > *, div.radio {
+      display: inline-block;
+    }
+    .input-group-addon:last-child {
+      margin-left: 16px;
+    }
   }
 }

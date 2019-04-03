@@ -18,21 +18,13 @@ button {
   cursor: pointer;
 }
 
-// fixes invisible input issue on some mobile devices
-// add other text input types as needed
-input[type="text"],
-input[type="password"],
-input:not([type]), // default is text
-textarea {
-  box-shadow: .25px .25px 1px 1px darkgray;
-}
-
 // range sliders seem to need this
 input[type="range"] {
   display: inline-block;
 }
 
 // fixes ios bugs
-input {
+input[type="submit"],
+input[type="button"] {
   appearance: none;
 }

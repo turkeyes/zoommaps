@@ -338,15 +338,13 @@
                 "type": "integer",
                 "title": "Was the content interesting?",
                 "required": true,
-                "minimum": 1,
-                "maximum": 9
+                "enum": [1, 2, 3, 4, 5]
             },
             "quality": {
                 "type": "integer",
                 "title": "Was the infographic well-designed?",
                 "required": true,
-                "minimum": 1,
-                "maximum": 9
+                "enum": [1, 2, 3, 4, 5]
             }
         },
         "form": [
@@ -356,15 +354,17 @@
             },
             {
                 "key": "interesting",
-                "type": "range",
+                "type": "radios",
                 "prepend": "No",
-                "append": "Yes"
+                "append": "Yes",
+                "htmlClass": "radio-range"
             },
             {
                 "key": "quality",
-                "type": "range",
+                "type": "radios",
                 "prepend": "No",
-                "append": "Yes"
+                "append": "Yes",
+                "htmlClass": "radio-range"
             }
         ]
     },
