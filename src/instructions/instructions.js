@@ -5,18 +5,24 @@ import overviewHTML from './overview.html';
 import './instructions.scss';
 import { humanRange } from '../utils';
 
+const SEC_PER_QUESTION = 10;
+const NUM_DEFAULT_QUESTIONS = 5; // defined in demographicSurvey.js
+
 export default function main($container, data, onValidKey) {
   const $instructions = $(html);
   $instructions.find('.title').text(`Zoom Maps: ${data.bigName}`);
   const $overview = $instructions.find('.overview');
   $overview.html(overviewHTML);
-
+  const numQuestions = NUM_DEFAULT_QUESTIONS
+    + _.size(data.extraQuestionsEnd.schema)
+    + _.size(data.extraQuestionsEachGroup.schema) * data.groups.length
+    + data.groups.reduce((c, g) => c + _.size(g.questions.schema), 0);
   // overview text
   const numImages = data.groups.reduce((s, g) => s + g.data.length, 0);
   const minSecTotal = Math.max(
     data.minSecImage * numImages,
     data.minSecGroup * data.groups.length
-  );
+  ) + numQuestions * SEC_PER_QUESTION;
   const [minSecImage, maxSecImage] = humanRange(data.minSecImage, 5, 1.25);
   const [minMinTotal, maxMinTotal] = humanRange(minSecTotal / 60, 1, 1.5);
   $overview.find('.num-images').text(numImages);
