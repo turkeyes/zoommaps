@@ -336,13 +336,13 @@
             },
             "interesting": {
                 "type": "integer",
-                "title": "Was the content interesting?",
+                "title": "How interesting was the content?",
                 "required": true,
                 "enum": [1, 2, 3, 4, 5]
             },
             "quality": {
                 "type": "integer",
-                "title": "Was the infographic well-designed?",
+                "title": "How well-designed was the infographic?",
                 "required": true,
                 "enum": [1, 2, 3, 4, 5]
             }
@@ -355,15 +355,15 @@
             {
                 "key": "interesting",
                 "type": "radios",
-                "prepend": "No",
-                "append": "Yes",
+                "prepend": "Not",
+                "append": "Very",
                 "htmlClass": "radio-range"
             },
             {
                 "key": "quality",
                 "type": "radios",
-                "prepend": "No",
-                "append": "Yes",
+                "prepend": "Not",
+                "append": "Very",
                 "htmlClass": "radio-range"
             }
         ]
