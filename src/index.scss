@@ -31,3 +31,8 @@ textarea {
 input[type="range"] {
   display: inline-block;
 }
+
+// fixes ios bugs
+input {
+  appearance: none;
+}
