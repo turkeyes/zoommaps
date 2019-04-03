@@ -17,6 +17,7 @@ const FINAL_SENTINEL_IMAGE = {
 class Viewer {
 
   constructor($container, data) {
+    window.history.replaceState(null, null, window.location.href.split('#')[0]);
     $container.append($(html));
     if (!data) {
       $('#error-url').show();
