@@ -52,7 +52,7 @@ const educations = {
  */
 const schemaform = {
   schema: {
-    zoom: {
+    zoomUse: {
       type: "string",
       title: "How did you use zoom to explore the images? What image regions did you find you zoomed into?",
       required: true,
@@ -64,7 +64,7 @@ const schemaform = {
       enum: Object.keys(genders),
       required: true
     },
-    age: {
+    ageGroup: {
       type: "string",
       title: "Age",
       enum: Object.keys(ages),
@@ -93,7 +93,7 @@ const schemaform = {
   },
   form: [
     {
-      key: "zoom",
+      key: "zoomUse",
       type: "textarea"
     },
     {
@@ -102,7 +102,7 @@ const schemaform = {
       titleMap: genders
     },
     {
-      key: "age",
+      key: "ageGroup",
       type: "radios",
       titleMap: ages
     },
@@ -119,10 +119,6 @@ const schemaform = {
     {
       key: "feedback",
       type: "textarea"
-    },
-    {
-      type: "submit",
-      title: "Submit"
     }
   ]
 };

@@ -61,7 +61,11 @@ export default function main($container, data, onValidKey) {
   $instructions.find('.enter-key').submit(async (e) => {
     e.preventDefault();
     const submitKey = $instructions.find('.enter-key input').val();
-    const keyIsValid = await $.get(`/api/validate?key=${submitKey}`);
+
+    let search = window.location.search;
+    search += search ? '&' : '?';
+    search += `key=${submitKey}`;
+    const keyIsValid = await $.get('/api/validate' + search);
     if (keyIsValid) {
       onValidKey();
     } else {

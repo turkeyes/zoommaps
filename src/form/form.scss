@@ -7,17 +7,18 @@ form {
     white-space: pre;
   }
 
-  label, input[type="radio"], input[type="checkbox"], button {
+  // label that wraps a checkbox / radio button is clickable
+  label:not([for]) {
     cursor: pointer;
-  }
-
-  label {
     margin-left: 16px;
     line-height: 150%;
   }
 
-  h4 {
-    margin-bottom: 0;
+  // headings
+  label[for] {
+    display: block;
+    margin-top: 16px;
+    font-weight: bold;
   }
 
   textarea {
@@ -25,9 +26,15 @@ form {
     font-size: 100%;
   }
 
-  button {
+  input[type="submit"] {
     display: block;
     margin-top: 16px;
     margin-left: auto;
+    font-size: 100%;
+  }
+
+  .jsonform-errortext {
+    color: red;
+    margin-bottom: 16px;
   }
 }

@@ -1,7 +1,10 @@
 {
-    "subsets": [
+    "bigName": "Graphic Designer Résumé",
+    "smallName": "résumé",
+    "groups": [
         {
-            "name": "Graphic Designer CVs",
+            "key": "0",
+            "name": "Click to Re-View Images",
             "data": [
                 {
                     "src": "graphic_designers_selection/CV_1_21_MACE-Y8syTs.png",
@@ -34,22 +37,22 @@
                     "h": 720
                 },
                 {
-                    "src": "graphic_designers_selection/CV_2_13_MACEl7z3RLc.png",
-                    "w": 556,
-                    "h": 720
-                },
-                {
                     "src": "graphic_designers_selection/CV_2_14_MACL4oc3UMw.png",
                     "w": 556,
                     "h": 720
                 },
                 {
-                    "src": "graphic_designers_selection/CV_2_15_MACKervc_i0.png",
+                    "src": "graphic_designers_selection/CV_2_13_MACEl7z3RLc.png",
                     "w": 556,
                     "h": 720
                 },
                 {
                     "src": "graphic_designers_selection/CV_2_32_MACLt1mZgrc.png",
+                    "w": 556,
+                    "h": 720
+                },
+                {
+                    "src": "graphic_designers_selection/CV_2_15_MACKervc_i0.png",
                     "w": 556,
                     "h": 720
                 },
@@ -134,14 +137,14 @@
                     "h": 720
                 },
                 {
-                    "src": "graphic_designers_selection/CV_5_0_MACL5A0DtnY.png",
-                    "w": 557,
-                    "h": 722
-                },
-                {
                     "src": "graphic_designers_selection/CV_5_8_MACE3z5jDl4.png",
                     "w": 556,
                     "h": 720
+                },
+                {
+                    "src": "graphic_designers_selection/CV_5_0_MACL5A0DtnY.png",
+                    "w": 557,
+                    "h": 722
                 },
                 {
                     "src": "graphic_designers_selection/CV_6_10_MACKlzfu2Hc.png",
@@ -150,13 +153,18 @@
                 }
             ],
             "sampleSize": 15,
-            "minSecImage": 3,
-            "minSecTotal": 150
+            "questions": {
+                "schema": {},
+                "form": []
+            }
         }
     ],
-    "extraQuestions": {
+    "sampleSize": 1,
+    "minSecGroup": 150,
+    "minSecImage": 3,
+    "extraQuestionsEnd": {
         "schema": {
-            "eq1": {
+            "hire": {
                 "type": "string",
                 "title": "Which candidate would you hire and why?",
                 "required": true,
@@ -165,11 +173,13 @@
         },
         "form": [
             {
-                "key": "eq1",
+                "key": "hire",
                 "type": "textarea"
             }
         ]
     },
-    "bigName": "Graphic Designer Résumés",
-    "smallName": "résumé"
+    "extraQuestionsEachGroup": {
+        "schema": {},
+        "form": []
+    }
 }

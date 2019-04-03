@@ -21,7 +21,7 @@ function navigate($container, data) {
 
 async function checkCompleted() {
   const { completed } = await $.get({
-    url: '/api/end' + window.location.search,
+    url: '/api/end-task' + window.location.search,
   });
   return completed;
 }

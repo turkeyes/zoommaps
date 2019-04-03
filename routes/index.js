@@ -4,6 +4,7 @@ const seedrandom = require('seedrandom');
 const randomWords = require('random-words');
 const fs = require('fs');
 const path = require('path');
+const _ = require('underscore');
 
 const Label = require('../models/label');
 const User = require('../models/user');
@@ -77,24 +78,6 @@ function readDatasetAndSample(dataset, seed, f) {
 }
 
 /**
- * Get a unique submit key, an English word
- * @param {(err, key: string) => void} f 
- */
-function getUniqueKey(f) {
-  const key = randomWords();
-  User.findOne({ key }, (findUserErr, user) => {
-    if (findUserErr) {
-      debug('Error finding user.', findUserErr);
-      f(findUserErr);
-    } else if (user) {
-      getUniqueKey(f);
-    } else {
-      return f(null, key);
-    }
-  });
-}
-
-/**
  * Finds user & labels for given workerId x dataset
  * Creates a user if one does not exist
  * @param {string} workerId
@@ -133,20 +116,6 @@ function getUserData(workerId, dataset, f) {
 }
 
 /**
- * Finds user & labels for given user ID
- * Throws an error if the user does not exist
- * @param {string} key - the submit key
- * @param {(err, u?: User, l?: Label[], d: Dataset) => void} f - callback
- */
-function getUserDataByKey(key, f) {
-  User.findOne({ key }, (findUserErr, foundUser) => {
-    if (findUserErr) return f(findUserErr);
-    if (!foundUser) return f('User not found.');
-    getUserData(foundUser.workerId, foundUser.dataset, f);
-  });
-}
-
-/**
  * Determines whether or not a label represents a zoom event
  * @param {Label} label
  * @return {boolean}
@@ -171,9 +140,15 @@ function checkGroupDone(labels, minSecImage, minSecGroup, group) {
   const enoughZooms = numZooms >= group.data.length * MIN_ZOOM_FRAC;
 
   const times = labelsInGroup.map(l => l._id.getTimestamp().getTime());
-  const startTime = Math.min(...times);
-  const endTime = Math.max(...times);
-  const time = (endTime - startTime) / 1000;
+  let timeMsec = 0;
+  if (times.length > 1) {
+    const startTime = Math.min(...times);
+    const endTime = Math.max(...times);
+    timeMsec = endTime - startTime;
+  } else if (times.length === 1) {
+    timeMsec = labelsInGroup[0].duration;
+  }
+  const time = timeMsec / 1000;
   const enoughTime = time >= minSecGroup;
 
   const uniqueImagesForMinSec = new Set(labelsInGroup
@@ -191,14 +166,24 @@ function checkGroupDone(labels, minSecImage, minSecGroup, group) {
 }
 
 /**
+ * Check if each group has been completed
+ * @param {Label[]} labels
+ * @param {Dataset} param1
+ * @return {boolean[]}
+ */
+function checkEachGroupDone(labels, { minSecImage, minSecGroup, groups }) {
+  return groups.map(g => checkGroupDone(labels, minSecImage, minSecGroup, g));
+}
+
+/**
  * Check whether or not the experiment has been completed.
  * @param {Label[]} labels
+ * @param {Dataset} param1
+ * @return {boolean[]}
  */
-function checkDone(labels, { minSecImage, minSecGroup, groups }) {
-  return groups.reduce((b, g) => (
-    b
-    && checkGroupDone(labels, minSecImage, minSecGroup, g)
-  ), true); // all groups done
+function checkAllDone(labels, { minSecImage, minSecGroup, groups }) {
+  const dones = checkEachGroupDone(labels, { minSecImage, minSecGroup, groups });
+  return dones.reduce((b, d) => b && d, true);
 }
 
 /**
@@ -275,24 +260,19 @@ router.post('/data', (req, res) => {
  */
 router.post('/survey', (req, res) => {
   const { workerId, dataset } = req.query;
-  const { 
-    gender,
-    ageGroup,
-    ethnicity,
-    education,
-    feedback,
-    zoomUse,
-    extraAnswers
-  } = req.body;
+  const defaultQuestions = [
+    'gender',
+    'ageGroup',
+    'ethnicity',
+    'education',
+    'feedback',
+    'zoomUse'
+  ];
+  const notExtra = _.pick(req.body, defaultQuestions);
+  const endAnswers = _.omit(req.body, defaultQuestions);
   const update = {
-    gender,
-    ageGroup,
-    ethnicity,
-    education,
-    feedback,
-    zoomUse,
-    extraAnswers,
-    key: '' // clear the key so we don't run out of words
+    ...notExtra,
+    endAnswers
   };
   User.findOne({ workerId, dataset }, (findUserErr, user) => {
     if (findUserErr || !user) {
@@ -309,6 +289,32 @@ router.post('/survey', (req, res) => {
         }
       });
     }
+  });
+});
+
+/**
+ * Send survey data
+ */
+router.post('/group-survey', (req, res) => {
+  const { workerId, dataset } = req.query;
+  const {
+    values,
+    groupIdx
+  } = req.body;
+  getUserData(workerId, dataset, (err, user, _labels, datasetDetails) => {
+    if (err) return res.send({ success: false });
+
+    const groupAnswers = user.groupAnswers || {};
+    const { key } = datasetDetails.groups[groupIdx];
+    groupAnswers[key] = values;
+    User.updateOne({ _id: user._id }, { groupAnswers }, (updateUserErr) => {
+      if (updateUserErr) {
+        debug('Error updating existing user', updateUserErr);
+        res.send({ success: false });
+      } else {
+        res.send({ success: true });
+      }
+    });
   });
 });
 
@@ -339,25 +345,26 @@ router.get('/end-task', (req, res) => {
       return res.send({ success: false, done: false, key: '' });
     }
 
-    const done = checkDone(labels, datasetDetails);
+    const dones = checkEachGroupDone(labels, datasetDetails);
+    const done = dones.reduce((a, b) => a && b, true);
     const survey = checkSurvey(user);
     if (!user.key && done && !survey) {
-      getUniqueKey((getKeyErr, key) => {
-        if (getKeyErr) {
+      const key = randomWords();
+      User.updateOne({ _id: user._id }, { key }, (setKeyErr) => {
+        if (err) {
+          debug('Error saving submit key', setKeyErr);
           res.send({ success: false });
         } else {
-          User.updateOne({ _id: user._id }, { key }, (setKeyErr) => {
-            if (err) {
-              debug('Error saving submit key', setKeyErr);
-              res.send({ success: false });
-            } else {
-              res.send({ success: true, completed: false, key });
-            }
-          });
+          res.send({ success: true, completed: false, key, dones });
         }
       });
     } else {
-      res.send({ success: true, completed: done && survey, key: user.key });
+      res.send({
+        success: true,
+        dones,
+        completed: done && survey,
+        key: user.key
+      });
     }
   });
 });
@@ -366,11 +373,12 @@ router.get('/end-task', (req, res) => {
  * Checks if a submit key corresponds to a valid id for a user that did the task
  */
 router.get('/validate', (req, res) => {
-  const { key } = req.query;
-  getUserDataByKey(key, (err, user, labels, datasetDetails) => {
+  const { key, workerId, dataset } = req.query;
+  getUserData(workerId, dataset, (err, user, labels, datasetDetails) => {
     if (
       err
-      || !checkDone(labels, datasetDetails)
+      || user.key !== key
+      || !checkAllDone(labels, datasetDetails)
       || checkSurvey(user) // codes are invalid after being used
     ) {
       res.status(200).send(false);

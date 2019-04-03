@@ -25,26 +25,27 @@ class Viewer {
   
     this.data = data;
     this.groupIdx = 0;
-    this.completed = this.data.groups.map(() => false); // TODO: get from server
-
+    this.dones = [];
     $('#sec-image').text(humanRange(this.data.minSecImage, 5, 1.5)[0]);
-    if (this.data.groups.length === 1) {
-      this.openPhotoSwipe(this.data.groups[0].data);
-    } else {
-      this.data.groups.forEach((group, i) => {
-        const r = $('<input/>').attr({
-          type: 'button',
-          id: 'field',
-          value: group.name
-        });
-        r.click(() => {
-          this.groupIdx = i;
-          this.openPhotoSwipe(group.data);
-        });
-        $("#galleries").append(r);
-        this.showGalleries();
+    this.data.groups.forEach((group, i) => {
+      const r = $('<input/>').attr({
+        type: 'button',
+        id: 'field',
+        value: group.name
       });
-    }
+      r.click(() => {
+        this.groupIdx = i;
+        this.openPhotoSwipe(group.data);
+      });
+      $("#galleries").append(r);
+    });
+    this.checkTaskEnd().then(() => {
+      if (this.data.groups.length === 1) {
+        this.openPhotoSwipe(this.data.groups[0].data);
+      } else {
+        this.showGalleries();
+      }
+    });
   }
 
   showGalleries() {
@@ -166,17 +167,39 @@ class Viewer {
       src = items[pswp.getCurrentIndex()].src;
       // when we get to the last (sentinel) image
       if (pswp.getCurrentIndex() === pswp.options.getNumItemsFn() - 1) {
-        pswp.goTo(0);
         $('#experiment').hide();
         this.checkGroupEnd(() => {
           $('#incomplete-task').show();
           setTimeout(() => {
             $('#incomplete-task').hide();
             $('#experiment').show();
+            pswp.goTo(0);
           }, 5000);
         });
       }
     });
+  }
+
+  checkTaskEnd() {
+    return $.get({
+      url: "/api/end-task" + window.location.search,
+      contentType: "application/json"
+    })
+      .then((res) => {
+        const { success, key, dones } = res;
+        this.dones = dones;
+        const buttons = $('#galleries').children('input');
+        dones.forEach((done, i) => {
+          if (done) {
+            $(buttons[i]).addClass('done');
+          }
+        });
+        if (success && key) {
+          this.showSubmitKey(key);
+        } else {
+          this.showGalleries();
+        }
+      });
   }
 
   /**
@@ -195,6 +218,11 @@ class Viewer {
       success: (res) => {
         const { success, completed } = res;
         if (success && completed) {
+          // remove # so next group will start at 1st photo
+          // goTo solutions didn't work
+          setTimeout(() => {
+            window.history.replaceState(null, null, window.location.href.split('#')[0]);
+          }, 1000); // delay is needed because pswp does an update after 500ms
           this.showGroupQuestions();
         } else {
           onNotDone();
@@ -210,14 +238,23 @@ class Viewer {
   showSubmitKey(key) {
     $('#experiment').hide();
     $('form').hide();
-    $('#galleries').hide();
+    $('#galleries').show();
 
     $('#submit-code').text(key);
     $('#succesful-submit').show();
   }
 
   showGroupQuestions() {
+    const onDone = () => {
+      return this.checkTaskEnd();
+    };
+
+    if (this.dones[this.groupIdx]) {
+      return onDone();
+    }
+  
     $('#galleries').hide();
+
     $('#experiment').hide();
     $('form').show();
 
@@ -235,20 +272,15 @@ class Viewer {
     const $form = $('form');
     $form.empty();
     formFromJSON($form, schemaform, (values) => {
-      // TODO: post to server
-      $.get({
-        url: "/api/end-task" + window.location.search,
-        contentType: "application/json",
-        success: (res) => {
-          const { success, completed, key } = res;
-          if (success && completed && key) {
-            this.showSubmitKey(key);
-          } else {
-            this.showGalleries();
-          }
-        }
-      });
-    })
+      $.post({
+        url: "/api/group-survey" + window.location.search,
+        data: JSON.stringify({
+          values,
+          groupIdx: this.groupIdx
+        }),
+        contentType: "application/json"
+      }).done(() => onDone());
+    });
   }
 
 }

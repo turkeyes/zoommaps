@@ -3,6 +3,7 @@
     "smallName": "infographic",
     "groups": [
         {
+            "key": "vis139",
             "name": "Image 1",
             "data": [
                 {
@@ -18,6 +19,7 @@
             }
         },
         {
+            "key": "vis152",
             "name": "Image 2",
             "data": [
                 {
@@ -33,6 +35,7 @@
             }
         },
         {
+            "key": "vis147",
             "name": "Image 3",
             "data": [
                 {
@@ -48,6 +51,7 @@
             }
         },
         {
+            "key": "vis285",
             "name": "Image 4",
             "data": [
                 {
@@ -63,6 +67,7 @@
             }
         },
         {
+            "key": "vis318",
             "name": "Image 5",
             "data": [
                 {
@@ -78,6 +83,7 @@
             }
         },
         {
+            "key": "vis349",
             "name": "Image 6",
             "data": [
                 {
@@ -93,6 +99,7 @@
             }
         },
         {
+            "key": "vis419",
             "name": "Image 7",
             "data": [
                 {
@@ -108,6 +115,7 @@
             }
         },
         {
+            "key": "vis463",
             "name": "Image 8",
             "data": [
                 {
@@ -123,6 +131,7 @@
             }
         },
         {
+            "key": "vis499",
             "name": "Image 9",
             "data": [
                 {
@@ -138,6 +147,7 @@
             }
         },
         {
+            "key": "vis50",
             "name": "Image 10",
             "data": [
                 {
@@ -153,6 +163,7 @@
             }
         },
         {
+            "key": "vis552",
             "name": "Image 11",
             "data": [
                 {
@@ -168,22 +179,8 @@
             }
         },
         {
+            "key": "vis593",
             "name": "Image 12",
-            "data": [
-                {
-                    "src": "infographics_impannots/vis876.png",
-                    "w": 3300,
-                    "h": 5100
-                }
-            ],
-            "sampleSize": 1,
-            "questions": {
-                "schema": {},
-                "form": []
-            }
-        },
-        {
-            "name": "Image 13",
             "data": [
                 {
                     "src": "infographics_impannots/vis593.png",
@@ -198,6 +195,23 @@
             }
         },
         {
+            "key": "vis876",
+            "name": "Image 13",
+            "data": [
+                {
+                    "src": "infographics_impannots/vis876.png",
+                    "w": 3300,
+                    "h": 5100
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "vis924",
             "name": "Image 14",
             "data": [
                 {
@@ -213,6 +227,7 @@
             }
         },
         {
+            "key": "visMost158",
             "name": "Image 15",
             "data": [
                 {
@@ -228,6 +243,7 @@
             }
         },
         {
+            "key": "visMost227",
             "name": "Image 16",
             "data": [
                 {
@@ -243,6 +259,7 @@
             }
         },
         {
+            "key": "visMost671",
             "name": "Image 17",
             "data": [
                 {
@@ -258,6 +275,7 @@
             }
         },
         {
+            "key": "visMost689",
             "name": "Image 18",
             "data": [
                 {
@@ -273,12 +291,13 @@
             }
         },
         {
+            "key": "visMost77",
             "name": "Image 19",
             "data": [
                 {
-                    "src": "infographics_impannots/visMost758.png",
-                    "w": 640,
-                    "h": 1750
+                    "src": "infographics_impannots/visMost77.png",
+                    "w": 1220,
+                    "h": 889
                 }
             ],
             "sampleSize": 1,
@@ -288,12 +307,13 @@
             }
         },
         {
+            "key": "visMost758",
             "name": "Image 20",
             "data": [
                 {
-                    "src": "infographics_impannots/visMost77.png",
-                    "w": 1220,
-                    "h": 889
+                    "src": "infographics_impannots/visMost758.png",
+                    "w": 640,
+                    "h": 1750
                 }
             ],
             "sampleSize": 1,
@@ -308,17 +328,43 @@
     "minSecImage": 5,
     "extraQuestionsEachGroup": {
         "schema": {
-            "eq1": {
+            "describe": {
                 "type": "string",
-                "title": "Which candidate would you hire and why?",
+                "title": "Describe the infographic you saw on the last page.",
                 "required": true,
                 "minLength": 50
+            },
+            "interesting": {
+                "type": "integer",
+                "title": "Was the content interesting?",
+                "required": true,
+                "minimum": 1,
+                "maximum": 9
+            },
+            "quality": {
+                "type": "integer",
+                "title": "Was the infographic well-designed?",
+                "required": true,
+                "minimum": 1,
+                "maximum": 9
             }
         },
         "form": [
             {
-                "key": "eq1",
+                "key": "describe",
                 "type": "textarea"
+            },
+            {
+                "key": "interesting",
+                "type": "range",
+                "prepend": "No",
+                "append": "Yes"
+            },
+            {
+                "key": "quality",
+                "type": "range",
+                "prepend": "No",
+                "append": "Yes"
             }
         ]
     },

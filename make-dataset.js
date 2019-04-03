@@ -12,6 +12,7 @@
 
 /**
  * @typedef DatasetGroup
+ * @prop {string} key
  * @prop {string} name
  * @prop {ImageInfo[]} data
  * @prop {number} sampleSize
@@ -153,8 +154,9 @@ async function main() {
    * @param {ImageInfo[]} data 
    * @return {DatasetGroup}
    */
-  function makeGroup(name, data) {
+  function makeGroup(key, name, data) {
     return {
+      key,
       name,
       data,
       sampleSize: capIfGiven(imageSampleSize, data.length),
@@ -162,8 +164,11 @@ async function main() {
     };
   }
   const groups = individuals
-  ? imgObjs.map((io, idx) => makeGroup(`Image ${idx+1}`, [io]))
-  : [makeGroup(dir, imgObjs)];
+    ? imgObjs.map((io, idx) => {
+      const key = path.basename(io.src).split('.')[0]; // just the filename
+      return makeGroup(key, `Image ${idx+1}`, [io]);
+    })
+    : [makeGroup('0', 'Click to Re-View Images', imgObjs)];
 
   const datasetFileContent = {
     bigName,
@@ -186,7 +191,6 @@ async function main() {
   /* eslint-disable no-console */
   console.log('Dataset has been created.');
   console.log(writePath);
-  console.log('Edit file to set thresholds and extra questions.');
 }
 
 main();

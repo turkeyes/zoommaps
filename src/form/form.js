@@ -21,7 +21,7 @@ export default function formFromJSON(
 
   schemaform.form.push(({
     type: 'submit',
-    title: 'submit'
+    title: 'Submit'
   }));
 
   $form.jsonForm({
