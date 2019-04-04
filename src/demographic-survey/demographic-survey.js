@@ -54,9 +54,7 @@ const schemaform = {
   schema: {
     zoomUse: {
       type: "string",
-      title: "How did you use zoom to explore the images? What image regions did you find you zoomed into?",
-      required: true,
-      minLength: 50
+      title: "How did you use zoom to explore the images? What image regions did you find you zoomed into?"
     },
     gender: {
       type: "string",
