@@ -3530,7 +3530,7 @@ var _historyUpdateTimeout,
 		} else {
 			params.pid = parseInt(params.pid,10)-1;
 		}
-		if( params.pid < 0 ) {
+		if(!params.pid || params.pid < 0 ) {
 			params.pid = 0;
 		}
 		return params;
@@ -3696,7 +3696,6 @@ _registerModule('History', {
 
 		},
 		onHashChange: function() {
-
 			if(_getHash() === _initialHash) {
 
 				_closedFromURL = true;

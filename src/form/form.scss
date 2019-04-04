@@ -39,5 +39,8 @@ form {
     .input-group-addon:last-child {
       margin-left: 16px;
     }
+    label:not([for]) {
+      margin-left: 8px;
+    }
   }
 }

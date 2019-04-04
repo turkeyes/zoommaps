@@ -1,3 +1,4 @@
+import Cookies from 'js-cookie';
 import { $ } from '../legacy-imports';
 import html from './viewer.html';
 import pswpHTML from './photoswipe.html';
@@ -9,7 +10,7 @@ import formFromJSON from '../form/form';
 /* global PhotoSwipeUI_Default PhotoSwipe */
 
 const FINAL_SENTINEL_IMAGE = {
-  "src": "final-sentinel.jpg",
+  "src": "final-sentinel.png",
   "w": 1920,
   "h": 1080
 };
@@ -17,17 +18,64 @@ const FINAL_SENTINEL_IMAGE = {
 class Viewer {
 
   constructor($container, data) {
-    window.history.replaceState(null, null, window.location.href.split('#')[0]);
-    $container.append($(html));
+    this.$container = $container;
+    // data may be undefined if URL is bad
     if (!data) {
-      $('#error-url').show();
+      $container.find('#error-url').show();
       return;
     }
-  
+
+    this.$container.append($(html));
+    this.$experiment = this.$container.find('#experiment');
+    this.$experiment.append($(pswpHTML));
+    this.$form = this.$container.find('#form');
+    this.$galleries = this.$container.find('#galleries');
+
     this.data = data;
-    this.groupIdx = 0;
+    this.groupIdx = parseInt(Cookies.get('groupIdx'), 10) || 0;
     this.dones = [];
-    $('#sec-image').text(humanRange(this.data.minSecImage, 5, 1.5)[0]);
+
+    // navigation handling
+    $(window).on('hashchange pushstate replacestate', () => {
+      const hash = window.location.hash.slice(1); // remove leading #
+      if (hash === this.lastHash) return;
+      const oldHashParams = new URLSearchParams(this.lastHash);
+      const newHashParams = new URLSearchParams(hash);
+      const newPID = parseInt(newHashParams.get('pid'), 10);
+      const group = this.data.groups[this.groupIdx];
+
+      switch (hash) {
+        case 'questions':
+          this.showGroupQuestions();
+          break;
+        case 'galleries':
+          this.showGalleries();
+          break;
+        default: // it's from pswp
+          // reject hash for final sentinel image
+          if (!newPID || newPID > group.data.length) {
+            window.location.hash = this.lastHash;
+            return;
+          }
+          // load pswp if it's not already loaded
+          if (
+            !this.pswpOpen
+            && (
+              this.initialLoad
+              || (!oldHashParams.get('pid') && !oldHashParams.get('gid'))
+            )
+          ) {
+            this.openPhotoSwipe(this.groupIdx);
+          }
+      }
+      this.lastHash = hash;
+      this.initialLoad = false;
+      this.pswpOpen = false;
+    });
+
+    // initialize UI elements
+    $container.find('#sec-image')
+      .text(humanRange(this.data.minSecImage, 5, 1.5)[0]);
     this.data.groups.forEach((group, i) => {
       const r = $('<input/>').attr({
         type: 'button',
@@ -35,39 +83,101 @@ class Viewer {
         value: group.name
       });
       r.click(() => {
-        this.groupIdx = i;
-        this.openPhotoSwipe(group.data);
+        this.openPhotoSwipe(i);
       });
-      $("#galleries").append(r);
+      this.$galleries.append(r);
     });
-    this.checkTaskEnd().then(() => {
+
+    // check if task is already completed
+    // jump straight to images if only 1 group, otherwise show buttons
+    // TODO: only jump straight in if not done
+    this.checkTaskEnd(false).then(() => {
       if (this.data.groups.length === 1) {
-        this.openPhotoSwipe(this.data.groups[0].data);
-      } else {
-        this.showGalleries();
+        this.openPhotoSwipe(0);
       }
+      this.initialLoad = true;
+      $(window).trigger('hashchange');
     });
   }
 
+  showExperiment() {
+    this.$form.hide();
+    this.$galleries.hide();
+    this.$experiment.show();
+  }
+
   showGalleries() {
-    $('form').hide();
-    $('#experiment').hide();
-    $("#galleries").show();
+    this.pswpOpen = false;
+    this.$form.hide();
+    this.$experiment.hide();
+    this.$galleries.show();
+  }
+
+  /**
+   * Show the form for the end of the current group
+   * Calls checkTaskEnd when the form is completed
+   * Does so immediately if the group has already been completed
+   * Or there is no form defined in the dataset JSON file
+   */
+  showGroupQuestions() {
+    const onDone = () => {
+      return this.checkTaskEnd();
+    };
+
+    if (this.dones[this.groupIdx]) {
+      return onDone();
+    }
+
+    // show form
+    this.pswpOpen = false;
+    this.$galleries.hide();
+    this.$experiment.hide();
+    this.$form.show();
+
+    const group = this.data.groups[this.groupIdx];
+    const schemaform = {
+      schema: {
+        ...group.questions.schema,
+        ...this.data.extraQuestionsEachGroup.schema
+      },
+      form: [
+        ...group.questions.form,
+        ...this.data.extraQuestionsEachGroup.form
+      ]
+    };
+
+    this.$form.empty();
+    formFromJSON(this.$form, schemaform, (values) => {
+      $.post({
+        url: "/api/group-survey" + window.location.search,
+        data: JSON.stringify({
+          values,
+          groupIdx: this.groupIdx
+        }),
+        contentType: "application/json"
+      }).done(() => onDone());
+    });
+  }
+
+  /**
+   * Show the completion key
+   * @param {string} key 
+   */
+  showSubmitKey(key) {
+    this.$container.find('#submit-code').text(key);
+    this.$container.find('#succesful-submit').show();
   }
 
   /**
    * Opens the PhotoSwipe UI and sets up handlers for logging
-   * @param {Object[]} items - image objects from dataset JSON
-   * @param {string} dataset - name of the dataset
-   * @param {workerId} workerId
    */
-  openPhotoSwipe(items) {
-    $('#experiment').empty();
-    $('#experiment').append($(pswpHTML));
+  openPhotoSwipe(groupIdx) {
+    this.pswpOpen = true;
+    this.groupIdx = groupIdx;
+    Cookies.set('groupIdx', groupIdx);
+    let items = this.data.groups[this.groupIdx].data;
 
-    $('#experiment').show();
-    $('form').hide();
-    $("#galleries").hide();
+    this.showExperiment();
 
     const pswpElement = $('#experiment').children()[0];
 
@@ -113,6 +223,8 @@ class Viewer {
 
     // post a label to the server
     function postLabel(time) {
+      if (src === FINAL_SENTINEL_IMAGE.src) return;
+
       $.post({
         url: "/api/data" + window.location.search,
         data: JSON.stringify({
@@ -169,19 +281,52 @@ class Viewer {
       // when we get to the last (sentinel) image
       if (pswp.getCurrentIndex() === pswp.options.getNumItemsFn() - 1) {
         $('#experiment').hide();
-        this.checkGroupEnd(() => {
-          $('#incomplete-task').show();
-          setTimeout(() => {
-            $('#incomplete-task').hide();
-            $('#experiment').show();
-            pswp.goTo(0);
-          }, 5000);
-        });
+        this.checkGroupEnd();
       }
     });
   }
 
-  checkTaskEnd() {
+  /**
+   * Check if the task has been completed.
+   * Shows the submit key if it has.
+   * If it hasn't, shows a message and then restarts the experiment
+   */
+  checkGroupEnd() {
+    const searchParams = new URLSearchParams(window.location.search);
+    searchParams.set('groupIdx', this.groupIdx);
+    $.get({
+      url: "/api/end-group?" + searchParams.toString(),
+      contentType: "application/json",
+      success: (res) => {
+        const { success, completed } = res;
+        if (success && completed) {
+          window.location.hash = 'questions';
+        } else {
+          const $incomplete = this.$container.find('#incomplete-task');
+          $incomplete.show();
+          setTimeout(() => {
+            $incomplete.hide();
+            const hash = window.location.hash.slice(1); // remove leading #
+            const hashParams = new URLSearchParams(hash);
+            const stillPswp = !!hashParams.get('pid');
+            hashParams.set('pid', 0);
+            window.location.hash = hashParams.toString();
+            if (stillPswp) {
+              this.showExperiment();
+            }
+          }, 5000);
+        }
+      }
+    });
+  }
+
+  /**
+   * Check if the entire task has been completed
+   * Update the completion status of each group
+   * If all are complete, show the completion key
+   * Either way, show the galleries page (unless redirectToGalleries is false)
+   */
+  checkTaskEnd(redirectToGalleries = true) {
     return $.get({
       url: "/api/end-task" + window.location.search,
       contentType: "application/json"
@@ -189,99 +334,19 @@ class Viewer {
       .then((res) => {
         const { success, key, dones } = res;
         this.dones = dones;
-        const buttons = $('#galleries').children('input');
+        const buttons = this.$galleries.children('input');
         dones.forEach((done, i) => {
           if (done) {
             $(buttons[i]).addClass('done');
           }
         });
+        if (redirectToGalleries) {
+          window.location.hash = 'galleries';
+        }
         if (success && key) {
           this.showSubmitKey(key);
-        } else {
-          this.showGalleries();
         }
       });
-  }
-
-  /**
-   * Check if the task has been completed.
-   * Shows the submit key if it has.
-   * Calls onNotDone if it hasn't.
-   * @param {() => void} onNotDone
-   */
-  checkGroupEnd(onNotDone) {
-    let search = window.location.search;
-    search += search ? '&' : '?';
-    search += `groupIdx=${this.groupIdx}`;
-    $.get({
-      url: "/api/end-group" + search,
-      contentType: "application/json",
-      success: (res) => {
-        const { success, completed } = res;
-        if (success && completed) {
-          // remove # so next group will start at 1st photo
-          // goTo solutions didn't work
-          setTimeout(() => {
-            window.history.replaceState(null, null, window.location.href.split('#')[0]);
-          }, 1000); // delay is needed because pswp does an update after 500ms
-          this.showGroupQuestions();
-        } else {
-          onNotDone();
-        }
-      }
-    });
-  }
-
-  /**
-   * Show the completion key
-   * @param {string} key 
-   */
-  showSubmitKey(key) {
-    $('#experiment').hide();
-    $('form').hide();
-    $('#galleries').show();
-
-    $('#submit-code').text(key);
-    $('#succesful-submit').show();
-  }
-
-  showGroupQuestions() {
-    const onDone = () => {
-      return this.checkTaskEnd();
-    };
-
-    if (this.dones[this.groupIdx]) {
-      return onDone();
-    }
-  
-    $('#galleries').hide();
-
-    $('#experiment').hide();
-    $('form').show();
-
-    const group = this.data.groups[this.groupIdx];
-    const schemaform = {
-      schema: {
-        ...group.questions.schema,
-        ...this.data.extraQuestionsEachGroup.schema
-      },
-      form: [
-        ...group.questions.form,
-        ...this.data.extraQuestionsEachGroup.form
-      ]
-    };
-    const $form = $('form');
-    $form.empty();
-    formFromJSON($form, schemaform, (values) => {
-      $.post({
-        url: "/api/group-survey" + window.location.search,
-        data: JSON.stringify({
-          values,
-          groupIdx: this.groupIdx
-        }),
-        contentType: "application/json"
-      }).done(() => onDone());
-    });
   }
 
 }
