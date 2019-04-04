@@ -136,18 +136,20 @@ function checkGroupDone(labels, minSecImage, minSecGroup, group) {
   const imagesInGroup = new Set(group.data.map(img => img.src));
   const labelsInGroup = labels.filter(l => imagesInGroup.has(l.src));
 
-  const numZooms = labelsInGroup.map(isZoom).length;
+  const numZooms = labelsInGroup.filter(isZoom).length;
   const enoughZooms = numZooms >= group.data.length * MIN_ZOOM_FRAC;
 
-  const times = labelsInGroup.map(l => l._id.getTimestamp().getTime());
-  let timeMsec = 0;
-  if (times.length > 1) {
-    const startTime = Math.min(...times);
-    const endTime = Math.max(...times);
-    timeMsec = endTime - startTime;
-  } else if (times.length === 1) {
-    timeMsec = labelsInGroup[0].duration;
-  }
+  // const times = labelsInGroup.map(l => l._id.getTimestamp().getTime());
+  // let timeMsec = 0;
+  // if (times.length > 1) {
+  //   const startTime = Math.min(...times);
+  //   const endTime = Math.max(...times);
+  //   timeMsec = endTime - startTime;
+  // } else if (times.length === 1) {
+  //   timeMsec = labelsInGroup[0].duration;
+  // }
+  const timeMsec = labelsInGroup.map(l => l.duration)
+    .reduce((a, b) => a + b, 0);
   const time = timeMsec / 1000;
   const enoughTime = time >= minSecGroup;
 

@@ -223,9 +223,7 @@ class Viewer {
 
     // post a label to the server
     function postLabel(time) {
-      if (src === FINAL_SENTINEL_IMAGE.src) return;
-
-      $.post({
+      if (src !== FINAL_SENTINEL_IMAGE.src) $.post({
         url: "/api/data" + window.location.search,
         data: JSON.stringify({
           src,
@@ -237,7 +235,7 @@ class Viewer {
           orientation,
           browser: getBrowser(),
           os: getOS(),
-          duration: (new Date()).getTime() - start_time
+          duration: time - start_time
         }),
         contentType: "application/json"
       });
@@ -280,7 +278,7 @@ class Viewer {
       src = items[pswp.getCurrentIndex()].src;
       // when we get to the last (sentinel) image
       if (pswp.getCurrentIndex() === pswp.options.getNumItemsFn() - 1) {
-        $('#experiment').hide();
+        this.$experiment.hide();
         this.checkGroupEnd();
       }
     });
