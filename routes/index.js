@@ -375,7 +375,8 @@ router.get('/end-task', (req, res) => {
  * Checks if a submit key corresponds to a valid id for a user that did the task
  */
 router.get('/validate', (req, res) => {
-  const { key, workerId, dataset } = req.query;
+  let { key, workerId, dataset } = req.query;
+  key = key.trim().toLowerCase();
   getUserData(workerId, dataset, (err, user, labels, datasetDetails) => {
     if (
       err

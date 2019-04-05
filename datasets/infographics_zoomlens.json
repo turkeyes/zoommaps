@@ -1,0 +1,535 @@
+{
+    "bigName": "Infographics",
+    "smallName": "infographic",
+    "groups": [
+        {
+            "key": "18-amazing-facts-about-human-body",
+            "name": "Image 1",
+            "data": [
+                {
+                    "src": "infographics_zoomlens/18-amazing-facts-about-human-body.jpg",
+                    "w": 1000,
+                    "h": 2859
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "benefits-corporate-branding",
+            "name": "Image 2",
+            "data": [
+                {
+                    "src": "infographics_zoomlens/benefits-corporate-branding.jpg",
+                    "w": 1000,
+                    "h": 2791
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "conflict-minerals-3tg",
+            "name": "Image 3",
+            "data": [
+                {
+                    "src": "infographics_zoomlens/conflict-minerals-3tg.jpg",
+                    "w": 1000,
+                    "h": 4941
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "dog-names-crazy-sublime",
+            "name": "Image 4",
+            "data": [
+                {
+                    "src": "infographics_zoomlens/dog-names-crazy-sublime.png",
+                    "w": 1000,
+                    "h": 4238
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "evolution-educational-technology",
+            "name": "Image 5",
+            "data": [
+                {
+                    "src": "infographics_zoomlens/evolution-educational-technology.jpg",
+                    "w": 1000,
+                    "h": 3170
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "facebook-numbers-may-2013",
+            "name": "Image 6",
+            "data": [
+                {
+                    "src": "infographics_zoomlens/facebook-numbers-may-2013.jpg",
+                    "w": 1000,
+                    "h": 1400
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "gun-violence-america",
+            "name": "Image 7",
+            "data": [
+                {
+                    "src": "infographics_zoomlens/gun-violence-america.jpg",
+                    "w": 1000,
+                    "h": 3600
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "how-big-oracle-openworld",
+            "name": "Image 8",
+            "data": [
+                {
+                    "src": "infographics_zoomlens/how-big-oracle-openworld.png",
+                    "w": 1000,
+                    "h": 2913
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "how-build-muscle-fast",
+            "name": "Image 9",
+            "data": [
+                {
+                    "src": "infographics_zoomlens/how-build-muscle-fast.png",
+                    "w": 1000,
+                    "h": 2500
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "how-men-women-spend-money-differently",
+            "name": "Image 10",
+            "data": [
+                {
+                    "src": "infographics_zoomlens/how-men-women-spend-money-differently.png",
+                    "w": 1000,
+                    "h": 3583
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "how-much-do-attorneys-make",
+            "name": "Image 11",
+            "data": [
+                {
+                    "src": "infographics_zoomlens/how-much-do-attorneys-make.jpg",
+                    "w": 1000,
+                    "h": 3193
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "how-much-oil-left-world",
+            "name": "Image 12",
+            "data": [
+                {
+                    "src": "infographics_zoomlens/how-much-oil-left-world.jpg",
+                    "w": 1000,
+                    "h": 3634
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "how-much-pound-fat",
+            "name": "Image 13",
+            "data": [
+                {
+                    "src": "infographics_zoomlens/how-much-pound-fat.jpg",
+                    "w": 1000,
+                    "h": 2500
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "how-stay-motivated-work-science-productive-breaks",
+            "name": "Image 14",
+            "data": [
+                {
+                    "src": "infographics_zoomlens/how-stay-motivated-work-science-productive-breaks.jpg",
+                    "w": 1000,
+                    "h": 1977
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "international-literacy-data",
+            "name": "Image 15",
+            "data": [
+                {
+                    "src": "infographics_zoomlens/international-literacy-data.jpg",
+                    "w": 1000,
+                    "h": 4017
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "mindfulness",
+            "name": "Image 16",
+            "data": [
+                {
+                    "src": "infographics_zoomlens/mindfulness.jpg",
+                    "w": 1000,
+                    "h": 3428
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "plastic-bag-and-film-recycling-reaches-1-billion-pounds-annually",
+            "name": "Image 17",
+            "data": [
+                {
+                    "src": "infographics_zoomlens/plastic-bag-and-film-recycling-reaches-1-billion-pounds-annually.jpg",
+                    "w": 1000,
+                    "h": 4144
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "smartphones-society",
+            "name": "Image 18",
+            "data": [
+                {
+                    "src": "infographics_zoomlens/smartphones-society.png",
+                    "w": 1000,
+                    "h": 2971
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "solar-panels-youll-be-bigger-star-sun",
+            "name": "Image 19",
+            "data": [
+                {
+                    "src": "infographics_zoomlens/solar-panels-youll-be-bigger-star-sun.jpg",
+                    "w": 1000,
+                    "h": 7235
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "talent-management-challenges-small-and-medium-sized-organizations",
+            "name": "Image 20",
+            "data": [
+                {
+                    "src": "infographics_zoomlens/talent-management-challenges-small-and-medium-sized-organizations.png",
+                    "w": 1000,
+                    "h": 1493
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "teachers-dont-work-hard-enough-think-again",
+            "name": "Image 21",
+            "data": [
+                {
+                    "src": "infographics_zoomlens/teachers-dont-work-hard-enough-think-again.jpg",
+                    "w": 1000,
+                    "h": 2242
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "texting-while-driving-statistics-facts",
+            "name": "Image 22",
+            "data": [
+                {
+                    "src": "infographics_zoomlens/texting-while-driving-statistics-facts.png",
+                    "w": 711,
+                    "h": 1000
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "top-five-mining-countries-world-and-their-gdp",
+            "name": "Image 23",
+            "data": [
+                {
+                    "src": "infographics_zoomlens/top-five-mining-countries-world-and-their-gdp.png",
+                    "w": 1000,
+                    "h": 3473
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "top-tips-ensure-first-date-success",
+            "name": "Image 24",
+            "data": [
+                {
+                    "src": "infographics_zoomlens/top-tips-ensure-first-date-success.jpg",
+                    "w": 1000,
+                    "h": 2600
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "using-social-media-crisis-management-tool",
+            "name": "Image 25",
+            "data": [
+                {
+                    "src": "infographics_zoomlens/using-social-media-crisis-management-tool.png",
+                    "w": 1000,
+                    "h": 4136
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "what-does-organic-really-mean",
+            "name": "Image 26",
+            "data": [
+                {
+                    "src": "infographics_zoomlens/what-does-organic-really-mean.jpg",
+                    "w": 1000,
+                    "h": 3127
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "what-makes-social-media-so-influential",
+            "name": "Image 27",
+            "data": [
+                {
+                    "src": "infographics_zoomlens/what-makes-social-media-so-influential.png",
+                    "w": 1000,
+                    "h": 4312
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "what-women-wantin-men",
+            "name": "Image 28",
+            "data": [
+                {
+                    "src": "infographics_zoomlens/what-women-wantin-men.jpg",
+                    "w": 1000,
+                    "h": 4938
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "why-minions-love-bananas",
+            "name": "Image 29",
+            "data": [
+                {
+                    "src": "infographics_zoomlens/why-minions-love-bananas.jpg",
+                    "w": 1000,
+                    "h": 2000
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "youtube-2nd-largest-search-engine",
+            "name": "Image 30",
+            "data": [
+                {
+                    "src": "infographics_zoomlens/youtube-2nd-largest-search-engine.jpg",
+                    "w": 1000,
+                    "h": 2972
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        }
+    ],
+    "sampleSize": 5,
+    "minSecGroup": 5,
+    "minSecImage": 5,
+    "extraQuestionsEachGroup": {
+        "schema": {
+            "describe": {
+                "type": "string",
+                "title": "Describe the infographic you saw on the last page.",
+                "required": true,
+                "minLength": 50
+            },
+            "interesting": {
+                "type": "integer",
+                "title": "Was the content interesting?",
+                "required": true,
+                "enum": [1, 2, 3, 4, 5]
+            },
+            "quality": {
+                "type": "integer",
+                "title": "Was the infographic well-designed?",
+                "required": true,
+                "enum": [1, 2, 3, 4, 5]
+            }
+        },
+        "form": [
+            {
+                "key": "describe",
+                "type": "textarea"
+            },
+            {
+                "key": "interesting",
+                "type": "radios",
+                "prepend": "No",
+                "append": "Yes",
+                "htmlClass": "radio-range"
+            },
+            {
+                "key": "quality",
+                "type": "radios",
+                "prepend": "No",
+                "append": "Yes",
+                "htmlClass": "radio-range"
+            }
+        ]
+    },
+    "extraQuestionsEnd": {
+        "schema": {},
+        "form": []
+    }
+}
