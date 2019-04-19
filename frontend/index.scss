@@ -26,5 +26,6 @@ input[type="range"] {
 // fixes ios bugs
 input[type="submit"],
 input[type="button"] {
-  appearance: none;
+  /* stylelint-disable-next-line plugin/no-unsupported-browser-features */
+  appearance: none; /* only needs to work on iOS */
 }

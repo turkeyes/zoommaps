@@ -9,7 +9,7 @@ const OUTPUT_PATH = 'dist';
 
 module.exports = {
   entry: {
-    app: './src/index.js',
+    app: './frontend/index.js',
   },
   output: {
     filename: '[name].bundle.js',
@@ -21,7 +21,7 @@ module.exports = {
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin({
       title: APP_NAME,
-      template: 'src/index.html',
+      template: 'frontend/index.html',
     })
   ],
   module: {

@@ -1,10 +1,12 @@
 #!/usr/bin/env node
 
+/* eslint-disable no-console */
+
 /**
  * Module dependencies.
  */
 
-var app = require('../app');
+var app = require('../backend/app');
 var debug = require('debug')('server:server');
 var http = require('http');
 

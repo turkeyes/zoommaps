@@ -15,32 +15,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 app.use('/api', routes);
-app.use(express.static(path.join(__dirname, 'images')));
-if (process.env.NODE_ENV === 'production') {
-	app.use(express.static(path.join(__dirname, 'dist')));
-	app.get('*', (req, res) => {
-		res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-	});
-} else {
-	const webpack = require('webpack');
-	const webpackDevMiddleware = require('webpack-dev-middleware');
-	const config = require('./webpack.dev');
-	const supertest = require('supertest');
-	const compiler = webpack(config);
-	const request = supertest(app);
-	app.use(webpackDevMiddleware(compiler, {
-		publicPath: config.output.publicPath
-	}));
-	app.get('*', (req, res) => {
-		request.get('/').end((err, { text: html }) => {
-			if (err) {
-				res.status(500).send(err);
-			} else {
-				res.send(html);
-			}
-		});
-	});
-}
+app.use(express.static(path.join(__dirname, '..', 'datasets', 'images')));
+app.use(express.static(path.join(__dirname, '..', 'dist')));
+app.get('*', (req, res) => {
+	res.sendFile(path.join(__dirname, '..', 'dist', 'index.html'));
+});
 
 // database
 mongoose.connect(

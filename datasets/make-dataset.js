@@ -181,7 +181,7 @@ async function main() {
     extraQuestionsEnd: { schema: {}, form: [] },
   };
 
-  const writePath = path.join(root, 'datasets', `${dir}.json`);
+  const writePath = path.join(root, 'definitions', `${dir}.json`);
   fs.writeFileSync(
     writePath,
     JSON.stringify(datasetFileContent, null, 4),

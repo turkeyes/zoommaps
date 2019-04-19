@@ -41,7 +41,7 @@ function getRandom(arr, n, rand=Math.random) {
  */
 function readDatasetFile(dataset, f) {
   fs.readFile(
-    path.join(__dirname, '..', 'datasets', `${dataset}.json`),
+    path.join(__dirname, '..', '..', 'datasets', 'definitions', `${dataset}.json`),
     'utf8',
     (readErr, data) => {
       if (readErr) {

@@ -4,12 +4,11 @@
   "private": true,
   "scripts": {
     "start": "NODE_ENV=production node ./bin/www",
-    "dev": "node ./bin/www",
+    "dev": "concurrently \"node ./bin/www\" \"webpack --config webpack.dev.js --watch\"",
     "build": "webpack --config webpack.prod.js",
-    "postinstall": "npm run build",
-    "lint": "npm run eslint & npm run stylelint",
-    "eslint": "eslint src",
-    "stylelint": "stylelint src"
+    "lint": "concurrently \"npm run eslint\" \"npm run stylelint\"",
+    "eslint": "eslint .",
+    "stylelint": "stylelint frontend"
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
@@ -44,6 +43,7 @@
     "autoprefixer": "^9.4.10",
     "babel-loader": "^8.0.5",
     "clean-webpack-plugin": "^2.0.0",
+    "concurrently": "^4.1.0",
     "css-loader": "^2.1.1",
     "eslint": "^5.14.1",
     "eslint-plugin-compat": "^2.7.0",
@@ -65,11 +65,9 @@
     "stylelint-config-recommended-scss": "^3.2.0",
     "stylelint-no-unsupported-browser-features": "^3.0.2",
     "stylelint-scss": "^3.5.4",
-    "supertest": "^3.4.2",
     "uglifyjs-webpack-plugin": "^2.1.2",
     "webpack": "^4.29.6",
     "webpack-cli": "^3.2.3",
-    "webpack-dev-middleware": "^3.6.1",
     "webpack-merge": "^4.2.1"
   },
   "browserslist": [
