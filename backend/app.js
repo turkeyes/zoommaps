@@ -23,7 +23,7 @@ app.get('*', (req, res) => {
 
 // database
 mongoose.connect(
-	process.env.MONGODB_URI || "mongodb://localhost/diviz",
+	process.env.MONGODB_URI || "mongodb://localhost/zoommaps",
 	{ useNewUrlParser: true }
 );
 const connection = mongoose.connection;
