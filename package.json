@@ -2,6 +2,18 @@
   "name": "server",
   "version": "0.0.0",
   "private": true,
+  "license": "MIT",
+  "contributors": [
+    {
+      "name": "Barry McNamara",
+      "email": "barryam3@mit.edu",
+      "url": "https://barryam3.com"
+    },
+    {
+      "name": "Shan Lu",
+      "email": "shanlu@mit.edu"
+    }
+  ],
   "scripts": {
     "start": "NODE_ENV=production node ./bin/www",
     "dev": "concurrently \"node ./bin/www\" \"webpack --config webpack.dev.js --watch\"",
