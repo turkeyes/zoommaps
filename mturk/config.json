@@ -1,0 +1,14 @@
+{
+    "hitCreation": {
+        "title": "ZoomMaps: Visualizations",
+        "description": "Look at visualizations on your mobile phone and answer some questions!",
+        "numTasks": 1,
+        "numAssignments": 20,
+        "rewardAmount": "3.00",
+        "keywords": "visualizations, images, viewing",
+        "duration": 3600,
+        "lifetime": 86400,
+        "taskUrl": "https://zoommaps.csail.mit.edu/?dataset=visualizations",
+        "variants": []
+    },
+}
