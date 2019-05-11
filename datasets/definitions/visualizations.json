@@ -3,13 +3,13 @@
     "smallName": "visualization",
     "groups": [
         {
-            "key": "arab-spring",
+            "key": "1_percent_w_title",
             "name": "Image 1",
             "data": [
                 {
-                    "src": "visualizations/arab-spring.jpg",
-                    "w": 647,
-                    "h": 647
+                    "src": "visualizations/1_percent_w_title.png",
+                    "w": 4504,
+                    "h": 2488
                 }
             ],
             "sampleSize": 1,
@@ -67,8 +67,24 @@
             }
         },
         {
-            "key": "oscars",
+            "key": "nat_disasters",
             "name": "Image 5",
+            "data": [
+                {
+                    "src": "visualizations/nat_disasters.png",
+                    "w": 3400,
+                    "h": 2400
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "oscars",
+            "name": "Image 6",
             "data": [
                 {
                     "src": "visualizations/oscars.png",
@@ -84,7 +100,7 @@
         },
         {
             "key": "soda",
-            "name": "Image 6",
+            "name": "Image 7",
             "data": [
                 {
                     "src": "visualizations/soda.png",
@@ -100,7 +116,7 @@
         },
         {
             "key": "syria",
-            "name": "Image 7",
+            "name": "Image 8",
             "data": [
                 {
                     "src": "visualizations/syria.jpg",
@@ -116,7 +132,7 @@
         },
         {
             "key": "t-map",
-            "name": "Image 8",
+            "name": "Image 9",
             "data": [
                 {
                     "src": "visualizations/t-map.png",
@@ -131,29 +147,13 @@
             }
         },
         {
-            "key": "nat_disasters",
-            "name": "Image 9",
-            "data": [
-                {
-                    "src": "visualizations/nat_disasters.png",
-                    "w": 3400,
-                    "h": 2400
-                }
-            ],
-            "sampleSize": 1,
-            "questions": {
-                "schema": {},
-                "form": []
-            }
-        },
-        {
-            "key": "1_percent_w_title",
+            "key": "arab_spring",
             "name": "Image 10",
             "data": [
                 {
-                    "src": "visualizations/1_percent_w_title.png",
-                    "w": 4504,
-                    "h": 2488
+                    "src": "visualizations/arab_spring.jpg",
+                    "w": 2262,
+                    "h": 2586
                 }
             ],
             "sampleSize": 1,
