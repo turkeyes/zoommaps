@@ -11,7 +11,7 @@ const User = require('../models/user');
 
 const router = express.Router();
 
-const MIN_EVENTS = 100; // num position changes for label to count as zoom event
+const MIN_EVENTS = 50; // num position changes for label to count as zoom event
 const MIN_ZOOM_FRAC = 0.2; // of images that must be zoomed on
 const MIN_IMAGE_FRAC = 0.85; // of images that must be viewed for min time
 
@@ -125,7 +125,7 @@ function isZoom(label) {
   const longEnough = x_min.length > MIN_EVENTS; // all lengths are equal
   const didMove = [x_min, x_max, y_min, y_max]
     .map(a => new Set(a))
-    .map(s => s.size)
+    .map((s) => s.size)
     .reduce((a, b) => a + b, 0) > 4;
   return longEnough && didMove;
 }

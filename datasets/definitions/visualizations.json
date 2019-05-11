@@ -3,74 +3,168 @@
     "smallName": "visualization",
     "groups": [
         {
-            "key": "0",
-            "name": "Click to Re-View Images",
+            "key": "arab-spring",
+            "name": "Image 1",
             "data": [
-                {
-                    "src": "visualizations/aids.jpg",
-                    "w": 1060,
-                    "h": 707
-                },
                 {
                     "src": "visualizations/arab-spring.jpg",
                     "w": 647,
                     "h": 647
-                },
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "depth_final",
+            "name": "Image 2",
+            "data": [
                 {
                     "src": "visualizations/depth_final.png",
                     "w": 646,
                     "h": 19175
-                },
-                {
-                    "src": "visualizations/epidemic.jpg",
-                    "w": 865,
-                    "h": 692
-                },
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "french-army",
+            "name": "Image 3",
+            "data": [
                 {
                     "src": "visualizations/french-army.png",
                     "w": 1920,
                     "h": 890
-                },
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "life-expectancy",
+            "name": "Image 4",
+            "data": [
                 {
                     "src": "visualizations/life-expectancy.png",
                     "w": 2048,
                     "h": 1556
-                },
-                {
-                    "src": "visualizations/nat-disasters.png",
-                    "w": 13114,
-                    "h": 9476
-                },
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "oscars",
+            "name": "Image 5",
+            "data": [
                 {
                     "src": "visualizations/oscars.png",
                     "w": 2048,
                     "h": 2060
-                },
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "soda",
+            "name": "Image 6",
+            "data": [
                 {
                     "src": "visualizations/soda.png",
                     "w": 950,
                     "h": 600
-                },
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "syria",
+            "name": "Image 7",
+            "data": [
                 {
                     "src": "visualizations/syria.jpg",
                     "w": 800,
                     "h": 617
-                },
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "t-map",
+            "name": "Image 8",
+            "data": [
                 {
                     "src": "visualizations/t-map.png",
                     "w": 1650,
                     "h": 1750
                 }
             ],
-            "sampleSize": 11,
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "nat_disasters",
+            "name": "Image 9",
+            "data": [
+                {
+                    "src": "visualizations/nat_disasters.png",
+                    "w": 3400,
+                    "h": 2400
+                }
+            ],
+            "sampleSize": 1,
+            "questions": {
+                "schema": {},
+                "form": []
+            }
+        },
+        {
+            "key": "1_percent_w_title",
+            "name": "Image 10",
+            "data": [
+                {
+                    "src": "visualizations/1_percent_w_title.png",
+                    "w": 4504,
+                    "h": 2488
+                }
+            ],
+            "sampleSize": 1,
             "questions": {
                 "schema": {},
                 "form": []
             }
         }
     ],
-    "sampleSize": 1,
-    "minSecGroup": 55,
+    "sampleSize": 10,
+    "minSecGroup": 0,
     "minSecImage": 5,
     "extraQuestionsEachGroup": {
         "schema": {
