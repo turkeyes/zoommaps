@@ -118,6 +118,20 @@ parser.addArgument(
     defaultValue: 0
   }
 );
+parser.addArgument(
+  ['-eqe', '--extra-questions-end'],
+  {
+    help: 'JSON file containing FormJSON specifying questions to show at end',
+    defaultValue: ''
+  }
+);
+parser.addArgument(
+  ['-eqg', '--extra-questions-group'],
+  {
+    help: 'JSON file containing FormJSON specifying questions to show at end',
+    defaultValue: ''
+  }
+);
 const {
   dir,
   smallName,
@@ -126,7 +140,9 @@ const {
   groupSampleSize,
   imageSampleSize,
   minSecImage,
-  minSecGroup
+  minSecGroup,
+  extraQuestionsEnd,
+  extraQuestionsGroup
 } = camelCaseKeys(parser.parseArgs());
 
 /**
@@ -137,6 +153,24 @@ const {
  */
 function capIfGiven(n, max) {
   return n ? Math.min(n, max) : max;
+}
+
+/**
+ * Parses a file representing questions to show in the interface. 
+ * Input file should contain FormJSON.
+ * Returns a default empty schema if name is the empty string.
+ * 
+ * @param {string} name : name of the file to parse relative to 
+ * `datasets/questions`
+ */
+function parseQuestionFile(name) {
+  const defaultSchema =  { schema: {}, form: [] };
+  if (!name.length) return defaultSchema;
+  
+  const fname = path.join(__dirname, '..', 'datasets', 'questions', `${name}.json`);
+  
+  const rawData = fs.readFileSync(fname);
+  return JSON.parse(rawData);
 }
 
 async function main() {
@@ -177,8 +211,8 @@ async function main() {
     sampleSize: capIfGiven(groupSampleSize, groups.length),
     minSecGroup,
     minSecImage,
-    extraQuestionsEachGroup: { schema: {}, form: [] },
-    extraQuestionsEnd: { schema: {}, form: [] },
+    extraQuestionsEachGroup: parseQuestionFile(extraQuestionsGroup),
+    extraQuestionsEnd: parseQuestionFile(extraQuestionsEnd),
   };
 
   const writePath = path.join(root, 'definitions', `${dir}.json`);
@@ -193,4 +227,7 @@ async function main() {
   console.log(writePath);
 }
 
-main();
+main()
+  .catch((err) => {
+    console.log("ERROR:", err);
+  });
