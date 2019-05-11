@@ -1,0 +1,52 @@
+{
+    "schema": {
+        "about": {
+            "type": "string",
+            "title": "What is the main message of the visualization?",
+            "required": true,
+            "minLength": 50
+        }, 
+        "design": {
+            "type": "string",
+            "title": "What do you think of the design of the visualization?",
+            "required": true,
+            "minLength": 50
+        }, 
+        "interesting": {
+            "type": "integer",
+            "title": "Was the content interesting?",
+            "required": true,
+            "enum": [1, 2, 3, 4, 5]
+        },
+        "quality": {
+            "type": "integer",
+            "title": "Was the infographic well-designed?",
+            "required": true,
+            "enum": [1, 2, 3, 4, 5]
+        }
+    },
+    "form": [
+        {
+            "key": "about",
+            "type": "textarea"
+        },
+        {
+            "key": "design",
+            "type": "textarea"
+        },
+        {
+            "key": "interesting",
+            "type": "radios",
+            "prepend": "No",
+            "append": "Yes",
+            "htmlClass": "radio-range"
+        },
+        {
+            "key": "quality",
+            "type": "radios",
+            "prepend": "No",
+            "append": "Yes",
+            "htmlClass": "radio-range"
+        }
+    ]
+}
