@@ -188,7 +188,8 @@ class Viewer {
       closeOnScroll: false,
       closeOnVerticalDrag: false,
       escKey: false,
-      loop: false
+      loop: false,
+      allowPanToNext: false
     };
 
     // orientation tracking
