@@ -212,6 +212,7 @@ class Viewer {
     items = [...items, FINAL_SENTINEL_IMAGE];
     const pswp = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, pswpOptions);
     pswp.init();
+    this.hideBackForFirstImage(pswp);
 
     // state for data logging
     let src = items[0].src;
@@ -277,12 +278,22 @@ class Viewer {
     pswp.listen('beforeChange', () => {
       postLabel((new Date()).getTime());
       src = items[pswp.getCurrentIndex()].src;
+      this.hideBackForFirstImage(pswp);
       // when we get to the last (sentinel) image
       if (pswp.getCurrentIndex() === pswp.options.getNumItemsFn() - 1) {
         this.$experiment.hide();
-        this.checkGroupEnd();
+        this.checkGroupEnd(pswp);
       }
     });
+  }
+
+  hideBackForFirstImage(pswp) {
+    // hide the back button for first image
+    if (pswp.getCurrentIndex() === 0) {
+      this.$experiment.find('.pswp__top-bar .pswp__button--arrow--left').hide();
+    } else {
+      this.$experiment.find('.pswp__top-bar .pswp__button--arrow--left').show();
+    }
   }
 
   /**
@@ -290,7 +301,7 @@ class Viewer {
    * Shows the submit key if it has.
    * If it hasn't, shows a message and then restarts the experiment
    */
-  checkGroupEnd() {
+  checkGroupEnd(pswp) {
     const searchParams = new URLSearchParams(window.location.search);
     searchParams.set('groupIdx', this.groupIdx);
     $.get({
@@ -304,15 +315,11 @@ class Viewer {
           const $incomplete = this.$container.find('#incomplete-task');
           $incomplete.show();
           setTimeout(() => {
+            pswp.goTo(0);
+          }, 2000);
+          setTimeout(() => {
             $incomplete.hide();
-            const hash = window.location.hash.slice(1); // remove leading #
-            const hashParams = new URLSearchParams(hash);
-            const stillPswp = !!hashParams.get('pid');
-            hashParams.set('pid', 0);
-            window.location.hash = hashParams.toString();
-            if (stillPswp) {
-              this.showExperiment();
-            }
+            this.showExperiment();
           }, 5000);
         }
       }

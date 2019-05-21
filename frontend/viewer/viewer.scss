@@ -2,6 +2,28 @@
   .pswp__counter {
     font-size: 24px;
   }
+  .pswp__top-bar {
+    .pswp__button {
+      visibility: visible;
+    }
+    .pswp__button--arrow--left, .pswp__button--arrow--right {
+      background-image: none;
+      position: relative;
+      height: 44px;
+      width: 36px;
+      margin-top: 0;
+      top: 0;
+      &::before {
+        top: 8px;
+        right: 0;
+        left: 0;
+        background-color: transparent;
+      }
+    }
+  }
+  .pswp__ui--hidden .pswp__top-bar {
+    pointer-events: none;
+  }
 }
 
 #submit-code {
