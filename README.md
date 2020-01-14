@@ -1,5 +1,13 @@
 # ZoomMaps
 
+A web-based image viewing library that tracks pinch zoom gestures when used on mobile. We present this as a proxy to eye-tracking that can be deployed as a crowdsourced task, and leverages the mobile screen as a restricted viewing window.
+
+A running web demo of this interface is available [here](http://zoommaps.csail.mit.edu:5136/?workerId=demo&dataset=natural_test).
+
+If you use this code, please consider citing:
+
+> Newman, A., McNamara, B., Fosco, C., Zhang, Y.B., Sukhum, P., Tancik, M., Kim, N.W., Bylinskii, Z. [TurkEyes: A Web-Based Toolbox for Crowdsourcing Attention Data.](http://turkeyes.mit.edu/) In ACM CHI, 2020.
+
 ## Starting the App
 - development: `npm run dev`
 - produciton `npm run build` then `npm start`
