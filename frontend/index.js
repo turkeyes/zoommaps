@@ -30,11 +30,21 @@ async function getData() {
   const query = new URLSearchParams(window.location.search);
   const workerId = query.get('workerId');
   var datasetName = query.get('dataset');
-  if (!workerId || !datasetName) {
-    throw new Error();
+  const exampleQuerystring = "?workerId=demo&dataset=natural_test"
+  if (!datasetName) {
+    throw new Error(`Please specify a dataset in the querystring. For example: <a href="/${exampleQuerystring}">${exampleQuerystring}</a>`);
+  }
+  if (!workerId) {
+    throw new Error(`Please specify a worker id in the querystring. For example: <a href="/${exampleQuerystring}">${exampleQuerystring}</a>`);
   }
   const data = await $.get({
     url: '/api/dataset' + window.location.search,
+  }).catch((e) => { 
+    if (e.status == 404) {
+      throw new Error(`Could not find dataset "${datasetName}"`);
+    } else {
+      throw new Error(`Error loading dataset "${datasetName}"`);
+    }
   });
   return data;
 }
@@ -56,7 +66,7 @@ $(document).ready(async () => {
   try {
     data = await getData();
   } catch (e) {
-    $main.html('<p>HIT could not be found. Check the URL.</p>');
+    $main.html(`<b>Page not found.</b><p>${e.message || ""}</p>`);
     return;
   }
   navigate($main, data);
