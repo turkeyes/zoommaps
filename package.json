@@ -1,90 +1,90 @@
 {
-  "name": "server",
-  "version": "0.0.0",
-  "private": true,
-  "license": "MIT",
-  "contributors": [
-    {
-      "name": "Barry McNamara",
-      "email": "barryam3@mit.edu",
-      "url": "https://barryam3.com"
+    "browserslist": [
+        "since 2011"
+    ],
+    "contributors": [
+        {
+            "email": "barryam3@mit.edu",
+            "name": "Barry McNamara",
+            "url": "https://barryam3.com"
+        },
+        {
+            "email": "shanlu@mit.edu",
+            "name": "Shan Lu"
+        }
+    ],
+    "dependencies": {
+        "acorn": "^6.1.1",
+        "babel-polyfill": "^6.26.0",
+        "body-parser": "^1.18.3",
+        "cookie-parser": "~1.4.3",
+        "debug": "^4.1.1",
+        "express": "^4.16.4",
+        "fs": "0.0.1-security",
+        "jquery": "^3.4.1",
+        "js-cookie": "^2.2.0",
+        "jsonform": "^2.1.3",
+        "mobile-detect": "^1.4.3",
+        "mongoose": "^5.3.12",
+        "morgan": "^1.9.1",
+        "photoswipe": "^4.1.2",
+        "popper.js": "^1.14.7",
+        "qr-image": "^3.2.0",
+        "qrcode-generator": "^1.4.3",
+        "random-words": "^1.1.0",
+        "seedrandom": "^2.4.4",
+        "serve-favicon": "^2.5.0",
+        "underscore": "^1.9.1",
+        "url-join": "^4.0.0",
+        "url-search-params-polyfill": "^5.0.0"
     },
-    {
-      "name": "Shan Lu",
-      "email": "shanlu@mit.edu"
-    }
-  ],
-  "scripts": {
-    "start": "NODE_ENV=production node ./bin/www",
-    "dev": "concurrently \"node ./bin/www\" \"webpack --config webpack.dev.js --watch\"",
-    "build": "webpack --config webpack.prod.js",
-    "lint": "concurrently \"npm run eslint\" \"npm run stylelint\"",
-    "eslint": "eslint .",
-    "stylelint": "stylelint frontend"
-  },
-  "dependencies": {
-    "acorn": "^6.1.1",
-    "babel-polyfill": "^6.26.0",
-    "body-parser": "^1.18.3",
-    "cookie-parser": "~1.4.3",
-    "debug": "^4.1.1",
-    "express": "^4.16.4",
-    "fs": "0.0.1-security",
-    "jquery": "^3.4.1",
-    "js-cookie": "^2.2.0",
-    "jsonform": "^2.1.3",
-    "mobile-detect": "^1.4.3",
-    "mongoose": "^5.3.12",
-    "morgan": "^1.9.1",
-    "photoswipe": "^4.1.2",
-    "popper.js": "^1.14.7",
-    "qr-image": "^3.2.0",
-    "qrcode-generator": "^1.4.3",
-    "random-words": "^1.1.0",
-    "seedrandom": "^2.4.4",
-    "serve-favicon": "^2.5.0",
-    "underscore": "^1.9.1",
-    "url-join": "^4.0.0",
-    "url-search-params-polyfill": "^5.0.0"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.3.4",
-    "@babel/preset-env": "^7.3.4",
-    "argparse": "^1.0.10",
-    "autoprefixer": "^9.4.10",
-    "babel-loader": "^8.0.5",
-    "clean-webpack-plugin": "^2.0.0",
-    "concurrently": "^4.1.0",
-    "css-loader": "^2.1.1",
-    "eslint": "^5.14.1",
-    "eslint-plugin-compat": "^2.7.0",
-    "eslint-plugin-import": "^2.16.0",
-    "file-loader": "^3.0.1",
-    "html-loader": "^0.5.5",
-    "html-webpack-plugin": "^3.2.0",
-    "image-size": "^0.7.2",
-    "lodash.camelcase": "^4.3.0",
-    "mini-css-extract-plugin": "^0.5.0",
-    "node-sass": "^4.12.0",
-    "optimize-css-assets-webpack-plugin": "^5.0.1",
-    "postcss-loader": "^3.0.0",
-    "precss": "^4.0.0",
-    "recursive-readdir": "^2.2.2",
-    "sass-loader": "^7.1.0",
-    "style-loader": "^0.23.1",
-    "stylelint": "^9.10.1",
-    "stylelint-config-recommended-scss": "^3.2.0",
-    "stylelint-no-unsupported-browser-features": "^3.0.2",
-    "stylelint-scss": "^3.5.4",
-    "uglifyjs-webpack-plugin": "^2.1.2",
-    "webpack": "^4.29.6",
-    "webpack-cli": "^3.2.3",
-    "webpack-merge": "^4.2.1"
-  },
-  "browserslist": [
-    "since 2011"
-  ],
-  "engines": {
-    "node": ">=10.0.0"
-  }
+    "devDependencies": {
+        "@babel/core": "^7.3.4",
+        "@babel/preset-env": "^7.3.4",
+        "argparse": "^1.0.10",
+        "autoprefixer": "^9.4.10",
+        "babel-loader": "^8.0.5",
+        "clean-webpack-plugin": "^2.0.0",
+        "concurrently": "^4.1.0",
+        "css-loader": "^2.1.1",
+        "eslint": "^5.14.1",
+        "eslint-plugin-compat": "^2.7.0",
+        "eslint-plugin-import": "^2.16.0",
+        "file-loader": "^3.0.1",
+        "html-loader": "^0.5.5",
+        "html-webpack-plugin": "^3.2.0",
+        "image-size": "^0.7.2",
+        "lodash.camelcase": "^4.3.0",
+        "mini-css-extract-plugin": "^0.5.0",
+        "node-sass": "^4.12.0",
+        "optimize-css-assets-webpack-plugin": "^5.0.1",
+        "postcss-loader": "^3.0.0",
+        "precss": "^4.0.0",
+        "recursive-readdir": "^2.2.2",
+        "sass-loader": "^7.1.0",
+        "style-loader": "^0.23.1",
+        "stylelint": "^9.10.1",
+        "stylelint-config-recommended-scss": "^3.2.0",
+        "stylelint-no-unsupported-browser-features": "^3.0.2",
+        "stylelint-scss": "^3.5.4",
+        "uglifyjs-webpack-plugin": "^2.1.2",
+        "webpack": "^4.29.6",
+        "webpack-cli": "^3.2.3",
+        "webpack-merge": "^4.2.1"
+    },
+    "engines": {
+        "node": ">=10.0.0"
+    },
+    "license": "MIT",
+    "name": "server",
+    "private": true,
+    "scripts": {
+        "build": "webpack --config webpack.prod.js",
+        "dev": "concurrently \"DEBUG=zoommaps node ./bin/www\" \"webpack --config webpack.dev.js --watch\"",
+        "eslint": "eslint .",
+        "lint": "concurrently \"npm run eslint\" \"npm run stylelint\"",
+        "start": "NODE_ENV=production node ./bin/www",
+        "stylelint": "stylelint frontend"
+    },
+    "version": "0.0.0"
 }
