@@ -14,7 +14,7 @@
         }
     ],
     "dependencies": {
-        "acorn": "^6.1.1",
+        "acorn": "^6.4.1",
         "babel-polyfill": "^6.26.0",
         "body-parser": "^1.18.3",
         "cookie-parser": "~1.4.3",
