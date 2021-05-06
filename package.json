@@ -34,7 +34,7 @@
         "random-words": "^1.1.0",
         "seedrandom": "^2.4.4",
         "serve-favicon": "^2.5.0",
-        "underscore": "^1.9.1",
+        "underscore": "^1.12.1",
         "url-join": "^4.0.0",
         "url-search-params-polyfill": "^5.0.0"
     },
